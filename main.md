@@ -364,11 +364,13 @@ Compared against himalaythermoplast.com (home, about, products, category, produc
 - **Reviews** (`#reviews`): the 3 testimonials from the live site, verbatim (Neha Sharma, Rajesh Kumar, Anjali Verma), as cards on a mist band. Note they say "Himalay Plastics".
 - Nav: "About" added; footer "On this page" gets "About us".
 
+### 2026-11-22 — Pass 15: Address confirmed
+- Owner confirmed the site address: **Dharti Industrial Estate, Plot No. 12, Rajpar – Khanpar Road, Morbi – 363641 (Guj.) INDIA**. Footer now uses exactly this wording and line breaks. (The GST certificate lists a different registered address; the certificate itself is unchanged and the card on the site shows only name, GSTIN, type and date.)
+
 ### Known follow-ups (not yet done)
 - **Hero video is 34 MB** — biggest remaining speed problem. Re-encoding to ~720p H.264, no audio, CRF ~28 would get it to roughly 3–5 MB. Needs `ffmpeg` (not installed on this machine). A poster frame (`images/hero-poster.jpg`) should be added at the same time so something shows before the video starts.
 - Hero + 3D ring still use the old Cormorant / DM Sans type; kept on request, so the top and bottom halves of the page use different fonts.
 - `css/style.css` still contains rules for removed sections (`.prod`, `.cgrid`, `.new-grid`, `.sec-prod`) — small, harmless, could be trimmed.
-- **Address mismatch to confirm with owner:** GST certificate address is Plot 21, 22, 27 & 28, Survey 217/219/220, Rajpar Road, near Himgiri Industrial Zone, Morbi 363641; website/footer says Dharti Industrial Estate, Plot No. 12, Rajpar – Khanpar Road. Site still shows the website address.
 - Content still missing vs live site: 12 catalogue PDFs (direct links), Himalay Bucket / Cool 8 / Cool 12 categories, links for Patla and Rack category pages, product counts on 6 tiles, phone in top bar, full category list in footer.
 - Catalogue form doesn't store leads; enquiry form relies on the visitor's email app (WhatsApp button works).
 - Unused images still on disk: `images/product-main.png`, `images/product-thumb-1..4.png` (featured section is gone), `images/category-bg.jpg`.
