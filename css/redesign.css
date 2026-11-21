@@ -251,15 +251,41 @@
 .rx-mono{font-variant-numeric:tabular-nums;letter-spacing:.04em}
 .rx-cert .rx-btn{padding:12px 16px;font-size:14px}
 
-/* ───────── 5b. Reviews ───────── */
-.rx-reviews{background:var(--rx-mist)}
-.rx-reviews__row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2vw,24px)}
-.rx-review{margin:0;padding:clamp(22px,2.4vw,32px);border-radius:var(--rx-r-lg);background:#fff;display:flex;flex-direction:column;gap:18px}
-.rx-review blockquote{margin:0}
-.rx-review blockquote p{font-size:clamp(16px,1.3vw,18px);line-height:1.55}
-.rx-review .rx-review__title{font-weight:800;font-stretch:110%;font-size:clamp(19px,1.6vw,22px);margin-bottom:8px;color:var(--rx-deep)}
-.rx-review figcaption{margin-top:auto;font-weight:700;font-size:15px}
-.rx-review figcaption::before{content:"";display:inline-block;width:18px;height:2px;background:var(--rx-lagoon);vertical-align:middle;margin-right:10px}
+/* ───────── 5b. Reviews: three tone cards, big quote mark, initials badge ───────── */
+.rx-reviews{background:var(--rx-paper)}
+.rx-reviews__row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2vw,28px);align-items:start;padding-bottom:clamp(0px,3vw,40px)}
+.rx-review{
+  --r-bg:var(--rx-deep);--r-fg:#fff;--r-mark:var(--rx-lagoon);--r-badge-bg:var(--rx-lagoon);--r-badge-fg:var(--rx-ink);
+  position:relative;margin:0;overflow:hidden;
+  padding:clamp(28px,3vw,40px) clamp(24px,2.6vw,36px);
+  border-radius:24px;background:var(--r-bg);color:var(--r-fg);
+  display:flex;flex-direction:column;gap:28px;min-height:clamp(320px,30vw,400px);
+  transition:transform .4s var(--rx-ease);
+}
+.rx-review[data-tone="lagoon"]{--r-bg:var(--rx-lagoon);--r-fg:var(--rx-ink);--r-mark:#fff;--r-badge-bg:var(--rx-ink);--r-badge-fg:#fff}
+.rx-review[data-tone="mist"]{--r-bg:#fff;--r-fg:var(--rx-ink);--r-mark:var(--rx-cobalt);--r-badge-bg:var(--rx-deep);--r-badge-fg:#fff;box-shadow:0 0 0 1px rgba(21,48,79,.1)}
+.rx-review:nth-child(2){margin-top:clamp(0px,3vw,40px)}
+.rx-review:hover{transform:translateY(-6px)}
+/* oversized soft quote mark in the corner, plus a crisp one at the top */
+.rx-review::after{
+  content:"D";position:absolute;right:-6px;bottom:-70px;
+  font:900 260px/1 "Archivo",sans-serif;color:var(--r-mark);opacity:.14;pointer-events:none;
+}
+.rx-review__mark{width:44px;height:34px;fill:var(--r-mark);flex:none}
+.rx-review blockquote{margin:0;position:relative;z-index:1}
+.rx-review .rx-review__title{
+  font:850 clamp(22px,2vw,28px)/1.1 "Archivo",sans-serif;font-stretch:115%;
+  margin:0 0 14px;color:inherit;
+}
+.rx-review blockquote p:not(.rx-review__title){font-size:clamp(17px,1.4vw,20px);line-height:1.55;opacity:.92}
+.rx-review figcaption{margin-top:auto;display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+.rx-review figcaption span:last-child{display:grid;font-weight:800;font-size:16px;line-height:1.25}
+.rx-review figcaption small{font-weight:400;font-size:13px;opacity:.75}
+.rx-review__avatar{
+  width:48px;height:48px;border-radius:50%;flex:none;display:grid;place-items:center;
+  font:800 16px/1 "Archivo",sans-serif;letter-spacing:.02em;
+  background:var(--r-badge-bg);color:var(--r-badge-fg);
+}
 
 /* ───────── 4. All products: room filters + search + mixed-size photo grid ───────── */
 .rx-cat{background:var(--rx-paper)}
@@ -347,18 +373,21 @@
 .rx-dl .st .btn{margin-top:12px;background:#fff;color:var(--rx-ink);border-radius:var(--rx-r);text-transform:none;letter-spacing:0;font:600 15px "Archivo",sans-serif;padding:14px 20px}
 
 /* ───────── 6. Footer ───────── */
-footer.rx-foot{background:var(--rx-ink)!important;color:#E8EFF6;font:400 15px/1.6 "Archivo",sans-serif;padding:clamp(36px,5vw,56px) 0 24px}
-.rx-foot__call{display:flex;justify-content:space-between;align-items:center;gap:12px 24px;flex-wrap:wrap;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:36px}
+footer.rx-foot{background:var(--rx-ink)!important;color:#E8EFF6;font:400 clamp(16px,1.25vw,18px)/1.7 "Archivo",sans-serif;padding:clamp(56px,7vw,96px) 0 32px}
+.rx-foot__call{display:flex;justify-content:space-between;align-items:center;gap:12px 24px;flex-wrap:wrap;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:clamp(40px,5vw,64px)}
 .rx-foot__call>div{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .rx-foot__call p{opacity:.75;margin:0}
 .rx-foot__call a.rx-phone{font:800 clamp(18px,1.8vw,22px)/1.2 "Archivo",sans-serif;color:#fff}
 .rx-foot__call a.rx-phone:hover{color:var(--rx-lagoon)}
 .rx-foot__call .rx-btn{padding:11px 16px;font-size:14px}
-footer.rx-foot .fg{grid-template-columns:1.4fr 1fr 1fr 1.3fr}
-footer.rx-foot h3{font:700 15px "Archivo",sans-serif;letter-spacing:0;text-transform:none;color:#fff;margin:0 0 14px}
-footer.rx-foot p{max-width:34ch}
+footer.rx-foot .fg{grid-template-columns:1.5fr 1fr 1fr 1.4fr;gap:clamp(32px,4vw,56px)}
+footer.rx-foot .logo img{height:clamp(56px,5vw,72px)}
+footer.rx-foot ul{gap:12px}
+footer.rx-foot address{line-height:1.8}
+footer.rx-foot h3{font:800 clamp(18px,1.5vw,21px) "Archivo",sans-serif;font-stretch:110%;letter-spacing:0;text-transform:none;color:#fff;margin:0 0 18px}
+footer.rx-foot p{max-width:34ch;margin-top:16px}
 footer.rx-foot a:hover,footer.rx-foot .lnk:hover{color:var(--rx-lagoon)}
-footer.rx-foot .fb{font-size:13px}
+footer.rx-foot .fb{font-size:14px;margin-top:clamp(40px,5vw,64px);padding-top:24px}
 
 /* ───────── Enquiry dialog ───────── */
 dialog.rx-dialog{
@@ -379,7 +408,9 @@ dialog.rx-dialog select option{color:var(--rx-ink)}
 }
 @media (max-width:900px){
   .rx-about__grid{grid-template-columns:1fr}
-  .rx-reviews__row{grid-template-columns:1fr}
+  .rx-reviews__row{grid-template-columns:1fr;padding-bottom:0}
+  .rx-review{min-height:0}
+  .rx-review:nth-child(2){margin-top:0}
   .rx-best__row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(-1 * clamp(16px,3.5vw,40px));padding:0 clamp(16px,3.5vw,40px) 6px;align-items:flex-end}
   .rx-best__row::-webkit-scrollbar{display:none}
   .rx-best__item{flex:0 0 42%;scroll-snap-align:start}

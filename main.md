@@ -367,6 +367,12 @@ Compared against himalaythermoplast.com (home, about, products, category, produc
 ### 2026-11-22 — Pass 15: Address confirmed
 - Owner confirmed the site address: **Dharti Industrial Estate, Plot No. 12, Rajpar – Khanpar Road, Morbi – 363641 (Guj.) INDIA**. Footer now uses exactly this wording and line breaks. (The GST certificate lists a different registered address; the certificate itself is unchanged and the card on the site shows only name, GSTIN, type and date.)
 
+### 2026-11-22 — Pass 16: Bigger footer
+- Footer enlarged: text 16–18px (was 15px), column headings 18–21px heavy, logo 56–72px tall (was 48px), more padding top (56–96px) and between columns/rows, bottom line 14px. The one-line "Call the factory" block stays compact.
+
+### 2026-11-22 — Pass 17: Reviews made richer
+- "What customers say" cards now use the site's three tones (deep cobalt / lagoon / white), each with a crisp quote mark at the top and a large faint one in the corner, bigger review title + text, and a round initials badge beside the name. Middle card sits lower on desktop for rhythm; cards lift on hover. Subtitle added under the heading. Review wording unchanged; no star ratings added (none exist on the live site). Phones/tablets: stacked.
+
 ### Known follow-ups (not yet done)
 - **Hero video is 34 MB** — biggest remaining speed problem. Re-encoding to ~720p H.264, no audio, CRF ~28 would get it to roughly 3–5 MB. Needs `ffmpeg` (not installed on this machine). A poster frame (`images/hero-poster.jpg`) should be added at the same time so something shows before the video starts.
 - Hero + 3D ring still use the old Cormorant / DM Sans type; kept on request, so the top and bottom halves of the page use different fonts.
