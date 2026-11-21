@@ -18,3 +18,6 @@ Thumbs.db
 # Local Python cache (if any helper scripts are run)
 __pycache__/
 *.pyc
+
+# full GST certificate has partner photos/names; only page 1 (docs/gst-certificate.pdf) is published
+GST CERTIFICATE.pdf

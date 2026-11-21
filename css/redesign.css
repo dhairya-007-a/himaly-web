@@ -211,6 +211,56 @@
 .rx-line__cap p{font-size:14px;color:var(--rx-muted)}
 .rx-line__cap .rx-link{margin-top:4px;font-size:14px}
 
+/* ───────── 3. Best sellers: dispensers shown to scale on an ink band ───────── */
+.rx-best{background:var(--rx-ink);color:#fff}
+.rx-best .rx-head p{color:rgba(255,255,255,.72)}
+.rx-best__row{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(12px,2vw,28px);align-items:end}
+.rx-best__item{display:grid;justify-items:center;text-align:center;gap:8px}
+.rx-best__obj{position:relative;width:100%;height:clamp(200px,22vw,300px)}
+.rx-best__obj::after{content:"";position:absolute;left:14%;right:14%;bottom:-6px;height:14px;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent)}
+.rx-best__obj img{
+  position:absolute;left:0;right:0;bottom:0;margin:0 auto;z-index:1;
+  width:100%;height:calc(var(--size,1) * 100%);object-fit:contain;object-position:50% 100%;
+  transition:transform .4s var(--rx-ease);transform-origin:50% 100%;
+}
+.rx-best__item:hover .rx-best__obj img{transform:translateY(-8px)}
+.rx-best__cap{margin-top:14px;font:800 13px/1 "Archivo",sans-serif;padding:6px 10px;border-radius:999px;background:var(--rx-lagoon);color:var(--rx-ink)}
+.rx-best h3{font-weight:700;font-size:clamp(15px,1.3vw,18px);line-height:1.25}
+.rx-best h3 a:hover{color:var(--rx-lagoon)}
+.rx-best .rx-link{color:#fff;font-size:14px}
+.rx-best .rx-link:hover{color:var(--rx-lagoon)}
+
+/* ───────── 5a. About + GST certificate ───────── */
+.rx-about{background:#fff}
+.rx-about__grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(28px,5vw,72px);align-items:center}
+.rx-about__lead{font-size:clamp(19px,1.7vw,23px);line-height:1.45;margin:18px 0 14px!important;color:var(--rx-ink)}
+.rx-about__text>p:not(.rx-about__lead){color:var(--rx-muted);max-width:56ch}
+.rx-about__facts{display:flex;flex-wrap:wrap;gap:12px 40px;margin:32px 0 0;padding-top:24px;border-top:1px solid rgba(21,48,79,.12)}
+.rx-about__facts div{display:grid;gap:2px}
+.rx-about__facts dt{font-size:14px;color:var(--rx-muted)}
+.rx-about__facts dd{margin:0;font:850 clamp(24px,2.4vw,34px)/1.1 "Archivo",sans-serif;font-stretch:115%;color:var(--rx-deep)}
+.rx-cert{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr);gap:20px;align-items:start;padding:20px;border-radius:var(--rx-r-lg);background:var(--rx-paper);box-shadow:0 0 0 1px rgba(21,48,79,.08)}
+.rx-cert__doc{display:block;border-radius:8px;overflow:hidden;box-shadow:0 1px 0 rgba(21,48,79,.12),0 14px 24px -14px rgba(21,48,79,.5);transform:rotate(-2deg);transition:transform .3s var(--rx-ease)}
+.rx-cert__doc:hover{transform:rotate(0) scale(1.03)}
+.rx-cert__doc img{display:block;width:100%;height:auto}
+.rx-cert h3{font-weight:800;font-stretch:110%;font-size:19px;margin-bottom:12px!important}
+.rx-cert dl{margin:0 0 16px;display:grid;gap:8px}
+.rx-cert dl div{display:grid;gap:0}
+.rx-cert dt{font-size:12.5px;color:var(--rx-muted)}
+.rx-cert dd{margin:0;font-weight:600;font-size:15px}
+.rx-mono{font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.rx-cert .rx-btn{padding:12px 16px;font-size:14px}
+
+/* ───────── 5b. Reviews ───────── */
+.rx-reviews{background:var(--rx-mist)}
+.rx-reviews__row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2vw,24px)}
+.rx-review{margin:0;padding:clamp(22px,2.4vw,32px);border-radius:var(--rx-r-lg);background:#fff;display:flex;flex-direction:column;gap:18px}
+.rx-review blockquote{margin:0}
+.rx-review blockquote p{font-size:clamp(16px,1.3vw,18px);line-height:1.55}
+.rx-review .rx-review__title{font-weight:800;font-stretch:110%;font-size:clamp(19px,1.6vw,22px);margin-bottom:8px;color:var(--rx-deep)}
+.rx-review figcaption{margin-top:auto;font-weight:700;font-size:15px}
+.rx-review figcaption::before{content:"";display:inline-block;width:18px;height:2px;background:var(--rx-lagoon);vertical-align:middle;margin-right:10px}
+
 /* ───────── 4. All products: room filters + search + mixed-size photo grid ───────── */
 .rx-cat{background:var(--rx-paper)}
 .rx-cat .rx-head{margin-bottom:24px}
@@ -328,6 +378,11 @@ dialog.rx-dialog select option{color:var(--rx-ink)}
   .rx-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media (max-width:900px){
+  .rx-about__grid{grid-template-columns:1fr}
+  .rx-reviews__row{grid-template-columns:1fr}
+  .rx-best__row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(-1 * clamp(16px,3.5vw,40px));padding:0 clamp(16px,3.5vw,40px) 6px;align-items:flex-end}
+  .rx-best__row::-webkit-scrollbar{display:none}
+  .rx-best__item{flex:0 0 42%;scroll-snap-align:start}
   .rx-range{min-height:0;display:block}
   .rx-range__grid{grid-template-columns:1fr;gap:20px}
   .rx-range__head{order:1}
@@ -348,6 +403,8 @@ dialog.rx-dialog select option{color:var(--rx-ink)}
 }
 /* phone */
 @media (max-width:640px){
+  .rx-best__item{flex-basis:62%}
+  .rx-cert{grid-template-columns:96px minmax(0,1fr);padding:16px;gap:14px}
   .rx-line__belt{--item-w:200px;--obj-h:180px}
   .rx-line__ctrl .rx-link{display:none}
   .rx-arrow{width:44px;height:44px}
