@@ -1,0 +1,300 @@
+/* Himalay redesign preview — sections from "Explore by category" down.
+   Scoped under .rx so the hero / showcase above keep their current styles. */
+:root{
+  --rx-cobalt:#488ACF;
+  --rx-deep:#2C6198;
+  --rx-lagoon:#41BCCF;
+  --rx-ink:#15304F;
+  --rx-paper:#F5F8FB;
+  --rx-mist:#E3ECF4;
+  --rx-muted:#5A6F85;
+  --rx-r-lg:18px;
+  --rx-r:10px;
+  --rx-ease:cubic-bezier(.2,.7,.2,1);
+}
+
+.rx{
+  background:var(--rx-paper);
+  color:var(--rx-ink);
+  font:400 16px/1.6 "Archivo",system-ui,sans-serif;
+  font-stretch:100%;
+  padding:clamp(56px,8vw,112px) 0;
+}
+.rx h2,.rx h3{
+  font-family:"Archivo",system-ui,sans-serif;
+  color:inherit;
+  letter-spacing:-.01em;
+  margin:0;
+}
+.rx h2{
+  font-weight:850;
+  font-stretch:118%;
+  font-size:clamp(34px,5vw,64px);
+  line-height:.98;
+}
+.rx p{margin:0}
+.rx a{text-decoration:none}
+
+/* reveal rule from the old inline styles hides .tile until scrolled; not wanted here */
+.rx .tile{opacity:1!important;transform:none!important}
+
+/* Buttons */
+.rx-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font:600 15px/1 "Archivo",system-ui,sans-serif;
+  padding:15px 22px;border:0;border-radius:var(--rx-r);
+  background:var(--rx-ink);color:#fff;cursor:pointer;
+  transition:background .25s var(--rx-ease),transform .25s var(--rx-ease);
+}
+.rx-btn:hover{background:var(--rx-deep)}
+.rx-btn:active{transform:translateY(1px)}
+.rx-btn--light{background:#fff;color:var(--rx-ink)}
+.rx-btn--light:hover{background:var(--rx-mist)}
+.rx-link{
+  font-weight:600;color:var(--rx-deep);
+  border-bottom:2px solid currentColor;padding-bottom:2px;
+  background:none;border-top:0;border-left:0;border-right:0;cursor:pointer;font-family:inherit;font-size:15px;
+}
+.rx-link:hover{color:var(--rx-ink)}
+.rx :focus-visible{outline:3px solid var(--rx-lagoon);outline-offset:3px}
+
+.rx-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:clamp(28px,4vw,48px)}
+.rx-head p{color:var(--rx-muted);max-width:44ch;margin-top:12px}
+
+/* ───────── 1. Explore by category: full-bleed colour section ─────────
+   The whole section takes the selected product's colour. */
+.rx-range{
+  --stage-bg:var(--rx-deep);--stage-fg:#fff;--bar:var(--rx-lagoon);
+  background:var(--stage-bg);color:var(--stage-fg);
+  min-height:100vh;display:flex;align-items:center;
+  transition:background-color .6s var(--rx-ease),color .6s var(--rx-ease);
+}
+.rx-range[data-tone="deep"]{--stage-bg:var(--rx-deep);--stage-fg:#fff;--bar:var(--rx-lagoon)}
+.rx-range[data-tone="lagoon"]{--stage-bg:var(--rx-lagoon);--stage-fg:var(--rx-ink);--bar:#fff}
+.rx-range[data-tone="mist"]{--stage-bg:var(--rx-mist);--stage-fg:var(--rx-ink);--bar:var(--rx-cobalt)}
+.rx-range>.c-wrap{width:100%}
+.rx-range__grid{
+  display:grid;
+  grid-template-columns:minmax(0,5fr) minmax(0,7fr);
+  gap:clamp(28px,5vw,72px);
+  align-items:center;
+}
+.rx-range__head p{opacity:.8;margin-top:14px;max-width:36ch}
+.rx-index{list-style:none;margin:clamp(28px,4vw,44px) 0 0;padding:0;display:grid}
+.rx-index button{
+  all:unset;box-sizing:border-box;cursor:pointer;
+  display:flex;align-items:center;gap:14px;width:100%;
+  padding:6px 0;
+  font:800 clamp(26px,3.1vw,42px)/1.08 "Archivo",system-ui,sans-serif;
+  font-stretch:112%;letter-spacing:-.015em;
+  color:inherit;opacity:.34;
+  transition:opacity .25s var(--rx-ease);
+}
+.rx-index button::before{
+  content:"";flex:none;width:0;height:.5em;border-radius:3px;
+  background:var(--bar);
+  transition:width .3s var(--rx-ease),background-color .6s var(--rx-ease);
+}
+.rx-index button:hover{opacity:.7}
+.rx-index button[aria-pressed="true"]{opacity:1}
+.rx-index button[aria-pressed="true"]::before{width:.5em}
+.rx-index button:focus-visible{outline:3px solid var(--bar);outline-offset:4px;border-radius:4px}
+
+.rx-stage{
+  position:relative;margin:0;
+  height:min(82vh,720px);min-height:460px;
+  display:grid;grid-template-rows:1fr auto;
+}
+.rx-stage__photo{position:relative;display:grid;place-items:center;padding:2% 0 0;min-height:0}
+.rx-stage__photo::after{ /* floor shadow so the cutout stands, not floats */
+  content:"";position:absolute;left:18%;right:18%;bottom:2%;height:7%;
+  background:radial-gradient(closest-side,rgba(10,25,45,.3),transparent);
+  pointer-events:none;
+}
+.rx-stage__photo img{
+  position:relative;z-index:1;
+  max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;
+  transition:opacity .35s var(--rx-ease),transform .45s var(--rx-ease);
+}
+.rx-stage.is-swapping .rx-stage__photo img{opacity:0;transform:translateY(14px) scale(.97)}
+.rx-stage figcaption{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;
+  padding:20px 0 0;
+}
+.rx-stage__name{display:block;font:850 clamp(26px,2.8vw,36px)/1 "Archivo",sans-serif;font-stretch:120%;letter-spacing:-.01em}
+.rx-stage__note{display:block;margin-top:8px;opacity:.82;max-width:38ch;font-size:15px}
+.rx-range[data-tone="deep"] .rx-btn{background:#fff;color:var(--rx-ink)}
+.rx-range[data-tone="deep"] .rx-btn:hover{background:var(--rx-mist)}
+
+/* ───────── 2. New arrivals on a shelf ───────── */
+.rx-shelf{background:#fff}
+.rx-shelf__row{
+  display:grid;grid-template-columns:1.7fr 1fr 1fr 1fr;
+  column-gap:0;
+}
+.rx-shelf__item{display:flex;flex-direction:column;min-width:0}
+.rx-shelf__obj{
+  height:clamp(220px,26vw,340px);
+  display:flex;align-items:flex-end;justify-content:center;
+  padding:0 8%;
+  border-bottom:16px solid var(--rx-deep);
+  box-shadow:0 2px 0 var(--rx-ink);
+  position:relative;
+}
+.rx-shelf__obj::after{ /* plank highlight */
+  content:"";position:absolute;left:0;right:0;bottom:-16px;height:3px;background:rgba(255,255,255,.22);
+}
+.rx-shelf__item:first-child .rx-shelf__obj{border-radius:0;}
+.rx-shelf__obj img{display:block;max-width:100%;max-height:92%;width:auto;height:auto;object-fit:contain;transform-origin:50% 100%;transition:transform .4s var(--rx-ease)}
+.rx-shelf__item:hover .rx-shelf__obj img{transform:translateY(-6px)}
+.rx-shelf__cap{padding:20px 8% 0;display:grid;gap:10px;justify-items:start}
+.rx-shelf__cap h3{font-weight:700;font-size:18px;line-height:1.25}
+.rx-shelf__cap h3 a:hover{color:var(--rx-deep)}
+.rx-shelf__cap .rx-tag{font-size:14px;color:var(--rx-muted)}
+
+/* ───────── 3. Featured product spec sheet ───────── */
+.rx-prod__grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(28px,5vw,72px);align-items:start}
+.rx-prod__stage{
+  --ph1:#6FA4DC;--ph2:var(--rx-deep);
+  position:relative;aspect-ratio:1/1;border-radius:var(--rx-r-lg);overflow:hidden;
+  background:radial-gradient(120% 90% at 50% 30%,var(--ph1),var(--ph2));
+  display:grid;place-items:center;
+  transition:background .5s var(--rx-ease);
+}
+.rx-prod__stage img{max-width:72%;max-height:84%;object-fit:contain;transition:opacity .3s var(--rx-ease)}
+.rx-prod__thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+.rx-prod__thumbs button{
+  all:unset;box-sizing:border-box;cursor:pointer;aspect-ratio:1/1;border-radius:var(--rx-r);
+  background:var(--rx-mist);display:grid;place-items:center;padding:12%;
+  outline:2px solid transparent;outline-offset:-2px;transition:outline-color .2s;
+}
+.rx-prod__thumbs button img{max-width:100%;max-height:100%;object-fit:contain}
+.rx-prod__thumbs button[aria-pressed="true"]{outline-color:var(--rx-ink)}
+.rx-prod__thumbs button:focus-visible{outline:3px solid var(--rx-lagoon)}
+.rx-prod__info h2{font-size:clamp(32px,4vw,52px)}
+.rx-price{margin-top:14px;font-weight:700;font-size:20px}
+.rx-price small{display:block;font-weight:400;font-size:15px;color:var(--rx-muted);margin-top:2px}
+.rx-prod__desc{margin-top:18px;color:var(--rx-muted);max-width:44ch}
+.rx-colour{margin-top:28px}
+.rx-colour .cl{font-size:15px}
+.rx-colour .cl span{font-weight:700}
+.rx .sw{display:flex;gap:12px;margin-top:10px}
+.rx .sw button{
+  width:40px;height:40px;border-radius:50%;cursor:pointer;
+  border:3px solid #fff;box-shadow:0 0 0 1px rgba(21,48,79,.25);
+}
+.rx .sw button.on{box-shadow:0 0 0 2px var(--rx-ink)}
+.rx-specs{margin:28px 0 0;display:grid;grid-template-columns:auto 1fr;border-top:1px solid rgba(21,48,79,.14)}
+.rx-specs dt,.rx-specs dd{margin:0;padding:12px 0;border-bottom:1px solid rgba(21,48,79,.14);font-size:15px}
+.rx-specs dt{color:var(--rx-muted);padding-right:28px}
+.rx-specs dd{font-weight:600}
+.rx-buy{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.rx-qty{display:flex;align-items:center;border:1px solid rgba(21,48,79,.25);border-radius:var(--rx-r);overflow:hidden;background:#fff}
+.rx-qty button{width:44px;height:48px;border:0;background:none;font:500 20px "Archivo",sans-serif;color:var(--rx-ink);cursor:pointer}
+.rx-qty button:hover{background:var(--rx-mist)}
+.rx-qty input{width:52px;height:48px;border:0;text-align:center;font:600 16px "Archivo",sans-serif;color:var(--rx-ink);-moz-appearance:textfield;appearance:textfield}
+.rx-qty input::-webkit-inner-spin-button,.rx-qty input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.rx-buy .rx-btn{flex:1;min-width:220px}
+
+/* ───────── 4. Full catalogue grid ───────── */
+.rx-cat{background:#fff}
+.rx-search{position:relative;min-width:min(320px,100%)}
+.rx-search input{
+  width:100%;box-sizing:border-box;padding:14px 16px 14px 44px;
+  border:1px solid rgba(21,48,79,.22);border-radius:var(--rx-r);
+  font:400 16px "Archivo",sans-serif;color:var(--rx-ink);background:var(--rx-paper);
+}
+.rx-search svg{position:absolute;left:14px;top:50%;width:18px;height:18px;transform:translateY(-50%);fill:none;stroke:var(--rx-muted);stroke-width:2}
+.rx-count{font-size:15px;color:var(--rx-muted);margin:0 0 20px}
+.rx-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.6vw,20px)}
+.rx-tile{position:relative;display:flex;flex-direction:column;gap:12px}
+.rx-tile__ph{
+  aspect-ratio:1/1;border-radius:var(--rx-r-lg);background:var(--rx-mist);
+  display:grid;place-items:center;padding:14%;transition:background-color .3s var(--rx-ease);
+}
+.rx-tile__ph img{max-width:100%;max-height:100%;object-fit:contain;transition:transform .4s var(--rx-ease)}
+.rx-tile h3{font-weight:700;font-size:17px;line-height:1.25}
+.rx-tile .ct{font-size:14px;color:var(--rx-muted)}
+.rx-tile a::after{content:"";position:absolute;inset:0;border-radius:var(--rx-r-lg)}
+.rx-tile:hover .rx-tile__ph{background:#CDEEF3}
+.rx-tile:hover .rx-tile__ph img{transform:translateY(-6px)}
+.rx-tile a:focus-visible{outline:none}
+.rx-tile:has(a:focus-visible) .rx-tile__ph{outline:3px solid var(--rx-lagoon);outline-offset:3px}
+
+/* ───────── 5. Catalogue download band ───────── */
+.rx-dl{background:var(--rx-deep);color:#fff}
+.rx-dl__grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(28px,5vw,72px);align-items:end}
+.rx-dl h2{font-size:clamp(40px,6.4vw,92px);font-stretch:125%;font-weight:900;line-height:.92}
+.rx-dl p{margin-top:18px;opacity:.85;max-width:42ch}
+.rx-form{display:grid;gap:14px}
+.rx-form label{display:grid;gap:6px;font-size:14px;font-weight:600}
+.rx-form input,.rx-form select,.rx-form textarea{
+  width:100%;box-sizing:border-box;padding:14px;border-radius:var(--rx-r);
+  border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);color:#fff;
+  font:400 16px "Archivo",sans-serif;
+}
+.rx-form input::placeholder{color:rgba(255,255,255,.6)}
+.rx-form input:focus,.rx-form select:focus,.rx-form textarea:focus{outline:3px solid var(--rx-lagoon);outline-offset:1px;border-color:transparent}
+.rx-form .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rx-dl .st{font-size:15px}
+.rx-dl .st .btn{margin-top:12px;background:#fff;color:var(--rx-ink);border-radius:var(--rx-r);text-transform:none;letter-spacing:0;font:600 15px "Archivo",sans-serif;padding:14px 20px}
+
+/* ───────── 6. Footer ───────── */
+footer.rx-foot{background:var(--rx-ink)!important;color:#E8EFF6;font:400 15px/1.6 "Archivo",sans-serif;padding:clamp(56px,7vw,88px) 0 28px}
+.rx-foot__call{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;padding-bottom:clamp(36px,5vw,56px);border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:clamp(36px,5vw,56px)}
+.rx-foot__call p{opacity:.75;margin:0 0 6px}
+.rx-foot__call a.rx-phone{font:850 clamp(32px,5vw,64px)/1 "Archivo",sans-serif;font-stretch:118%;color:#fff;letter-spacing:-.01em}
+.rx-foot__call a.rx-phone:hover{color:var(--rx-lagoon)}
+footer.rx-foot .fg{grid-template-columns:1.4fr 1fr 1fr 1.3fr}
+footer.rx-foot h3{font:700 15px "Archivo",sans-serif;letter-spacing:0;text-transform:none;color:#fff;margin:0 0 14px}
+footer.rx-foot p{max-width:34ch}
+footer.rx-foot a:hover,footer.rx-foot .lnk:hover{color:var(--rx-lagoon)}
+footer.rx-foot .fb{font-size:13px}
+
+/* ───────── Enquiry dialog ───────── */
+dialog.rx-dialog{
+  background:var(--rx-deep);color:#fff;border-radius:var(--rx-r-lg);
+  font:400 16px/1.6 "Archivo",sans-serif;padding:clamp(24px,4vw,40px);
+}
+dialog.rx-dialog h2{font:850 clamp(30px,4vw,44px)/1 "Archivo",sans-serif;font-stretch:118%;color:#fff;margin:0 0 8px}
+dialog.rx-dialog>p{opacity:.85;margin:0 0 22px}
+dialog.rx-dialog .x{color:#fff}
+dialog.rx-dialog .acts{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+dialog.rx-dialog .acts .rx-btn{flex:1}
+dialog.rx-dialog select option{color:var(--rx-ink)}
+
+/* ───────── Responsive ───────── */
+@media (max-width:900px){
+  .rx-range__grid{grid-template-columns:1fr}
+  .rx-range{min-height:0;display:block}
+  .rx-stage{height:auto;min-height:0;order:2}
+  .rx-stage__photo{aspect-ratio:1/1}
+  .rx-index{order:3;display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0;padding:4px 2px 8px;scrollbar-width:none}
+  .rx-index::-webkit-scrollbar{display:none}
+  .rx-index li{scroll-snap-align:start;flex:none}
+  .rx-index button{
+    font-size:16px;font-weight:700;font-stretch:100%;white-space:nowrap;
+    padding:11px 16px;border-radius:999px;opacity:1;
+    background:color-mix(in srgb,currentColor 14%,transparent);
+  }
+  .rx-index button::before{display:none}
+  .rx-index button[aria-pressed="true"]{background:var(--stage-fg);color:var(--stage-bg)}
+  .rx-range__head{order:1}
+  .rx-prod__grid,.rx-dl__grid{grid-template-columns:1fr}
+  .rx-grid{grid-template-columns:repeat(3,1fr)}
+  .rx-shelf__row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(-1 * clamp(16px,3.5vw,40px));padding:0 clamp(16px,3.5vw,40px)}
+  .rx-shelf__row::-webkit-scrollbar{display:none}
+  .rx-shelf__item{flex:0 0 62%;scroll-snap-align:start}
+  .rx-shelf__item:first-child{flex-basis:84%}
+  footer.rx-foot .fg{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .rx-grid{grid-template-columns:1fr 1fr}
+  .rx-form .two{grid-template-columns:1fr}
+  .rx-stage figcaption .rx-btn{width:100%}
+  footer.rx-foot .fg{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .rx,.rx *{transition:none!important}
+  .rx-stage.is-swapping .rx-stage__photo img{opacity:1;transform:none}
+}
