@@ -1,0 +1,17 @@
+# Raw manufacturer source photos (2.4GB, not used directly by the site —
+# every photo actually on the site is already optimized into images/).
+# Keep this folder on disk, just don't version it.
+HIMALAY THERMOPLAST PNG FILES/
+
+# Tool-internal caches (not part of the website)
+.claude-flow/
+.remember/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Local Python cache (if any helper scripts are run)
+__pycache__/
+*.pyc
