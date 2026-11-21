@@ -6,6 +6,9 @@ HIMALAY THERMOPLAST PNG FILES/
 # Tool-internal caches (not part of the website)
 .claude-flow/
 .remember/
+.agents/
+.claude/
+skills-lock.json
 
 # OS / editor junk
 .DS_Store
