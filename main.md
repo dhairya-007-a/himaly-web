@@ -14,7 +14,7 @@ This web application is the unified digital storefront and interactive product c
 The platform bridges corporate identity with interactive 3D digital experiences:
 - **Corporate Landing Page**: Full-bleed edge-to-edge layout, responsive modern typography, and fast lead generation.
 - **Kinetic 3D Product Ring**: Embedded 3D kinetic harmonic-physics engine for spinning and exploring product collections.
-- **Skiper 52 HoverExpand Gallery**: Smooth expanding accordion showcasing 9 distinct household product categories.
+- **Explore by Category stage**: full-screen section that recolours (cobalt / lagoon / mist) as each of 9 categories is picked, with a large product photo. Replaced the old HoverExpand gallery on 2026-11-22 (see Pass 6).
 - **Direct Commercial Pipelines**: Lead capture for catalogue download, native `<dialog>` modal for dealer applications, and one-tap WhatsApp/email connectivity.
 
 ---
@@ -298,10 +298,69 @@ Installed via `npx skills add <repo> --skill <name>` (the [skills.sh](https://sk
 
 All three ended up installed **globally** (`~/.agents/skills/`, re-run with `-g` after the first project-local install), so they're available in every project, not just this one. Project-local copies were initially created in `himalay-web/.agents/skills/` before the global reinstall — those are redundant now but harmless, and `.gitignore` already excludes `.agents/`, `.claude/`, and `skills-lock.json` so none of this tooling noise reaches the repo.
 
+### 2026-11-22 — Pass 5: Logo + favicon (`8286390`)
+- `logo/himalaya-new-logo.png` replaces the text wordmark in the index nav + footer and the showcase header + receipt slip. Footer copy is turned white with `filter:brightness(0) invert(1)` because blue/teal on the navy footer was unreadable.
+- `logo/fvicon-icon.png` (192×192) is now the favicon and apple-touch-icon on both pages (was a 💧 emoji SVG).
+
+### 2026-11-22 — Pass 6: Redesign, Explore by Category → footer (`1e7d7b5`)
+Built first as `preview.html`, approved, then promoted to `index.html`. Hero, feature strip and 3D ring were left as they were (on request).
+- **Design tokens** (`css/redesign.css`, everything scoped under `.rx`): colours sampled from the logo — cobalt `#488ACF`, deep cobalt `#2C6198`, lagoon `#41BCCF`, ink `#15304F`, paper `#F5F8FB`, mist `#E3ECF4`. Type: Archivo (variable width + weight) — wide heavy headings echo the blocky logo letters; sentence case, no all-caps eyebrows.
+- **Explore by Category**: the signature section. Big type index of 9 categories on the left, product photo on the right; the *whole section* background changes colour per category (`data-tone` on the `<section>`, set in `js/redesign.js`). Text, marker bar and button flip light/dark per tone. Phones: names become swipeable pill buttons under the photo.
+- Catalogue download is a full-width cobalt band; footer opens with the factory phone number in large type; enquiry dialog restyled to match.
+
+### 2026-11-22 — Pass 7: Bigger ring, new sections, product sheet removed, speed + mobile pass
+- **Interactive Product Ring — images much bigger** (`showcase.html`). Root cause: each ring slot was a tall 4:7 portrait box, but the product cutouts are landscape (~3:2), so `object-fit:contain` shrank every product to roughly a third of its slot. Slots are now 3:2 (`MODEL_AR` constant, used by ring, grid and focus views), the front item is up to 40% of stage height (30% on phones) capped so it never spills sideways, and the ring is wider.
+- **Featured product section deleted** (Flower pattern dispenser spec sheet with price/colour/qty) — markup and CSS removed.
+- **New arrivals redesigned**: each product on its own colour panel (deep / lagoon / mist, same language as the category stage), big photo with soft drop shadow, name + one-line description + Enquire button. 4 across on desktop (first one wider for the wide storage-jar set), 2×2 on tablet, swipe carousel on phones. Captions written from what each photo actually shows.
+- **Every category redesigned**: taller 4:5 photo tiles in three alternating soft tints, product much larger, name inside the tile, product count as a pill; whole tile is the link. 4 / 3 / 2 columns for desktop / tablet / phone.
+- **`js/main.js` rewritten** with null-guards on every element (old version crashed the rest of the script if any section was removed — deleting the product sheet would have broken search, the enquiry dialog and the forms). Enquire buttons now use one delegated click handler that reads `data-enq` at click time. The scroll-reveal animation was removed (its CSS would have left the feature strip invisible, and it hid content until scrolled).
+- **Speed**:
+  - Product photos converted to WebP and resized to display size: **14.6 MB → 1.3 MB** (gallery 1200px, categories 640px, new arrivals 900px). Original PNGs kept on disk; both pages now point at the `.webp` files (all modern browsers).
+  - Hero video `preload="auto"` → `preload="metadata"`, and it now pauses when scrolled off-screen (saves CPU/battery). The file itself is still **34 MB** — see follow-ups.
+  - Google Fonts merged into one request with `preconnect`.
+  - Category stage preloads its 9 photos only when you scroll within ~600px of it (was: on page load).
+  - ~230 lines of dead inline CSS removed (old HoverExpand gallery, old New Arrivals grid, old product grid, scroll-reveal).
+  - Removed the `images/hero.jpg` fallback `<img>` that 404'd on every page load.
+- **Robustness**: photo areas use absolutely-positioned `object-fit:contain` images so they size the same in every browser (percentage `max-height` inside flexible grid rows is unreliable). Tap targets ≥44px on phone pills. Reduced-motion turns off all transitions in the new sections.
+- Checked: no broken `#anchors`, no missing files referenced by either page, all JS parses. **Not yet checked visually in a real browser by Claude** (browser extension not connected) — verify on desktop, tablet and phone.
+
+### 2026-11-22 — Pass 8: Durability / Recyclability / Go green strip redesigned
+- Old navy bar with thin outline icons + all-caps serif labels replaced by three full-width colour panels (deep cobalt / lagoon / mist — the same tones as the category stage), each with a heavier icon and an Archivo heading (explanation lines removed on request — icon + word only, centred on one row). Desktop/tablet: 3 across; phones (≤760px): stacked rows, icon left of text.
+- Markup: `<section class="rx-feat">` in `index.html`; styles at the top of `css/redesign.css`. Old `.feat` inline CSS removed.
+
+### 2026-11-22 — Pass 9: Ring photos toned down
+- Pass 7 made the front ring item too large. Front item now up to 32% of stage height on desktop (was 40%) and 25% on phones (was 30%); width cap 34% / 52% of stage width (was 42% / 62%). Still roughly 2× the original pre-Pass-7 size. Tweak in `showcase.html` → `layoutRing()` → `frontH`.
+
+### 2026-11-22 — Pass 10: New arrivals → "Fresh off the line" conveyor
+- Colour-panel cards (Pass 7) replaced: they repeated the category stage's look. New arrivals now ride a moving conveyor belt — product cutouts standing on a dark striped belt that scrolls in step with them, caption (name, one line, Enquire) under each. Factory-floor idea, fits a manufacturer.
+- Loop: the 4 items are duplicated (copies are `aria-hidden` + `inert`, so screen readers and keyboard see each product once) and the track slides −50% over 46s (36s on phones). Pauses on hover, keyboard focus, tap on empty belt space (`is-paused`, `js/redesign.js`), and automatically when scrolled off-screen (`is-offscreen`).
+- Reduced motion: belt stands still, becomes a normal horizontal scroller, duplicates hidden.
+- Markup `section.rx-line` in `index.html`; CSS section 2 of `css/redesign.css`. Speed/size knobs: `--speed`, `--item-w`, `--obj-h` on `.rx-line__belt`.
+
+### 2026-11-22 — Pass 11: Catalogue band made compact
+- "Get the full catalogue" band cut to roughly a third of its height: padding 32–48px (was 56–112px), heading 26–38px (was up to 92px), one-line description. Desktop: heading left, name + phone + button on one row right. Tablet: heading above the row. Phone: fields stack. Labels kept for screen readers (visually hidden), placeholders show on screen.
+
+### 2026-11-22 — Pass 12: Belt you can scroll, 10 new products, ring title, smaller footer call
+- **New arrivals belt** now has **14 products**. 10 new photos taken from the master folder (`HIMALAY THERMOPLAST PNG FILES/`), auto-cropped to the product, resized to 900px, saved as WebP in `images/new/` (30–150 KB each): Bento, Munch, Mello and Study Snack lunch boxes, insulated casserole set, Rolex and Keeper clear storage sets, spin mop, pedal dustbin, 21 L commercial jug. Mixed in with the original 4 so colours alternate.
+- Belt rebuilt as a **real horizontal scroller**: swipe on touch, drag with the mouse, trackpad/wheel, left/right keys, and new round **‹ › arrow buttons** (one product per press). It still glides on its own (38 px/s, `js/redesign.js` sets `scrollLeft` each frame); any user input pauses gliding for 2.5 s, hovering pauses it, and it stops when off-screen. The striped belt is now drawn on the track itself, so it moves exactly with the products. A drag never triggers a click on a product link. Seamless loop via the duplicated second half (`aria-hidden` + `inert`).
+- **Interactive Product Ring**: the header above the iframe ("Interactive 3D Showcase" label, title, and the "Drag to spin ring · Toggle Ring / Grid · Tap Product for 25-item list" hint) is deleted. The title now sits **inside the ring**, in its centre, replacing leftover template copy "Stay out of the loop". Screen-reader heading/labels updated to match.
+- **Footer call block** shrunk to one line: "Dealer or distributor? Call the factory." + phone in normal-size bold (was up to 64px) + small "Become a distributor" button. Footer top padding reduced.
+
+### 2026-11-22 — Pass 13: "All products" redesign (main catalogue)
+- Was "Every category": 13 identical tiles. Now **All products** with **22 ranges**: the 13 from himalaythermoplast.com plus 9 the factory makes but the site didn't show — bathroom sets (13 sets), patla, lunch boxes (5 ranges), casserole set, storage containers (Rolex/Keeper), storage rack, commercial water jugs (12–21 L), fridge bottle, spin mop. Photos reuse the optimised WebPs already in `images/`.
+- **Room filters** (All · Bathroom · Kitchen & storage · Water · Cleaning) work together with **search**; search also matches extra keywords per tile (e.g. "tiffin" finds lunch boxes, "bin" finds pedal dustbin). Live count ("22 ranges"), and an empty state with "Show all products" when nothing matches. Logic in `js/redesign.js` (search removed from `main.js`).
+- **Mixed-size grid**: wide group photos (bathroom set, storage containers, PET containers, pedal dustbin) span two columns; `grid-auto-flow:dense` fills gaps. 4 / 3 / 2 columns for desktop / tablet / phone.
+- Each tile: tinted photo panel, name, count/detail line, and an action — **View range** (opens the category on the main site) or **Enquire** (opens the enquiry form with the range pre-filled) for ranges with no page there yet. The whole tile is the click target. Hover lifts the tile and fills the action button.
+- Phones: filter chips become one swipeable row, search goes full width, action button moves under the name.
+- Nav/footer link text "All categories" → "All products".
+
 ### Known follow-ups (not yet done)
-- Gallery images (ring + Explore By Category) are still plain PNG — a WebP pass (with PNG fallback) would shrink them further; skipped this round to limit scope.
+- **Hero video is 34 MB** — biggest remaining speed problem. Re-encoding to ~720p H.264, no audio, CRF ~28 would get it to roughly 3–5 MB. Needs `ffmpeg` (not installed on this machine). A poster frame (`images/hero-poster.jpg`) should be added at the same time so something shows before the video starts.
+- Hero + 3D ring still use the old Cormorant / DM Sans type; kept on request, so the top and bottom halves of the page use different fonts.
+- `css/style.css` still contains rules for removed sections (`.prod`, `.cgrid`, `.new-grid`, `.sec-prod`) — small, harmless, could be trimmed.
+- Unused images still on disk: `images/product-main.png`, `images/product-thumb-1..4.png` (featured section is gone), `images/category-bg.jpg`.
+- 9 ranges in "All products" have no page on himalaythermoplast.com yet, so they show **Enquire** instead of **View range** — swap in links once those pages exist.
 - The ring's side "enquiry list" drawer still has leftover clothing-cart plumbing (`cartState`, size picker UI) that now always resolves to "One size" — functions correctly but could be simplified/removed in a later pass since it's no longer doing real cart work.
 - `images/category-bg.jpg` and `images/showcase-bg.jpg` source uploads were small (735×490 and 736×552) — fine blurred/scrimmed at current section sizes, would look soft if either section got taller or the overlay lighter.
 - No photo exists yet for "Flower Pattern Dispenser, 10 Ltr." specifically or for the "Premium Water Jugs"/"Premium Water Dispenser" categories beyond the one dispenser shot reused in two places — worth a real photo for each once available.
-- `images/hero.jpg` (the hero's static `<img>` fallback behind the video) still doesn't exist; harmless since the video is the real background and `onerror` removes the broken tag, but worth adding a real fallback frame for browsers that block autoplay video.
 - The `mobile-native` skill is installed but hasn't been run over this site yet — next mobile pass should use it.

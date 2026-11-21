@@ -7,8 +7,9 @@
 <meta name="description" content="Himalay Thermoplast makes durable, recyclable plastic household products in Morbi, Gujarat: water dispensers, bath tubs, pedal dustbins, hot pots and more.">
 <link rel="icon" type="image/png" sizes="192x192" href="logo/fvicon-icon.png">
 <link rel="apple-touch-icon" href="logo/fvicon-icon.png">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=DM+Sans:wght@400;500&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Cormorant+Garamond:wght@400;500&family=DM+Sans:wght@400;500&display=swap">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/redesign.css">
 <style>
@@ -106,53 +107,6 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, .3);
 }
 
-/* 3 Points Clean Section (Durability, Recyclability, Go Green) - Full Width Navy Bar */
-.feat {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  background: #15304F;
-  color: #F4F7F8;
-  display: block;
-  border-radius: 0;
-}
-.feat-inner {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  text-align: center;
-}
-.feat-inner > div {
-  padding: 40px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-right: 1px solid rgba(143, 179, 194, .25);
-  transition: background .3s;
-}
-.feat-inner > div:last-child {
-  border-right: 0;
-}
-.feat-inner > div:hover {
-  background: rgba(255, 255, 255, .04);
-}
-.feat svg {
-  width: 44px;
-  height: 44px;
-  stroke: #8FB3C2;
-  fill: none;
-  stroke-width: 1.3;
-  margin: 0 auto 16px;
-  display: block;
-}
-.feat h3 {
-  font-size: 26px;
-  color: #F4F7F8;
-  text-transform: uppercase;
-  margin: 0;
-  letter-spacing: .06em;
-}
-
 /* In-Between 3D Showcase - Full Screen, Edge to Edge, Part of the Page */
 .sec-showcase {
   width: 100%;
@@ -181,152 +135,6 @@ body {
   display: block;
 }
 
-/* Skiper 52 HoverExpand_001 Component Styles - Full Width Section */
-.hover-expand-section {
-  width: 100%;
-  position: relative;
-  background: linear-gradient(180deg, rgba(21,48,79,.88), rgba(21,48,79,.8) 40%, rgba(21,48,79,.92)), url('images/category-bg.jpg') center/cover no-repeat fixed;
-  overflow: hidden;
-  margin: 0;
-  padding: 56px 0 64px;
-  border-top: 1px solid rgba(143, 179, 194, 0.25);
-  border-bottom: 1px solid rgba(143, 179, 194, 0.25);
-  border-radius: 0;
-}
-.hover-expand-section .eyebrow { color: #8FB3C2; }
-.hover-expand-section .sh h2 { color: #F4F7F8; }
-.hover-expand-section .sh > div:last-child { color: #D5E3E8 !important; }
-@media (max-width: 820px) {
-  .hover-expand-section { background-attachment: scroll; }
-}
-.hover-expand-wrap {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 32px 10px;
-  background: transparent;
-  overflow-x: auto;
-  scrollbar-width: none;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-}
-.hover-expand-wrap::-webkit-scrollbar {
-  display: none;
-}
-.hover-expand-grid {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  max-width: 1152px;
-}
-.hover-expand-card {
-  position: relative;
-  height: 24rem;
-  width: 5rem;
-  flex: 0 0 5rem;
-  border-radius: 1.5rem;
-  overflow: hidden;
-  cursor: pointer;
-  will-change: width, flex, transform;
-  transition: width 0.55s cubic-bezier(0.16, 1, 0.3, 1), flex 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-  background: rgba(21, 48, 79, .3);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(244, 247, 248, 0.18);
-}
-.hover-expand-card.is-active {
-  width: 24rem;
-  flex: 0 0 24rem;
-  box-shadow: 0 16px 36px rgba(21, 48, 79, 0.16);
-}
-.hover-expand-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  transform: scale(1.1);
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.hover-expand-card.is-active img {
-  transform: scale(1.18);
-}
-.hover-expand-grad {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.15) 45%, transparent 100%);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  z-index: 1;
-}
-.hover-expand-card.is-active .hover-expand-grad {
-  opacity: 1;
-}
-.hover-expand-meta {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-start;
-  padding: 18px 20px;
-  pointer-events: none;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.3s ease 0.05s, transform 0.3s ease 0.05s;
-}
-.hover-expand-card.is-active .hover-expand-meta {
-  opacity: 1;
-  transform: translateY(0);
-}
-.hover-expand-title {
-  color: #fff;
-  font-size: 20px;
-  line-height: 1.2;
-  font-weight: 500;
-  margin: 0;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  text-transform: uppercase;
-  letter-spacing: .02em;
-}
-
-@media (max-width: 900px) {
-  .hover-expand-wrap {
-    justify-content: flex-start;
-    padding: 16px 16px 24px;
-  }
-  .hover-expand-grid {
-    width: max-content;
-    justify-content: flex-start;
-  }
-  .hover-expand-card {
-    height: 20rem;
-    width: 4rem;
-    flex: 0 0 4rem;
-  }
-  .hover-expand-card.is-active {
-    width: 18rem;
-    flex: 0 0 18rem;
-  }
-}
-@media (max-width: 520px) {
-  .hover-expand-card {
-    height: 18rem;
-    width: 3.5rem;
-    flex: 0 0 3.5rem;
-    border-radius: 1.2rem;
-  }
-  .hover-expand-card.is-active {
-    width: 15rem;
-    flex: 0 0 15rem;
-  }
-}
-
 /* Responsive adjustments for Big Hero and Clean Feat */
 @media(max-width: 820px) {
   .hero {
@@ -336,17 +144,6 @@ body {
   .showcase-frame-wrap {
     height: 86vh;
     min-height: 560px;
-  }
-  .feat-inner > div {
-    padding: 24px 12px;
-  }
-  .feat svg {
-    width: 34px;
-    height: 34px;
-    margin: 0 auto 10px;
-  }
-  .feat h3 {
-    font-size: 18px;
   }
 }
 @media(max-width: 520px) {
@@ -358,95 +155,7 @@ body {
     height: 78vh;
     min-height: 480px;
   }
-  .feat h3 {
-    font-size: 15px;
-  }
 }
-footer, footer.card, footer#contact {
-  width: 100%;
-  margin: 0;
-  padding: 56px 0 28px;
-  background: #15304F !important;
-  color: #F4F7F8;
-  font-size: 12.5px;
-}
-
-/* Scroll-reveal: quick fade+rise, staggered per item, skipped under reduced-motion */
-.tile, .four > article, .new-grid > article, .feat-inner > div {
-  opacity: 0;
-  transform: translateY(26px);
-  transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1);
-  transition-delay: calc(var(--ri, 0) * 70ms);
-}
-.tile.is-visible, .four > article.is-visible, .new-grid > article.is-visible, .feat-inner > div.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* New Arrivals — asymmetric editorial grid instead of 4 equal tiles */
-.new-grid {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 22px;
-}
-.new-grid .new-feature {
-  grid-row: 1 / 3;
-  position: relative;
-}
-.new-grid .new-feature .ph {
-  aspect-ratio: 3/4;
-}
-.new-grid .new-feature .new-cap {
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  padding: 28px 24px;
-  background: linear-gradient(180deg, transparent, rgba(21,48,79,.78) 60%);
-  color: #F4F7F8;
-}
-.new-grid .new-feature .new-cap h3 { margin: 0 0 8px; font-size: clamp(22px, 2.4vw, 30px); }
-.new-grid .new-feature .new-cap a { color: #F4F7F8; }
-.new-grid .new-feature .new-cap .more { color: #D5E3E8; border-bottom-color: rgba(244,247,248,.5); }
-.new-grid > article:not(.new-feature) .ph { aspect-ratio: 1/1.05; }
-@media (max-width: 900px) {
-  .new-grid { grid-template-columns: 1fr 1fr; }
-  .new-grid .new-feature { grid-column: 1 / 3; grid-row: auto; }
-}
-@media (max-width: 560px) {
-  .new-grid { grid-template-columns: 1fr; }
-  .new-grid .new-feature { grid-column: 1; }
-}
-
-/* Our Products — glass "View range" overlay on hover/focus, image zoom */
-.cgrid .tile { position: relative; }
-.cgrid .tile .ph { position: relative; }
-.cgrid .tile .ph::after {
-  content: "View range \2192";
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  padding: 14px 16px;
-  background: rgba(21,48,79,.6);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: #F4F7F8;
-  font: 500 10.5px "DM Sans", sans-serif;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(100%);
-  transition: opacity .4s cubic-bezier(.16,1,.3,1), transform .4s cubic-bezier(.16,1,.3,1);
-  pointer-events: none;
-}
-.cgrid .tile:hover .ph::after, .cgrid .tile:focus-within .ph::after {
-  opacity: 1;
-  transform: translateY(0);
-}
-.cgrid .tile:hover .ph img, .cgrid .tile:focus-within .ph img {
-  transform: scale(1.08);
-}
-.cgrid .tile { transition: transform .4s cubic-bezier(.16,1,.3,1); }
-.cgrid .tile:hover { transform: translateY(-4px); }
 </style>
 </head>
 <body>
@@ -454,10 +163,9 @@ footer, footer.card, footer#contact {
 <div class="wrap">
 <header class="card hero" id="top">
 <div class="ph dark">
-  <video class="hero-video" autoplay muted loop playsinline preload="auto">
+  <video class="hero-video" autoplay muted loop playsinline preload="metadata">
     <source src="main-bg-video.mp4" type="video/mp4">
   </video>
-  <img src="images/hero.jpg" alt="Himalay products" onerror="this.remove()">
 </div>
 <nav aria-label="Main">
   <div class="c-wrap nav-inner">
@@ -482,29 +190,23 @@ footer, footer.card, footer#contact {
 </div>
 </header>
 
-<section class="card feat" aria-label="Why Himalay">
-  <div class="c-wrap">
-    <div class="feat-inner">
-      <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.500-3.400 8-8 9-4.600-1-8-4.500-8-9V6z"/><path d="M8.500 12l2.500 2.500L16 9.500"/></svg><h3>Durability</h3></div>
-      <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 0 0-14-5.300M4 12a8 8 0 0 0 14 5.300"/><path d="M6 3v4h4M18 21v-4h-4"/></svg><h3>Recyclability</h3></div>
-      <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15"/><path d="M5 19c3-5 6-8 10-10"/></svg><h3>Go Green</h3></div>
-    </div>
+<section class="rx-feat" aria-label="Why Himalay">
+  <div class="rx-feat__item" data-tone="deep">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5L16 9.5"/></svg>
+    <h3>Durability</h3>
+  </div>
+  <div class="rx-feat__item" data-tone="lagoon">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 0 0-14-5.3M4 12a8 8 0 0 0 14 5.3"/><path d="M6 3v4h4M18 21v-4h-4"/></svg>
+    <h3>Recyclability</h3>
+  </div>
+  <div class="rx-feat__item" data-tone="mist">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15"/><path d="M5 19c3-5 6-8 10-10"/></svg>
+    <h3>Go green</h3>
   </div>
 </section>
 
 <!-- IN-BETWEEN: Interactive 3D Kinetic Showcase Section -->
-<section class="card sec-showcase" id="showcase" aria-label="Interactive 3D Product Showcase">
-  <div class="c-wrap">
-    <div class="sh" style="padding: 0 0 16px; margin-bottom: 0; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
-      <div>
-        <span class="eyebrow">Interactive 3D Showcase</span>
-        <h2 style="font-size: clamp(26px, 3.5vw, 42px); text-transform: uppercase; margin-top: 8px;">Interactive Product Ring</h2>
-      </div>
-      <div style="font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--tide);">
-        Drag to spin ring · Toggle Ring / Grid · Tap Product for 25-item list
-      </div>
-    </div>
-  </div>
+<section class="card sec-showcase" id="showcase" aria-label="Interactive product ring">
   <div class="showcase-frame-wrap">
     <iframe class="showcase-frame" src="showcase.html" title="Himalay 3D Interactive Showcase" loading="lazy"></iframe>
   </div>
@@ -519,19 +221,19 @@ footer, footer.card, footer#contact {
         <p>Nine everyday ranges, made in our Morbi factory. Pick one to see it up close.</p>
       </div>
       <ul class="rx-index" role="list" aria-label="Categories">
-        <li><button type="button" aria-pressed="true" data-tone="deep" data-img="images/gallery/item-1.png" data-alt="Super Jumbo Bathroom Set" data-enq="Bathroom Set" data-note="Bucket, mug and matching pieces in one colour.">Bathroom set</button></li>
-        <li><button type="button" aria-pressed="false" data-tone="lagoon" data-img="images/gallery/item-2.png" data-alt="PP storage container set" data-enq="PP Containers" data-note="Stackable kitchen storage with tight lids.">PP containers</button></li>
-        <li><button type="button" aria-pressed="false" data-tone="mist" data-img="images/gallery/item-3.png" data-alt="PET container with spoon" data-enq="PET Container" data-note="Clear jars with a spoon, so you can see what's inside.">PET container</button></li>
-        <li><button type="button" aria-pressed="false" data-tone="deep" data-img="images/gallery/item-4.png" data-alt="Premium fridge bottle" data-enq="Fridge Bottle" data-note="Slim bottles that fit the fridge door.">Fridge bottle</button></li>
-        <li><button type="button" aria-pressed="false" data-tone="lagoon" data-img="images/gallery/item-5.png" data-alt="Himalay bath patla" data-enq="Himalay Patla" data-note="Low bathroom stool with a firm, non-slip grip.">Himalay patla</button></li>
-        <li><button type="button" aria-pressed="false" data-tone="mist" data-img="images/gallery/item-6.png" data-alt="Multi-tier storage rack" data-enq="Storage Rack" data-note="Multi-tier racks for kitchens and bathrooms.">Storage rack</button></li>
-        <li><button type="button" aria-pressed="false" data-tone="deep" data-img="images/gallery/item-7.png" data-alt="Aquvo water jug" data-enq="Household Jug" data-note="Everyday water jugs for the home.">Household jug</button></li>
-        <li><button type="button" aria-pressed="false" data-tone="lagoon" data-img="images/gallery/item-8.png" data-alt="Commercial water jug, 12 litre" data-enq="Commercial Jug" data-note="Large-capacity jugs for shops and offices.">Commercial jug</button></li>
-        <li><button type="button" aria-pressed="false" data-tone="mist" data-img="images/gallery/item-9.png" data-alt="Water dispenser, 8 litre" data-enq="Water Dispenser" data-note="Dispensers with a tap, in 8 and 10 litre sizes.">Water dispenser</button></li>
+        <li><button type="button" aria-pressed="true" data-tone="deep" data-img="images/gallery/item-1.webp" data-alt="Super Jumbo Bathroom Set" data-enq="Bathroom Set" data-note="Bucket, mug and matching pieces in one colour.">Bathroom set</button></li>
+        <li><button type="button" aria-pressed="false" data-tone="lagoon" data-img="images/gallery/item-2.webp" data-alt="PP storage container set" data-enq="PP Containers" data-note="Stackable kitchen storage with tight lids.">PP containers</button></li>
+        <li><button type="button" aria-pressed="false" data-tone="mist" data-img="images/gallery/item-3.webp" data-alt="PET container with spoon" data-enq="PET Container" data-note="Clear jars with a spoon, so you can see what's inside.">PET container</button></li>
+        <li><button type="button" aria-pressed="false" data-tone="deep" data-img="images/gallery/item-4.webp" data-alt="Premium fridge bottle" data-enq="Fridge Bottle" data-note="Slim bottles that fit the fridge door.">Fridge bottle</button></li>
+        <li><button type="button" aria-pressed="false" data-tone="lagoon" data-img="images/gallery/item-5.webp" data-alt="Himalay bath patla" data-enq="Himalay Patla" data-note="Low bathroom stool with a firm, non-slip grip.">Himalay patla</button></li>
+        <li><button type="button" aria-pressed="false" data-tone="mist" data-img="images/gallery/item-6.webp" data-alt="Multi-tier storage rack" data-enq="Storage Rack" data-note="Multi-tier racks for kitchens and bathrooms.">Storage rack</button></li>
+        <li><button type="button" aria-pressed="false" data-tone="deep" data-img="images/gallery/item-7.webp" data-alt="Aquvo water jug" data-enq="Household Jug" data-note="Everyday water jugs for the home.">Household jug</button></li>
+        <li><button type="button" aria-pressed="false" data-tone="lagoon" data-img="images/gallery/item-8.webp" data-alt="Commercial water jug, 12 litre" data-enq="Commercial Jug" data-note="Large-capacity jugs for shops and offices.">Commercial jug</button></li>
+        <li><button type="button" aria-pressed="false" data-tone="mist" data-img="images/gallery/item-9.webp" data-alt="Water dispenser, 8 litre" data-enq="Water Dispenser" data-note="Dispensers with a tap, in 8 and 10 litre sizes.">Water dispenser</button></li>
       </ul>
     </div>
     <figure class="rx-stage" id="rxStage">
-      <div class="rx-stage__photo"><img id="rxStageImg" src="images/gallery/item-1.png" alt="Super Jumbo Bathroom Set" width="1600" height="1067"></div>
+      <div class="rx-stage__photo"><img id="rxStageImg" decoding="async" src="images/gallery/item-1.webp" alt="Super Jumbo Bathroom Set" width="1600" height="1067"></div>
       <figcaption aria-live="polite">
         <div><span class="rx-stage__name" id="rxStageName">Bathroom set</span><span class="rx-stage__note" id="rxStageNote">Bucket, mug and matching pieces in one colour.</span></div>
         <button class="rx-btn" type="button" id="rxStageEnq" data-enq="Bathroom Set">Ask for dealer price</button>
@@ -540,92 +242,236 @@ footer, footer.card, footer#contact {
   </div>
 </section>
 
-<section class="rx rx-shelf" id="new" aria-labelledby="h-new">
+<section class="rx rx-line" id="new" aria-labelledby="h-new">
   <div class="c-wrap">
     <div class="rx-head">
-      <div><h2 id="h-new">New on the shelf</h2><p>The latest pieces to leave the factory.</p></div>
-      <a class="rx-link" href="#catalog">See all categories</a>
-    </div>
-    <div class="rx-shelf__row">
-      <article class="rx-shelf__item">
-        <div class="rx-shelf__obj"><img src="images/new-1.png" alt="Flower Pattern Container" loading="lazy" width="900" height="389"></div>
-        <div class="rx-shelf__cap"><h3><a href="https://himalaythermoplast.com/products/flower-pattern-container/" target="_blank" rel="noopener">Flower pattern container</a></h3><button class="rx-link" type="button" data-enq="Flower Pattern Container">Enquire</button></div>
-      </article>
-      <article class="rx-shelf__item">
-        <div class="rx-shelf__obj"><img src="images/new-2.png" alt="Himalay Cool 8" loading="lazy" width="827" height="900"></div>
-        <div class="rx-shelf__cap"><h3><a href="https://himalaythermoplast.com/products/himalay-cool-8/" target="_blank" rel="noopener">Himalay Cool 8</a></h3><button class="rx-link" type="button" data-enq="Himalay Cool 8">Enquire</button></div>
-      </article>
-      <article class="rx-shelf__item">
-        <div class="rx-shelf__obj"><img src="images/new-3.png" alt="Plain Water Dispenser, 8 Ltr." loading="lazy" width="744" height="900"></div>
-        <div class="rx-shelf__cap"><h3><a href="https://himalaythermoplast.com/products/plain-water-dispenser-8-ltr/" target="_blank" rel="noopener">Plain water dispenser, 8 L</a></h3><button class="rx-link" type="button" data-enq="Plain Water Dispenser, 8 Ltr.">Enquire</button></div>
-      </article>
-      <article class="rx-shelf__item">
-        <div class="rx-shelf__obj"><img src="images/new-4.png" alt="Flower Pattern Dispenser, 10 Ltr." loading="lazy" width="605" height="900"></div>
-        <div class="rx-shelf__cap"><h3><a href="https://himalaythermoplast.com/products/flower-pattern-dispenser-10-ltr/" target="_blank" rel="noopener">Flower pattern dispenser, 10 L</a></h3><button class="rx-link" type="button" data-enq="Flower Pattern Dispenser, 10 Ltr.">Enquire</button></div>
-      </article>
+      <div><h2 id="h-new">Fresh off the line</h2><p>New pieces from our Morbi factory. Swipe, drag or use the arrows.</p></div>
+      <div class="rx-line__ctrl">
+        <a class="rx-link" href="#catalog">See all products</a>
+        <button class="rx-arrow" type="button" data-dir="-1" aria-label="Previous products"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="rx-arrow rx-arrow--next" type="button" data-dir="1" aria-label="Next products"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      </div>
     </div>
   </div>
-</section>
-
-<section class="rx rx-prod" id="product" aria-labelledby="h-prod">
-  <div class="c-wrap rx-prod__grid">
-    <div>
-      <div class="rx-prod__stage ph" id="main"><img src="images/product-main.png" alt="Flower Pattern Dispenser" width="826" height="1000"></div>
-      <div class="rx-prod__thumbs" role="group" aria-label="Product photos">
-        <button type="button" aria-pressed="true" data-src="images/product-main.png"><img src="images/product-thumb-1.png" alt="Flower Pattern Dispenser" loading="lazy"></button>
-        <button type="button" aria-pressed="false" data-src="images/product-thumb-2.png"><img src="images/product-thumb-2.png" alt="Himalay Gold colour option" loading="lazy"></button>
-        <button type="button" aria-pressed="false" data-src="images/product-thumb-3.png"><img src="images/product-thumb-3.png" alt="Himalay Gold, light grey option" loading="lazy"></button>
-        <button type="button" aria-pressed="false" data-src="images/product-thumb-4.png"><img src="images/product-thumb-4.png" alt="Flower pattern detail" loading="lazy"></button>
-      </div>
-    </div>
-    <div class="rx-prod__info">
-      <h2 id="h-prod">Flower pattern dispenser</h2>
-      <p class="rx-price">Price on request<small>Dealer and distributor rates sent on enquiry.</small></p>
-      <p class="rx-prod__desc">A sculpted water dispenser with a soft flower pattern and a front tap. Wipes clean in seconds.</p>
-      <div class="rx-colour">
-        <div class="cl">Colour: <span id="cl">Cobalt</span></div>
-        <div class="sw" id="sw" role="group" aria-label="Colour">
-          <button class="on" aria-pressed="true" aria-label="Cobalt" data-n="Cobalt" data-a="#6FA4DC" data-b="#2C6198" style="background:#2C6198"></button>
-          <button aria-pressed="false" aria-label="Lagoon" data-n="Lagoon" data-a="#9FE0EA" data-b="#41BCCF" style="background:#41BCCF"></button>
-          <button aria-pressed="false" aria-label="White" data-n="White" data-a="#FFFFFF" data-b="#E3ECF4" style="background:#F5F8FB"></button>
-        </div>
-      </div>
-      <dl class="rx-specs">
-        <dt>Capacity</dt><dd>8 L and 10 L</dd>
-        <dt>Finish</dt><dd>Plain or flower pattern</dd>
-        <dt>Material</dt><dd>Recyclable thermoplast</dd>
-        <dt>Ships from</dt><dd>Morbi, Gujarat</dd>
-      </dl>
-      <div class="rx-buy">
-        <div class="rx-qty" role="group" aria-label="Quantity"><button id="qm" type="button" aria-label="Decrease quantity">–</button><input id="qi" type="number" min="1" max="999" value="1" aria-label="Quantity"><button id="qp" type="button" aria-label="Increase quantity">+</button></div>
-        <button class="rx-btn" id="eq" type="button">Ask for dealer price</button>
-      </div>
-    </div>
+  <div class="rx-line__belt" tabindex="0" role="region" aria-label="New arrivals. Use left and right arrow keys to scroll.">
+    <ul class="rx-line__track" role="list">
+      <li class="rx-line__item">
+        <div class="rx-line__obj"><img src="images/new/bento-box.webp" alt="Bento lunch box" loading="lazy" decoding="async" draggable="false" width="892" height="900"></div>
+        <div class="rx-line__cap"><h3>Bento lunch box</h3><p>Steel compartments, clip-lock lid.</p><button class="rx-link" type="button" data-enq="Bento lunch box">Enquire</button></div>
+      </li>
+      <li class="rx-line__item">
+        <div class="rx-line__obj"><img src="images/new-2.webp" alt="Himalay Cool 8" loading="lazy" decoding="async" draggable="false" width="827" height="900"></div>
+        <div class="rx-line__cap"><h3><a href="https://himalaythermoplast.com/products/himalay-cool-8/" target="_blank" rel="noopener">Himalay Cool 8</a></h3><p>Insulated water cooler, 8 litres.</p><button class="rx-link" type="button" data-enq="Himalay Cool 8">Enquire</button></div>
+      </li>
+      <li class="rx-line__item">
+        <div class="rx-line__obj"><img src="images/new/casserole.webp" alt="Insulated casserole set" loading="lazy" decoding="async" draggable="false" width="900" height="657"></div>
+        <div class="rx-line__cap"><h3>Insulated casserole set</h3><p>Keeps rotis and curries hot.</p><button class="rx-link" type="button" data-enq="Insulated casserole set">Enquire</button></div>
+      </li>
+      <li class="rx-line__item">
+        <div class="rx-line__obj"><img src="images/new/munch-box.webp" alt="Munch lunch box" loading="lazy" decoding="async" draggable="false" width="811" height="900"></div>
+        <div class="rx-line__cap"><h3>Munch lunch box</h3><p>Printed lid, clip-lock sides.</p><button class="rx-link" type="button" data-enq="Munch lunch box">Enquire</button></div>
+      </li>
+      <li class="rx-line__item">
+        <div class="rx-line__obj"><img src="images/new-1.webp" alt="Flower pattern container" loading="lazy" decoding="async" draggable="false" width="900" height="389"></div>
+        <div class="rx-line__cap"><h3><a href="https://himalaythermoplast.com/products/flower-pattern-container/" target="_blank" rel="noopener">Flower pattern container</a></h3><p>Set of three printed storage jars.</p><button class="rx-link" type="button" data-enq="Flower pattern container">Enquire</button></div>
+      </li>
+      <li class="rx-line__item">
+        <div class="rx-line__obj"><img src="images/new/pedal-dustbin.webp" alt="Pedal dustbin" loading="lazy" decoding="async" draggable="false" width="900" height="580"></div>
+        <div class="rx-line__cap"><h3>Pedal dustbin</h3><p>Lid opens with a foot pedal.</p><button class="rx-link" type="button" data-enq="Pedal dustbin">Enquire</button></div>
+      </li>
+      <li class="rx-line__item">
+        <div class="rx-line__obj"><img src="images/new/mello-box.webp" alt="Mello lunch box" loading="lazy" decoding="async" draggable="false" width="860" height="900"></div>
+        <div class="rx-line__cap"><h3>Mello lunch box</h3><p>Soft colours, snap-shut lid.</p><button class="rx-link" type="button" data-enq="Mello lunch box">Enquire</button></div>
+      </li>
+      <li class="rx-line__item">
+        <div class="rx-line__obj"><img src="images/new-3.webp" alt="Plain water dispenser" loading="lazy" decoding="async" draggable="false" width="744" height="900"></div>
+        <div class="rx-line__cap"><h3><a href="https://himalaythermoplast.com/products/plain-water-dispenser-8-ltr/" target="_blank" rel="noopener">Plain water dispenser</a></h3><p>Clear body, 8 litres, front tap.</p><button class="rx-link" type="button" data-enq="Plain water dispenser">Enquire</button></div>
+      </li>
+      <li class="rx-line__item">
+        <div class="rx-line__obj"><img src="images/new/rolex-storage.webp" alt="Rolex storage set" loading="lazy" decoding="async" draggable="false" width="430" height="900"></div>
+        <div class="rx-line__cap"><h3>Rolex storage set</h3><p>Clear stackable containers, 7 pieces.</p><button class="rx-link" type="button" data-enq="Rolex storage set">Enquire</button></div>
+      </li>
+      <li class="rx-line__item">
+        <div class="rx-line__obj"><img src="images/new/study-snack.webp" alt="Study Snack lunch box" loading="lazy" decoding="async" draggable="false" width="900" height="695"></div>
+        <div class="rx-line__cap"><h3>Study Snack lunch box</h3><p>Kids’ box with steel trays.</p><button class="rx-link" type="button" data-enq="Study Snack lunch box">Enquire</button></div>
+      </li>
+      <li class="rx-line__item">
+        <div class="rx-line__obj"><img src="images/new-4.webp" alt="Flower pattern dispenser" loading="lazy" decoding="async" draggable="false" width="605" height="900"></div>
+        <div class="rx-line__cap"><h3><a href="https://himalaythermoplast.com/products/flower-pattern-dispenser-10-ltr/" target="_blank" rel="noopener">Flower pattern dispenser</a></h3><p>Insulated, 10 litres, front tap.</p><button class="rx-link" type="button" data-enq="Flower pattern dispenser">Enquire</button></div>
+      </li>
+      <li class="rx-line__item">
+        <div class="rx-line__obj"><img src="images/new/steel-mop.webp" alt="Spin mop" loading="lazy" decoding="async" draggable="false" width="490" height="900"></div>
+        <div class="rx-line__cap"><h3>Spin mop</h3><p>Steel handle with spin bucket.</p><button class="rx-link" type="button" data-enq="Spin mop">Enquire</button></div>
+      </li>
+      <li class="rx-line__item">
+        <div class="rx-line__obj"><img src="images/new/keeper-storage.webp" alt="Keeper storage set" loading="lazy" decoding="async" draggable="false" width="900" height="517"></div>
+        <div class="rx-line__cap"><h3>Keeper storage set</h3><p>Clear rectangular containers.</p><button class="rx-link" type="button" data-enq="Keeper storage set">Enquire</button></div>
+      </li>
+      <li class="rx-line__item">
+        <div class="rx-line__obj"><img src="images/new/commercial-jug-21.webp" alt="Commercial water jug" loading="lazy" decoding="async" draggable="false" width="528" height="900"></div>
+        <div class="rx-line__cap"><h3>Commercial water jug</h3><p>Insulated, 21 litres.</p><button class="rx-link" type="button" data-enq="Commercial water jug">Enquire</button></div>
+      </li>
+      <li class="rx-line__item" aria-hidden="true" inert>
+        <div class="rx-line__obj"><img src="images/new/bento-box.webp" alt="" loading="lazy" decoding="async" draggable="false" width="892" height="900"></div>
+        <div class="rx-line__cap"><h3>Bento lunch box</h3><p>Steel compartments, clip-lock lid.</p><button class="rx-link" type="button" data-enq="Bento lunch box">Enquire</button></div>
+      </li>
+      <li class="rx-line__item" aria-hidden="true" inert>
+        <div class="rx-line__obj"><img src="images/new-2.webp" alt="" loading="lazy" decoding="async" draggable="false" width="827" height="900"></div>
+        <div class="rx-line__cap"><h3><a href="https://himalaythermoplast.com/products/himalay-cool-8/" target="_blank" rel="noopener">Himalay Cool 8</a></h3><p>Insulated water cooler, 8 litres.</p><button class="rx-link" type="button" data-enq="Himalay Cool 8">Enquire</button></div>
+      </li>
+      <li class="rx-line__item" aria-hidden="true" inert>
+        <div class="rx-line__obj"><img src="images/new/casserole.webp" alt="" loading="lazy" decoding="async" draggable="false" width="900" height="657"></div>
+        <div class="rx-line__cap"><h3>Insulated casserole set</h3><p>Keeps rotis and curries hot.</p><button class="rx-link" type="button" data-enq="Insulated casserole set">Enquire</button></div>
+      </li>
+      <li class="rx-line__item" aria-hidden="true" inert>
+        <div class="rx-line__obj"><img src="images/new/munch-box.webp" alt="" loading="lazy" decoding="async" draggable="false" width="811" height="900"></div>
+        <div class="rx-line__cap"><h3>Munch lunch box</h3><p>Printed lid, clip-lock sides.</p><button class="rx-link" type="button" data-enq="Munch lunch box">Enquire</button></div>
+      </li>
+      <li class="rx-line__item" aria-hidden="true" inert>
+        <div class="rx-line__obj"><img src="images/new-1.webp" alt="" loading="lazy" decoding="async" draggable="false" width="900" height="389"></div>
+        <div class="rx-line__cap"><h3><a href="https://himalaythermoplast.com/products/flower-pattern-container/" target="_blank" rel="noopener">Flower pattern container</a></h3><p>Set of three printed storage jars.</p><button class="rx-link" type="button" data-enq="Flower pattern container">Enquire</button></div>
+      </li>
+      <li class="rx-line__item" aria-hidden="true" inert>
+        <div class="rx-line__obj"><img src="images/new/pedal-dustbin.webp" alt="" loading="lazy" decoding="async" draggable="false" width="900" height="580"></div>
+        <div class="rx-line__cap"><h3>Pedal dustbin</h3><p>Lid opens with a foot pedal.</p><button class="rx-link" type="button" data-enq="Pedal dustbin">Enquire</button></div>
+      </li>
+      <li class="rx-line__item" aria-hidden="true" inert>
+        <div class="rx-line__obj"><img src="images/new/mello-box.webp" alt="" loading="lazy" decoding="async" draggable="false" width="860" height="900"></div>
+        <div class="rx-line__cap"><h3>Mello lunch box</h3><p>Soft colours, snap-shut lid.</p><button class="rx-link" type="button" data-enq="Mello lunch box">Enquire</button></div>
+      </li>
+      <li class="rx-line__item" aria-hidden="true" inert>
+        <div class="rx-line__obj"><img src="images/new-3.webp" alt="" loading="lazy" decoding="async" draggable="false" width="744" height="900"></div>
+        <div class="rx-line__cap"><h3><a href="https://himalaythermoplast.com/products/plain-water-dispenser-8-ltr/" target="_blank" rel="noopener">Plain water dispenser</a></h3><p>Clear body, 8 litres, front tap.</p><button class="rx-link" type="button" data-enq="Plain water dispenser">Enquire</button></div>
+      </li>
+      <li class="rx-line__item" aria-hidden="true" inert>
+        <div class="rx-line__obj"><img src="images/new/rolex-storage.webp" alt="" loading="lazy" decoding="async" draggable="false" width="430" height="900"></div>
+        <div class="rx-line__cap"><h3>Rolex storage set</h3><p>Clear stackable containers, 7 pieces.</p><button class="rx-link" type="button" data-enq="Rolex storage set">Enquire</button></div>
+      </li>
+      <li class="rx-line__item" aria-hidden="true" inert>
+        <div class="rx-line__obj"><img src="images/new/study-snack.webp" alt="" loading="lazy" decoding="async" draggable="false" width="900" height="695"></div>
+        <div class="rx-line__cap"><h3>Study Snack lunch box</h3><p>Kids’ box with steel trays.</p><button class="rx-link" type="button" data-enq="Study Snack lunch box">Enquire</button></div>
+      </li>
+      <li class="rx-line__item" aria-hidden="true" inert>
+        <div class="rx-line__obj"><img src="images/new-4.webp" alt="" loading="lazy" decoding="async" draggable="false" width="605" height="900"></div>
+        <div class="rx-line__cap"><h3><a href="https://himalaythermoplast.com/products/flower-pattern-dispenser-10-ltr/" target="_blank" rel="noopener">Flower pattern dispenser</a></h3><p>Insulated, 10 litres, front tap.</p><button class="rx-link" type="button" data-enq="Flower pattern dispenser">Enquire</button></div>
+      </li>
+      <li class="rx-line__item" aria-hidden="true" inert>
+        <div class="rx-line__obj"><img src="images/new/steel-mop.webp" alt="" loading="lazy" decoding="async" draggable="false" width="490" height="900"></div>
+        <div class="rx-line__cap"><h3>Spin mop</h3><p>Steel handle with spin bucket.</p><button class="rx-link" type="button" data-enq="Spin mop">Enquire</button></div>
+      </li>
+      <li class="rx-line__item" aria-hidden="true" inert>
+        <div class="rx-line__obj"><img src="images/new/keeper-storage.webp" alt="" loading="lazy" decoding="async" draggable="false" width="900" height="517"></div>
+        <div class="rx-line__cap"><h3>Keeper storage set</h3><p>Clear rectangular containers.</p><button class="rx-link" type="button" data-enq="Keeper storage set">Enquire</button></div>
+      </li>
+      <li class="rx-line__item" aria-hidden="true" inert>
+        <div class="rx-line__obj"><img src="images/new/commercial-jug-21.webp" alt="" loading="lazy" decoding="async" draggable="false" width="528" height="900"></div>
+        <div class="rx-line__cap"><h3>Commercial water jug</h3><p>Insulated, 21 litres.</p><button class="rx-link" type="button" data-enq="Commercial water jug">Enquire</button></div>
+      </li>
+    </ul>
   </div>
 </section>
 
 <section class="rx rx-cat" id="catalog" aria-labelledby="h-cat">
   <div class="c-wrap">
     <div class="rx-head">
-      <div><h2 id="h-cat">Every category</h2><p>Buckets, tubs, jugs, dispensers and more. Open a category to see each product on our main site.</p></div>
-      <label class="rx-search"><span class="skip">Search categories</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Search categories" autocomplete="off"></label>
+      <div><h2 id="h-cat">All products</h2><p>22 ranges for the bathroom, kitchen, water and cleaning. Pick a room or search.</p></div>
     </div>
-    <p class="rx-count" id="cn" role="status" aria-live="polite">13 categories</p>
+    <div class="rx-cat__bar">
+      <div class="rx-chips" role="group" aria-label="Filter by room"><button type="button" class="rx-chip" data-f="all" aria-pressed="true">All</button><button type="button" class="rx-chip" data-f="bathroom" aria-pressed="false">Bathroom</button><button type="button" class="rx-chip" data-f="kitchen" aria-pressed="false">Kitchen &amp; storage</button><button type="button" class="rx-chip" data-f="water" aria-pressed="false">Water</button><button type="button" class="rx-chip" data-f="cleaning" aria-pressed="false">Cleaning</button></div>
+      <label class="rx-search"><span class="skip">Search products</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Search, e.g. bucket, jug, lunch box" autocomplete="off"></label>
+    </div>
+    <p class="rx-count" id="cn" role="status" aria-live="polite">22 ranges</p>
     <div class="rx-grid" id="cg">
-      <article class="tile rx-tile" data-n="deluxe bucket set"><div class="rx-tile__ph"><img src="images/categories/deluxe-bucket-set.png" alt="" loading="lazy"></div><h3><a href="https://himalaythermoplast.com/product-category/deluxe-bucket-set/" target="_blank" rel="noopener">Deluxe bucket set</a></h3></article>
-      <article class="tile rx-tile" data-n="bucket set"><div class="rx-tile__ph"><img src="images/categories/bucket-set.png" alt="" loading="lazy"></div><h3><a href="https://himalaythermoplast.com/product-category/bucket-set/" target="_blank" rel="noopener">Bucket set</a></h3></article>
-      <article class="tile rx-tile" data-n="insulated hot pot"><div class="rx-tile__ph"><img src="images/categories/instuleted-hot-pot.png" alt="" loading="lazy"></div><h3><a href="https://himalaythermoplast.com/product-category/instuleted-hot-pot/" target="_blank" rel="noopener">Insulated hot pot</a></h3><span class="ct">2 products</span></article>
-      <article class="tile rx-tile" data-n="jumbo container set"><div class="rx-tile__ph"><img src="images/categories/jumbo-container-set.png" alt="" loading="lazy"></div><h3><a href="https://himalaythermoplast.com/product-category/jumbo-container-set/" target="_blank" rel="noopener">Jumbo container set</a></h3></article>
-      <article class="tile rx-tile" data-n="pet container with spoon set"><div class="rx-tile__ph"><img src="images/categories/pet-container-with-spoon-set.png" alt="" loading="lazy"></div><h3><a href="https://himalaythermoplast.com/product-category/pet-container-with-spoon-set/" target="_blank" rel="noopener">PET container with spoon set</a></h3></article>
-      <article class="tile rx-tile" data-n="bath tub"><div class="rx-tile__ph"><img src="images/categories/bath-tub.png" alt="" loading="lazy"></div><h3><a href="https://himalaythermoplast.com/product-category/bath-tub/" target="_blank" rel="noopener">Bath tub</a></h3><span class="ct">3 products</span></article>
-      <article class="tile rx-tile" data-n="bath bucket"><div class="rx-tile__ph"><img src="images/categories/bath-bucket.png" alt="" loading="lazy"></div><h3><a href="https://himalaythermoplast.com/product-category/bath-bucket/" target="_blank" rel="noopener">Bath bucket</a></h3></article>
-      <article class="tile rx-tile" data-n="bathroom stool"><div class="rx-tile__ph"><img src="images/categories/bathroom-stool.png" alt="" loading="lazy"></div><h3><a href="https://himalaythermoplast.com/product-category/bathroom-stool/" target="_blank" rel="noopener">Bathroom stool</a></h3></article>
-      <article class="tile rx-tile" data-n="bathroom tumbler"><div class="rx-tile__ph"><img src="images/categories/bathroom-tubler.png" alt="" loading="lazy"></div><h3><a href="https://himalaythermoplast.com/product-category/bathroom-tubler/" target="_blank" rel="noopener">Bathroom tumbler</a></h3><span class="ct">3 products</span></article>
-      <article class="tile rx-tile" data-n="pedal dustbin"><div class="rx-tile__ph"><img src="images/categories/pedal-dustbin.png" alt="" loading="lazy"></div><h3><a href="https://himalaythermoplast.com/product-category/pedal-dustbin/" target="_blank" rel="noopener">Pedal dustbin</a></h3><span class="ct">7 products</span></article>
-      <article class="tile rx-tile" data-n="premium pet bottle"><div class="rx-tile__ph"><img src="images/categories/premium-pet-bottle.png" alt="" loading="lazy"></div><h3><a href="https://himalaythermoplast.com/product-category/premium-pet-bottle/" target="_blank" rel="noopener">Premium PET bottle</a></h3></article>
-      <article class="tile rx-tile" data-n="premium water jugs"><div class="rx-tile__ph"><img src="images/categories/premium-water-jugs.png" alt="" loading="lazy"></div><h3><a href="https://himalaythermoplast.com/product-category/premium-water-jugs/" target="_blank" rel="noopener">Premium water jugs</a></h3><span class="ct">3 products</span></article>
-      <article class="tile rx-tile" data-n="premium water dispenser"><div class="rx-tile__ph"><img src="images/categories/premium-water-dispenser.png" alt="" loading="lazy"></div><h3><a href="https://himalaythermoplast.com/product-category/premium-water-dispenser/" target="_blank" rel="noopener">Premium water dispenser</a></h3><span class="ct">5 products</span></article>
+      <article class="tile rx-tile is-wide" data-g="bathroom" data-n="bathroom set bath bucket mug tumbler soap">
+        <div class="rx-tile__ph"><img src="images/gallery/item-1.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Bathroom set</h3><p class="rx-tile__meta">13 sets</p><button class="rx-tile__go" type="button" data-enq="Bathroom set">Enquire</button></div>
+      </article>
+      <article class="tile rx-tile" data-g="bathroom" data-n="bath tub tub">
+        <div class="rx-tile__ph"><img src="images/categories/bath-tub.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Bath tub</h3><p class="rx-tile__meta">3 products</p><a class="rx-tile__go" href="https://himalaythermoplast.com/product-category/bath-tub/" target="_blank" rel="noopener">View range</a></div>
+      </article>
+      <article class="tile rx-tile" data-g="bathroom" data-n="bath bucket bucket">
+        <div class="rx-tile__ph"><img src="images/categories/bath-bucket.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Bath bucket</h3><a class="rx-tile__go" href="https://himalaythermoplast.com/product-category/bath-bucket/" target="_blank" rel="noopener">View range</a></div>
+      </article>
+      <article class="tile rx-tile" data-g="bathroom" data-n="bathroom stool stool">
+        <div class="rx-tile__ph"><img src="images/categories/bathroom-stool.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Bathroom stool</h3><a class="rx-tile__go" href="https://himalaythermoplast.com/product-category/bathroom-stool/" target="_blank" rel="noopener">View range</a></div>
+      </article>
+      <article class="tile rx-tile" data-g="bathroom" data-n="bathroom tumbler mug glass">
+        <div class="rx-tile__ph"><img src="images/categories/bathroom-tubler.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Bathroom tumbler</h3><p class="rx-tile__meta">3 products</p><a class="rx-tile__go" href="https://himalaythermoplast.com/product-category/bathroom-tubler/" target="_blank" rel="noopener">View range</a></div>
+      </article>
+      <article class="tile rx-tile" data-g="bathroom" data-n="himalay patla patla stool seat">
+        <div class="rx-tile__ph"><img src="images/gallery/item-5.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Himalay patla</h3><p class="rx-tile__meta">Round and square</p><button class="rx-tile__go" type="button" data-enq="Himalay patla">Enquire</button></div>
+      </article>
+      <article class="tile rx-tile" data-g="bathroom" data-n="bucket set bucket">
+        <div class="rx-tile__ph"><img src="images/categories/bucket-set.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Bucket set</h3><a class="rx-tile__go" href="https://himalaythermoplast.com/product-category/bucket-set/" target="_blank" rel="noopener">View range</a></div>
+      </article>
+      <article class="tile rx-tile" data-g="bathroom" data-n="deluxe bucket set bucket">
+        <div class="rx-tile__ph"><img src="images/categories/deluxe-bucket-set.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Deluxe bucket set</h3><a class="rx-tile__go" href="https://himalaythermoplast.com/product-category/deluxe-bucket-set/" target="_blank" rel="noopener">View range</a></div>
+      </article>
+      <article class="tile rx-tile" data-g="kitchen" data-n="lunch boxes tiffin bento munch mello study snack bites school">
+        <div class="rx-tile__ph"><img src="images/new/study-snack.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Lunch boxes</h3><p class="rx-tile__meta">5 ranges</p><button class="rx-tile__go" type="button" data-enq="Lunch boxes">Enquire</button></div>
+      </article>
+      <article class="tile rx-tile" data-g="kitchen" data-n="insulated hot pot casserole roti">
+        <div class="rx-tile__ph"><img src="images/categories/instuleted-hot-pot.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Insulated hot pot</h3><p class="rx-tile__meta">2 products</p><a class="rx-tile__go" href="https://himalaythermoplast.com/product-category/instuleted-hot-pot/" target="_blank" rel="noopener">View range</a></div>
+      </article>
+      <article class="tile rx-tile" data-g="kitchen" data-n="casserole set hot pot roti">
+        <div class="rx-tile__ph"><img src="images/new/casserole.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Casserole set</h3><p class="rx-tile__meta">Insulated</p><button class="rx-tile__go" type="button" data-enq="Casserole set">Enquire</button></div>
+      </article>
+      <article class="tile rx-tile is-wide" data-g="kitchen" data-n="storage containers clear box keeper rolex">
+        <div class="rx-tile__ph"><img src="images/new/keeper-storage.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Storage containers</h3><p class="rx-tile__meta">Rolex and Keeper sets</p><button class="rx-tile__go" type="button" data-enq="Storage containers">Enquire</button></div>
+      </article>
+      <article class="tile rx-tile" data-g="kitchen" data-n="jumbo container set storage">
+        <div class="rx-tile__ph"><img src="images/categories/jumbo-container-set.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Jumbo container set</h3><a class="rx-tile__go" href="https://himalaythermoplast.com/product-category/jumbo-container-set/" target="_blank" rel="noopener">View range</a></div>
+      </article>
+      <article class="tile rx-tile is-wide" data-g="kitchen" data-n="pet container with spoon jar storage">
+        <div class="rx-tile__ph"><img src="images/categories/pet-container-with-spoon-set.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>PET container with spoon</h3><a class="rx-tile__go" href="https://himalaythermoplast.com/product-category/pet-container-with-spoon-set/" target="_blank" rel="noopener">View range</a></div>
+      </article>
+      <article class="tile rx-tile" data-g="kitchen" data-n="storage rack shelf organiser">
+        <div class="rx-tile__ph"><img src="images/gallery/item-6.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Storage rack</h3><p class="rx-tile__meta">Round and square</p><button class="rx-tile__go" type="button" data-enq="Storage rack">Enquire</button></div>
+      </article>
+      <article class="tile rx-tile" data-g="water" data-n="premium water dispenser tap">
+        <div class="rx-tile__ph"><img src="images/categories/premium-water-dispenser.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Premium water dispenser</h3><p class="rx-tile__meta">5 products</p><a class="rx-tile__go" href="https://himalaythermoplast.com/product-category/premium-water-dispenser/" target="_blank" rel="noopener">View range</a></div>
+      </article>
+      <article class="tile rx-tile" data-g="water" data-n="premium water jugs jug cool">
+        <div class="rx-tile__ph"><img src="images/categories/premium-water-jugs.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Premium water jugs</h3><p class="rx-tile__meta">3 products</p><a class="rx-tile__go" href="https://himalaythermoplast.com/product-category/premium-water-jugs/" target="_blank" rel="noopener">View range</a></div>
+      </article>
+      <article class="tile rx-tile" data-g="water" data-n="commercial water jugs jug office shop">
+        <div class="rx-tile__ph"><img src="images/gallery/item-8.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Commercial water jugs</h3><p class="rx-tile__meta">12 to 21 litres</p><button class="rx-tile__go" type="button" data-enq="Commercial water jugs">Enquire</button></div>
+      </article>
+      <article class="tile rx-tile" data-g="water" data-n="premium pet bottle bottle">
+        <div class="rx-tile__ph"><img src="images/categories/premium-pet-bottle.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Premium PET bottle</h3><a class="rx-tile__go" href="https://himalaythermoplast.com/product-category/premium-pet-bottle/" target="_blank" rel="noopener">View range</a></div>
+      </article>
+      <article class="tile rx-tile" data-g="water" data-n="fridge bottle bottle">
+        <div class="rx-tile__ph"><img src="images/gallery/item-4.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Fridge bottle</h3><button class="rx-tile__go" type="button" data-enq="Fridge bottle">Enquire</button></div>
+      </article>
+      <article class="tile rx-tile is-wide" data-g="cleaning" data-n="pedal dustbin bin paddle waste">
+        <div class="rx-tile__ph"><img src="images/categories/pedal-dustbin.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Pedal dustbin</h3><p class="rx-tile__meta">7 products</p><a class="rx-tile__go" href="https://himalaythermoplast.com/product-category/pedal-dustbin/" target="_blank" rel="noopener">View range</a></div>
+      </article>
+      <article class="tile rx-tile" data-g="cleaning" data-n="spin mop mop floor">
+        <div class="rx-tile__ph"><img src="images/new/steel-mop.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="rx-tile__body"><h3>Spin mop</h3><p class="rx-tile__meta">Steel and plastic</p><button class="rx-tile__go" type="button" data-enq="Spin mop">Enquire</button></div>
+      </article>
     </div>
+    <div class="rx-empty" id="cempty" hidden><p>Nothing matches that search.</p><button class="rx-btn" type="button" id="creset">Show all products</button></div>
   </div>
 </section>
 
@@ -633,11 +479,11 @@ footer, footer.card, footer#contact {
   <div class="c-wrap rx-dl__grid">
     <div>
       <h2 id="h-dl">Get the full catalogue</h2>
-      <p>Every product with sizes and colours, in one file. Leave your name and number and we'll tell you when new pieces arrive.</p>
+      <p>Every product, size and colour in one file.</p>
     </div>
     <div>
-      <form id="df" class="rx-form">
-        <div class="two"><label>Name<input name="dn" required autocomplete="name"></label><label>Phone<input name="dp" type="tel" required autocomplete="tel"></label></div>
+      <form id="df" class="rx-form rx-dl__form">
+        <label><span class="skip">Name</span><input name="dn" required autocomplete="name" placeholder="Your name"></label><label><span class="skip">Phone</span><input name="dp" type="tel" required autocomplete="tel" placeholder="Phone number"></label>
         <button class="rx-btn rx-btn--light" type="submit">Get the catalogue</button>
       </form>
       <p class="st" id="dm" role="status" aria-live="polite"></p>
@@ -667,7 +513,7 @@ footer, footer.card, footer#contact {
     </div>
     <div class="fg">
       <div><span class="logo"><img src="logo/himalaya-new-logo.png" alt="Himalay Thermoplast" width="598" height="158"></span><p>Durable household plastics, made in Morbi, Gujarat.</p><p><a href="https://www.instagram.com/himalay_thermoplast/" target="_blank" rel="noopener">Instagram</a>, <a href="https://www.facebook.com/share/16AWY2b8x7/" target="_blank" rel="noopener">Facebook</a></p></div>
-      <div><h3>On this page</h3><ul><li><a href="#top">Home</a></li><li><a href="#showcase">3D showcase</a></li><li><a href="#catalog">All categories</a></li><li><a href="#download">Catalogue</a></li></ul></div>
+      <div><h3>On this page</h3><ul><li><a href="#top">Home</a></li><li><a href="#showcase">3D showcase</a></li><li><a href="#catalog">All products</a></li><li><a href="#download">Catalogue</a></li></ul></div>
       <div><h3>Popular</h3><ul><li><a href="https://himalaythermoplast.com/product-category/premium-water-dispenser/" target="_blank" rel="noopener">Water dispensers</a></li><li><a href="https://himalaythermoplast.com/product-category/bath-tub/" target="_blank" rel="noopener">Bath tubs</a></li><li><a href="https://himalaythermoplast.com/product-category/pedal-dustbin/" target="_blank" rel="noopener">Pedal dustbins</a></li><li><a href="https://himalaythermoplast.com/product-category/instuleted-hot-pot/" target="_blank" rel="noopener">Insulated hot pots</a></li></ul></div>
       <div><h3>Factory</h3><address>Dharti Industrial Estate, Plot No. 12,<br>Rajpar – Khanpar Road,<br>Morbi – 363641, Gujarat, India<br><a href="mailto:himalaythermoplast@gmail.com">himalaythermoplast@gmail.com</a></address></div>
     </div>
