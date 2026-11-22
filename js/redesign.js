@@ -10,6 +10,7 @@
     const name = document.getElementById("rxStageName");
     const note = document.getElementById("rxStageNote");
     const enq = document.getElementById("rxStageEnq");
+    const go = document.getElementById("rxStageGo");
     const items = [...document.querySelectorAll(".rx-index button")];
     const section = stage.closest("section");
     let timer;
@@ -24,7 +25,8 @@
         img.alt = d.alt;
         name.textContent = btn.textContent.trim();
         note.textContent = d.note;
-        enq.dataset.enq = d.enq;
+        enq.dataset.enq = d.range;
+        if (go && d.href) go.href = d.href;
         stage.classList.remove("is-swapping");
       };
       clearTimeout(timer);
@@ -134,8 +136,38 @@
     belt.scrollLeft = 1; pos = 1;
     start();
   }
-  /* All products: room filter chips + search, combined */
+  /* All products on the home page: one tile per range from js/catalog-data.js,
+     each opening that range on products.html (no links leave the site). */
   const grid = document.getElementById("cg");
+  const CAT = window.HIMALAY_CATALOG;
+  if (grid && CAT) {
+    const WIDE = new Set(["bathroom-sets", "storage", "lunch-boxes", "commercial-jugs", "dustbins"]);
+    CAT.categories.forEach((c) => {
+      const ps = CAT.products.filter((p) => p.cat === c.id);
+      const colours = ps.reduce((n, p) => n + p.variants.length, 0);
+      const a = document.createElement("a");
+      a.className = "tile rx-tile" + (WIDE.has(c.id) ? " is-wide" : "");
+      a.href = "products.html?c=" + encodeURIComponent(c.id);
+      a.dataset.g = c.room;
+      a.dataset.n = [c.name, c.keywords, ...ps.flatMap((p) => [p.name, p.code])].join(" ").toLowerCase();
+      const ph = document.createElement("div"); ph.className = "rx-tile__ph";
+      const im = new Image(); im.src = c.cover.sm; im.alt = ""; im.loading = "lazy"; im.decoding = "async"; im.width = c.cover.w; im.height = c.cover.h;
+      ph.append(im);
+      const body = document.createElement("div"); body.className = "rx-tile__body";
+      const h3 = document.createElement("h3"); h3.textContent = c.name;
+      const meta = document.createElement("p"); meta.className = "rx-tile__meta";
+      meta.textContent = ps.length + (ps.length === 1 ? " product" : " products") + " · " + colours + " colours";
+      const goBtn = document.createElement("span"); goBtn.className = "rx-tile__go"; goBtn.setAttribute("aria-hidden", "true"); goBtn.textContent = "View range";
+      body.append(h3, meta, goBtn);
+      a.append(ph, body);
+      grid.append(a);
+    });
+    const fr = document.getElementById("factRanges"), fp = document.getElementById("factProducts");
+    if (fr) fr.textContent = CAT.categories.length;
+    if (fp) fp.textContent = CAT.products.length;
+  }
+
+  /* All products: room filter chips + search, combined */
   if (grid) {
     const tiles = [...grid.querySelectorAll(".tile")];
     const chips = [...document.querySelectorAll(".rx-chip")];
@@ -169,5 +201,6 @@
       apply();
       q?.focus();
     });
+    apply();
   }
 })();

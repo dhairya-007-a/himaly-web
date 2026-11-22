@@ -4,7 +4,7 @@
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => [...document.querySelectorAll(s)];
   const on = (el, ev, fn, opt) => el && el.addEventListener(ev, fn, opt);
-  const CAT = "https://himalaythermoplast.com/catalogue-download/"; /* swap for the direct PDF link */
+  const WA = "919979011141";
 
   /* Mobile menu */
   const nv = $("nav"), mb = $("#mb");
@@ -41,12 +41,14 @@
     if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dd.close();
   });
 
-  /* Catalogue download form */
+  /* Catalogue form → WhatsApp request to the factory (no PDF hosted yet), plus a link to browse on this site */
   on($("#df"), "submit", (e) => {
     e.preventDefault();
     const f = e.target.elements, m = $("#dm"), a = document.createElement("a");
-    m.textContent = "Thank you, " + f.dn.value.trim() + ". Your catalogue is ready.";
-    a.className = "btn"; a.href = CAT; a.target = "_blank"; a.rel = "noopener"; a.textContent = "Open the catalogue";
+    const name = f.dn.value.trim(), phone = f.dp.value.trim();
+    window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent("Hello Himalay, please send me the product catalogue.\nName: " + name + "\nPhone: " + phone), "_blank", "noopener");
+    m.textContent = "Thank you, " + name + ". WhatsApp should open with your request; we'll send the catalogue there. Meanwhile, every product and colour is on this site.";
+    a.className = "btn"; a.href = "products.html"; a.textContent = "Browse all products";
     m.append(document.createElement("br"), a);
     e.target.hidden = true;
   });

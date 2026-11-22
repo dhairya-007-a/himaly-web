@@ -394,16 +394,45 @@ Compared against himalaythermoplast.com (home, about, products, category, produc
   - Enquiry form builds a `mailto:` with `encodeURIComponent` — no injection.
   - Not done: a Content-Security-Policy. GitHub Pages can't send headers; a `<meta>` CSP would need `'unsafe-inline'` (inline styles/scripts in both pages), so little gain for a static brochure site with no logins or user data.
 
+### 2026-11-22 — Pass 19: Every product on our own site (no more links to the old website)
+- **New page `products.html`** with three views, all on this site:
+  - `products.html` — all 15 ranges as tiles, room filter (Bathroom / Kitchen & storage / Water / Cleaning) + search (names, codes like `HT-01`, keywords).
+  - `products.html?c=<range>` — every product in that range; colour dots under each card preview that colour's photo on hover/tap.
+  - `products.html?p=<product>[&v=<colour>]` — product page: big photo, every colour as a swatch (swaps the photo and updates the URL so a colour can be shared), extra angles as thumbnails, code/size/pieces facts, **Enquire** (form pre-filled with code + name + colour) and **Ask on WhatsApp** (message pre-filled the same way), then "More in this range".
+- **All 266 factory photos** from `HIMALAY THERMOPLAST PNG FILES` used: trimmed and converted to WebP at 1200 px + 520 px → `images/p/<product>/<colour>.webp` (33 MB total, was 2.4 GB). Result: **15 ranges, 63 products, 245 colours, 262 photos.** Left out on purpose: one CMYK duplicate, two non-final casserole shots, one mixed group photo.
+  - Photo checks that changed the data: the "SINGLE PRODUCT – BLUE – BUCKET" and "BROWN – 35 LTR" photos are tubs (→ *Bath tub*); the grey/light-pink "paddle dustbin" singles are a printed model (→ *Printed paddle dustbin*); `_05_PATLA_DONE/NEW/` holds extra patla colours with wrong file names (round: cream, baby pink, light grey; square: brown, coco, grey); `_18_CASEROLL/DSC…` is a second, plain casserole set (brown / green / black, 4 angles each); Cool 12 `IMG-…WA0004/5` are brown and dark grey.
+- **`tools/build_catalog.py`** is the single source: it maps folders → ranges → products → colours, exports the images and writes `js/catalog-data.js`. Add a photo → edit one line → re-run (see `images/README.txt`).
+- **Home page links now stay on the site:** nav "Our Products" + hero "All Products" → `products.html`; New-arrivals titles, Best-seller cards (whole card clickable) and "See all 9 colours" → their product pages; Explore-by-category stage gets a **View range** button that follows the selected range; All-products tiles on the home page are generated from the same data and open the range page; footer "Popular" → range pages; About facts read from the data (15 ranges, 63 products). The catalogue form now asks the factory for the PDF on WhatsApp and links to `products.html` (it used to send people to the old site's download page).
+- **Fixes:** removed the thin white line under the landing-page menu bar (`nav` border in `css/style.css`); clicking a name in "Explore by category" no longer opens the enquiry form (buttons used `data-enq`, now `data-range`); the hidden "Search products" label no longer peeks in at the left edge on wide screens.
+- **Structure clean-up:** removed `himalay-site/` (an old copy of the whole site that GitHub Pages was still publishing at `/himalay-site/`) and 46 unused images (old category/gallery PNGs, product thumbs, `category-bg.jpg`, the old best-seller dispensers). All recoverable from git history.
+- **Checked:** every link on `index.html` and `products.html` resolves to a real product, range or section; all 524 image files load; all 80 page variants (15 ranges, 63 products, not-found, and a script-injection attempt in the URL) render without errors; phone width 390 px has no sideways scroll, 2-column cards, 1-column product page.
+
+## Site structure
+
+```
+index.html            Home: hero, 3D ring, explore by category, new arrivals, best sellers, all ranges, about, reviews, catalogue, footer
+products.html         All ranges / one range / one product (rendered by js/products.js)
+showcase.html         3D product ring (loaded in an iframe on the home page)
+css/style.css         Base + hero/nav (original)
+css/redesign.css      Sections from "Explore by category" down, dialog, footer
+css/products.css      products.html only
+js/main.js            Menu, enquiry dialog + forms (both pages)
+js/redesign.js        Home: category stage, new-arrivals belt, range tiles + filters
+js/products.js        products.html views
+js/catalog-data.js    GENERATED catalogue (ranges, products, colours, image sizes)
+tools/build_catalog.py  Builds images/p + js/catalog-data.js from the factory PNG folder
+images/p/<product>/   GENERATED product photos per colour
+docs/gst-certificate.pdf  Page 1 of the GST certificate
+```
+
 ### Known follow-ups (not yet done)
-- `images/best/plain-8.webp` and `images/best/flower-8.webp` are no longer used after Pass 18 — can be deleted.
+- **Product details are short on purpose:** sizes, piece counts and codes come from the photo folder names; capacities for Aquvo/Cool/Gold, mug and bucket sizes, materials and prices were not available. Add them as `facts` in `tools/build_catalog.py` when the factory confirms them.
+- **No PDF catalogue is hosted yet** — the form requests it on WhatsApp. Put the PDF in `docs/` and link it when available.
 - **Hero video is 34 MB** — biggest remaining speed problem. Re-encoding to ~720p H.264, no audio, CRF ~28 would get it to roughly 3–5 MB. Needs `ffmpeg` (not installed on this machine). A poster frame (`images/hero-poster.jpg`) should be added at the same time so something shows before the video starts.
 - Hero + 3D ring still use the old Cormorant / DM Sans type; kept on request, so the top and bottom halves of the page use different fonts.
 - `css/style.css` still contains rules for removed sections (`.prod`, `.cgrid`, `.new-grid`, `.sec-prod`) — small, harmless, could be trimmed.
-- Content still missing vs live site: 12 catalogue PDFs (direct links), Himalay Bucket / Cool 8 / Cool 12 categories, links for Patla and Rack category pages, product counts on 6 tiles, phone in top bar, full category list in footer.
-- Catalogue form doesn't store leads; enquiry form relies on the visitor's email app (WhatsApp button works).
-- Unused images still on disk: `images/product-main.png`, `images/product-thumb-1..4.png` (featured section is gone), `images/category-bg.jpg`.
-- 9 ranges in "All products" have no page on himalaythermoplast.com yet, so they show **Enquire** instead of **View range** — swap in links once those pages exist.
-- The ring's side "enquiry list" drawer still has leftover clothing-cart plumbing (`cartState`, size picker UI) that now always resolves to "One size" — functions correctly but could be simplified/removed in a later pass since it's no longer doing real cart work.
-- `images/category-bg.jpg` and `images/showcase-bg.jpg` source uploads were small (735×490 and 736×552) — fine blurred/scrimmed at current section sizes, would look soft if either section got taller or the overlay lighter.
-- No photo exists yet for "Flower Pattern Dispenser, 10 Ltr." specifically or for the "Premium Water Jugs"/"Premium Water Dispenser" categories beyond the one dispenser shot reused in two places — worth a real photo for each once available.
+- Enquiry form relies on the visitor's email app (WhatsApp button works).
+- The ring's side "enquiry list" drawer still has leftover clothing-cart plumbing (`cartState`, size picker UI) that now always resolves to "One size" — functions correctly but could be simplified.
+- `images/showcase-bg.jpg` source upload was small (736×552) — fine blurred at the current size.
+- "Explore by category" and the 3D ring still use the 9 older gallery photos; they could switch to the new per-colour photos.
 - The `mobile-native` skill is installed but hasn't been run over this site yet — next mobile pass should use it.

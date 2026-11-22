@@ -152,6 +152,19 @@
 .rx-stage__note{display:block;margin-top:8px;opacity:.82;max-width:38ch;font-size:15px}
 .rx-range[data-tone="deep"] .rx-btn{background:#fff;color:var(--rx-ink)}
 .rx-range[data-tone="deep"] .rx-btn:hover{background:var(--rx-mist)}
+.rx-stage__acts{display:flex;gap:10px;flex-wrap:wrap}
+/* "View range" = outlined, so the dealer-price button stays the main action */
+.rx-range .rx-btn#rxStageGo{background:transparent;color:inherit;box-shadow:inset 0 0 0 2px currentColor}
+.rx-range .rx-btn#rxStageGo:hover{background:rgba(255,255,255,.14)}
+.rx-best__all{display:inline-block;margin:14px 0 0 16px;color:var(--rx-ink)!important;font-size:15px}
+.rx-best h3 a{color:inherit}
+.rx-best h3 a::after{content:"";position:absolute;inset:0;z-index:1;border-radius:var(--rx-r-lg)}
+.rx-best__card .rx-link,.rx-best__card .rx-btn,.rx-best__all{position:relative;z-index:2}
+.rx-best h3 a:focus-visible{outline:none}
+.rx-best__card:has(h3 a:focus-visible){outline:3px solid var(--rx-lagoon);outline-offset:3px}
+.rx-best h3 a:hover{color:var(--rx-lagoon)}
+.rx-best__card.is-hero h3 a:hover{color:#fff}
+.rx-line__cap h3 a:hover{color:var(--rx-deep)}
 
 /* ───────── 2. New arrivals: production line (scrollable, self-moving belt) ─────────
    The belt is a real horizontal scroller: touch-swipe, trackpad, mouse-drag and arrow
@@ -332,6 +345,8 @@
 .rx-chip:hover{border-color:var(--rx-ink)}
 .rx-chip[aria-pressed="true"]{background:var(--rx-ink);color:#fff;border-color:var(--rx-ink)}
 .rx-search{position:relative;flex:0 1 340px;min-width:240px}
+/* screen-reader label: .skip's left:-999px is relative to this box, so it peeked in on wide screens */
+.rx-search .skip{position:absolute;left:0;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .rx-search input{
   width:100%;box-sizing:border-box;padding:13px 16px 13px 44px;min-height:46px;
   border:1px solid rgba(21,48,79,.18);border-radius:999px;
@@ -484,6 +499,8 @@ dialog.rx-dialog select option{color:var(--rx-ink)}
   .rx-form .two{grid-template-columns:1fr}
   .rx-dl__form{grid-template-columns:1fr}
   .rx-stage figcaption .rx-btn{width:100%}
+  .rx-stage__acts{width:100%}
+  .rx-best__all{margin:12px 0 0}
   footer.rx-foot .fg{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){
