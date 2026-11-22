@@ -21,3 +21,6 @@ __pycache__/
 
 # full GST certificate has partner photos/names; only page 1 (docs/gst-certificate.pdf) is published
 GST CERTIFICATE.pdf
+
+.claude/settings.local.json
+.playwright-mcp/

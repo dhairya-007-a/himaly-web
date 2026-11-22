@@ -373,7 +373,29 @@ Compared against himalaythermoplast.com (home, about, products, category, produc
 ### 2026-11-22 — Pass 17: Reviews made richer
 - "What customers say" cards now use the site's three tones (deep cobalt / lagoon / white), each with a crisp quote mark at the top and a large faint one in the corner, bigger review title + text, and a round initials badge beside the name. Middle card sits lower on desktop for rhythm; cards lift on hover. Subtitle added under the heading. Review wording unchanged; no star ratings added (none exist on the live site). Phones/tablets: stacked.
 
+### 2026-11-22 — Pass 18: Best sellers rebuilt as a ranked top 7
+- Replaces Pass 14's five-dispenser row (and its stand-in flower-pattern photos). Now one best seller from each range, ranked 01–07 on the ink band:
+  - **01 Super Jumbo bathroom set** (11 pcs, 9 colours) — big lagoon hero card spanning two rows, huge "01" numeral, description and a full "Enquire about this set" button.
+  - **02–07** in a 3×2 grid beside it: Cool 12 jug, Commercial jug 18 L, Water dispenser 8 L, Mello box, Paddle dustbin, Spin mop — tag, name, one-line detail, Enquire link.
+- Photos: 7 new trimmed WebP cut-outs in `images/best/` exported from `HIMALAY THERMOPLAST PNG FILES` (with `width`/`height` set to prevent layout shift).
+- Header: new subtitle + "See all products" link to `#catalog`.
+- Responsive: tablet = hero full-width (photo beside text) + 3 columns; phone = hero stacked with full-width button + 2 columns. Card photo area is `flex:1`, so Enquire links line up even when a name wraps.
+- Verified in Chrome at 1535 / 900 / 390 px: all images load, no horizontal scroll, Enquire opens the dialog pre-filled with the product.
+- `.gitignore`: added `.claude/settings.local.json` and `.playwright-mcp/` (local screenshot folder).
+
+### 2026-11-22 — Debug + security check
+- **Debug:** full-page scroll on localhost: 0 console errors, 0 broken images, all local `src`/`href` paths exist, all 54 Enquire buttons wired to one dialog. Only oddity: local `python -m http.server` sometimes answers 503 on the 34 MB hero video before serving it (206) — local server limit, not a site bug; GitHub Pages serves it normally.
+- **Security:**
+  - No API keys, tokens, passwords or private keys in tracked files.
+  - Full `GST CERTIFICATE.pdf` (partner names/photos) and `.claude/` stay untracked; only page 1 is published.
+  - Every `target="_blank"` link has `rel="noopener"`.
+  - No third-party scripts or iframes (only Google Fonts CSS).
+  - `innerHTML` in `showcase.html` only renders hardcoded product arrays — no URL, storage or form input reaches it, so no XSS path.
+  - Enquiry form builds a `mailto:` with `encodeURIComponent` — no injection.
+  - Not done: a Content-Security-Policy. GitHub Pages can't send headers; a `<meta>` CSP would need `'unsafe-inline'` (inline styles/scripts in both pages), so little gain for a static brochure site with no logins or user data.
+
 ### Known follow-ups (not yet done)
+- `images/best/plain-8.webp` and `images/best/flower-8.webp` are no longer used after Pass 18 — can be deleted.
 - **Hero video is 34 MB** — biggest remaining speed problem. Re-encoding to ~720p H.264, no audio, CRF ~28 would get it to roughly 3–5 MB. Needs `ffmpeg` (not installed on this machine). A poster frame (`images/hero-poster.jpg`) should be added at the same time so something shows before the video starts.
 - Hero + 3D ring still use the old Cormorant / DM Sans type; kept on request, so the top and bottom halves of the page use different fonts.
 - `css/style.css` still contains rules for removed sections (`.prod`, `.cgrid`, `.new-grid`, `.sec-prod`) — small, harmless, could be trimmed.
