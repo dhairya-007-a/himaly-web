@@ -248,8 +248,21 @@ python -m http.server 8000
 ```
 Open your browser to: **`http://localhost:8000/`**
 
+If a page looks old after a change, hard-refresh with **Ctrl+Shift+R** (the browser caches CSS/JS).
+
+### Live site (GitHub Pages)
+- Repo: `dhairya-007-a/himaly-web`, branch `main`, served from the repo root.
+- URL: **https://dhairya-007-a.github.io/himaly-web/** · products: `/products.html`
+- Deploy = commit + `git push origin main`; Pages rebuilds in ~1 minute. Check with `gh api repos/dhairya-007-a/himaly-web/pages/builds/latest`.
+
+### Updating products
+1. Put the transparent PNG in `HIMALAY THERMOPLAST PNG FILES/` (not in git, 2.4 GB).
+2. Add/adjust its line in `tools/build_catalog.py` (`PRODUCTS`, `CATEGORIES`).
+3. `python -X utf8 tools/build_catalog.py` → writes `images/p/` and `js/catalog-data.js`.
+4. Commit both, push.
+
 ### Production Characteristics
-- **Zero Build Dependencies**: Pure HTML5, CSS3, and ES6+ JavaScript. No npm build, webpack, or external compiler required.
+- **No build step for the site itself**: pure HTML, CSS and JavaScript. Only the product catalogue is generated (Python + Pillow, run by hand when photos change).
 - **Asset Self-Sufficiency**: All local images and scripts are self-contained within the project root.
 - **Responsive Viewport Support**: Tested and verified across desktop (1440px+), tablet (820px), and mobile (375px - 520px) screens.
 
@@ -406,6 +419,13 @@ Compared against himalaythermoplast.com (home, about, products, category, produc
 - **Fixes:** removed the thin white line under the landing-page menu bar (`nav` border in `css/style.css`); clicking a name in "Explore by category" no longer opens the enquiry form (buttons used `data-enq`, now `data-range`); the hidden "Search products" label no longer peeks in at the left edge on wide screens.
 - **Structure clean-up:** removed `himalay-site/` (an old copy of the whole site that GitHub Pages was still publishing at `/himalay-site/`) and 46 unused images (old category/gallery PNGs, product thumbs, `category-bg.jpg`, the old best-seller dispensers). All recoverable from git history.
 - **Checked:** every link on `index.html` and `products.html` resolves to a real product, range or section; all 524 image files load; all 80 page variants (15 ranges, 63 products, not-found, and a script-injection attempt in the URL) render without errors; phone width 390 px has no sideways scroll, 2-column cards, 1-column product page.
+
+### Deploy log
+| Date | Commit | What went live | Checked |
+|---|---|---|---|
+| 2026-11-22 | `7cd888c` | First public deploy (redesign up to Pass 17) | home 200 |
+| 2026-11-22 | `f6fe8fa` | Pass 18 best sellers + debug/security notes | hero card + new photos 200 |
+| 2026-11-22 | `2c16f83` | Pass 19 product pages, all photos, link fixes, clean-up | `products.html`, data, product photos 200; `/himalay-site/` now 404; 0 old-site links on home |
 
 ## Site structure
 
