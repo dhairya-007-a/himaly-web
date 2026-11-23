@@ -498,10 +498,11 @@ To change the admin key: `vercel env add ADMIN_TOKEN production --value <new key
 Goal: survive floods (target 10k requests/s) and abuse without the database or the bill being the weak point. Layers, outermost first:
 
 1. **Vercel platform:** automatic DDoS mitigation (always on, all plans). Static pages, images, CSS/JS, the video and the GST PDF are served from Vercel's CDN; they never run our code, so 10k req/s of page views is CDN load, not server load. (The 34 MB hero video makes that bandwidth-heavy; see follow-ups.)
-2. **Vercel Firewall rules (staged, owner publishes):**
+2. **Vercel Firewall rules (published 2026-11-23 by the owner):**
    - `API rate limit`: any path starting `/api/`, 60 requests / 60 s per IP, over the limit → 429. Firewall-blocked requests aren't billed.
    - `Block exploit probes`: deny `/.env*`, `/.git/*`, `/wp-admin`, `/wp-login.php`, `/xmlrpc.php`, `/phpmyadmin`, `/.aws/credentials`, `/server-status`, `/.DS_Store`.
-   - Publish: `vercel firewall diff` then `vercel firewall publish --yes`. Undo one: `vercel firewall rules disable "API rate limit"` + publish. Counters are per region.
+   - Verified live: `/.env`, `/.git/config`, `/wp-admin` → 403; pages and the GST PDF → 200; 70 quick requests to `/api/health` → 59 through, then 429.
+   - Changing rules: stage with `vercel firewall rules ...`, check with `vercel firewall diff`, then `vercel firewall publish` (the CLI asks for `--confirm-name himalay-web --effects-digest <code>`; it prints the exact command). Undo one: `vercel firewall rules disable "API rate limit"` + publish. Counters are per region.
 3. **`POST /api/lead`, cheapest check first** (`api/lead.js`):
    - **Origin required** (`api/_lib/http.js`): every current browser sends `Origin` on a `fetch` POST, so no Origin = script → 403. Must be this host over https; `Sec-Fetch-Site`, if sent, must be `same-origin`.
    - **Per-instance limiter** (`api/_lib/limiter.js`): 10 posts/min per visitor per instance → 429, before any database call. Memory capped at 10,000 keys (oldest evicted), so spoofed-IP floods can't exhaust it.
@@ -567,7 +568,6 @@ docs/gst-certificate.pdf  Page 1 of the GST certificate
 - Hero + 3D ring still use the old Cormorant / DM Sans type; kept on request, so the top and bottom halves of the page use different fonts.
 - `css/style.css` still contains rules for removed sections (`.prod`, `.cgrid`, `.new-grid`, `.sec-prod`) — small, harmless, could be trimmed.
 - **Database not connected yet** — see Pass 21 "Finish the database". After connecting, re-run `npm run db:migrate` (adds the Pass 25 phone index).
-- **Firewall rules staged, not published** — see Pass 25 step 2.
 - **Lead notifications** (email via Resend, or WhatsApp) skipped for now on request; leads are only visible in `/admin`.
 - **Custom domain** not set up; the site is on `himalay-web.vercel.app` (also hard-coded in OG/canonical tags, see Pass 24).
 - Repo `api/`, `db/`, `package.json` are also visible on the GitHub Pages mirror (source code only, no secrets). Turn GitHub Pages off once Vercel is the main site.
