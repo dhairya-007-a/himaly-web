@@ -428,12 +428,48 @@ Compared against himalaythermoplast.com (home, about, products, category, produc
 - **Status bar colour:** `theme-color #15304F` added to both pages.
 - **Checked (Playwright, Chromium):** 360, 390, 768, 1024 px on home, a range page and a product page; no sideways scroll, no element past the screen edge. Still needs a real phone: tap highlight, input zoom, safe areas and the address-bar height can't be reproduced in a desktop browser.
 
+### 2026-11-23 — Pass 21: Production backend (Vercel + Neon) and Vercel hosting
+- **Live on Vercel:** https://himalay-web.vercel.app (project `himalay-web`, team `forge-714b`). GitHub Pages copy still works as a static mirror; its forms use the old WhatsApp/email behaviour.
+- **API (serverless functions in `api/`):**
+  - `POST /api/lead`: saves distributor enquiries and catalogue requests. Checks: same-origin, JSON only, 8 KB max, server-side validation of every field (lengths, phone 8–15 digits, email), honeypot field + "form open at least 2.5 s" spam check, max 5 leads per visitor per 10 min (IP stored only as a salted hash).
+  - `GET/PATCH /api/admin/leads`: list, filter, CSV export (Excel formula-injection safe) and status changes (new / contacted / closed / spam). Needs the admin key.
+  - `GET /api/health`: `200 {db:"up"}` or `503 {db:"down"}`, for an uptime monitor.
+- **`/admin`:** phone-friendly lead inbox with tabs, tap-to-call, WhatsApp link per lead, CSV download. The key is kept in the browser tab only (`sessionStorage`). Not indexed by search engines.
+- **Forms (`js/main.js`):** post to the API. If the API isn't there or the database is down (404/405/5xx), they fall back to WhatsApp (catalogue) or an email draft (enquiry), so a visitor is never stuck.
+- **Security headers (`vercel.json`):** Content-Security-Policy (no inline scripts on the main pages; `showcase.html` gets its own policy for its one inline script), HSTS, X-Frame-Options, Referrer-Policy, Permissions-Policy, nosniff. Images cached 7 days, video 30 days.
+- **What gets uploaded (`.vercelignore` allowlist):** only the pages, `css/ js/ images/ logo/ docs/ api/`, the video and config. The 2.4 GB raw photo folder, the full GST certificate, tools and any `.env` file stay on this computer (checked: they 404 on the live site).
+- **Bug found and fixed while testing:** the spam timer first compared the visitor's clock with the server's, so a phone with a wrong clock got "Please try again". It now sends how long the form was open instead.
+- **Tests:** `npm test`: 12 unit tests for validation, spam rules, phone normalising and CSV safety. Live checks on the deployment: wrong method 405, non-JSON 415, other-site origin 403, honeypot gets a fake "ok", admin without/with wrong key 401, no console or CSP errors on home (ring, fonts, video, tiles all load).
+- **Status: database NOT connected yet.** Neon needs its terms accepted once in the browser. Until then `/api/health` says `db: down` and both forms use the WhatsApp/email fallback.
+
+#### Finish the database (one time, ~2 minutes)
+1. Accept Neon's terms: https://vercel.com/forge-714b/~/integrations/accept-terms/neon?source=cli
+2. `vercel --non-interactive integration add neon --no-claim --name himalay-leads` (adds `DATABASE_URL` to the project)
+3. `vercel env pull .env.local` then `npm run db:migrate` (creates the `leads` table from `db/schema.sql`; safe to re-run)
+4. `vercel deploy --prod`, then open https://himalay-web.vercel.app/api/health and check for `"db":"up"`
+5. Sign in at https://himalay-web.vercel.app/admin with the key in `.admin-key.txt` (on this computer only, never committed)
+
+#### Secrets (Vercel → Project → Settings → Environment Variables)
+| Name | What | Set |
+|---|---|---|
+| `ADMIN_TOKEN` | key for `/admin` (copy in `.admin-key.txt`) | yes, all environments |
+| `IP_SALT` | salt for hashing visitor IPs | yes, all environments |
+| `DATABASE_URL` | Neon connection string | added by step 2 above |
+
+To change the admin key: `vercel env add ADMIN_TOKEN production --value <new key of 24+ characters> --yes --force`, then `vercel deploy --prod`.
+
+#### Deploying
+- `vercel deploy --prod` from this folder (deploys whatever is on disk, filtered by `.vercelignore`). `git push` updates GitHub and the GitHub Pages mirror.
+- Preview deploys (`vercel deploy`) sit behind Vercel login; use `vercel curl <url>` to test them.
+
 ### Deploy log
 | Date | Commit | What went live | Checked |
 |---|---|---|---|
 | 2026-11-22 | `7cd888c` | First public deploy (redesign up to Pass 17) | home 200 |
 | 2026-11-22 | `f6fe8fa` | Pass 18 best sellers + debug/security notes | hero card + new photos 200 |
 | 2026-11-22 | `2c16f83` | Pass 19 product pages, all photos, link fixes, clean-up | `products.html`, data, product photos 200; `/himalay-site/` now 404; 0 old-site links on home |
+| 2026-11-23 | `abb55a4` | Pass 20 mobile/tablet (GitHub Pages) | no sideways scroll at 360/390/768/1024 |
+| 2026-11-23 | Pass 21 | **First Vercel production deploy** (https://himalay-web.vercel.app), backend without database | pages 200, private files 404, API 405/415/403/401 checks, CSP clean, form fallback works |
 
 ## Site structure
 
@@ -445,7 +481,17 @@ css/style.css         Base + hero/nav (original)
 css/redesign.css      Sections from "Explore by category" down, dialog, footer
 css/products.css      products.html only
 css/mobile.css        Phone/tablet layer (touch, safe areas), loaded last
-js/main.js            Menu, enquiry dialog + forms (both pages)
+js/main.js            Menu, enquiry dialog + forms (both pages) → POST /api/lead, WhatsApp/email fallback
+js/admin.js           /admin lead inbox
+admin.html, css/admin.css  Lead inbox page
+api/lead.js           POST lead (validate, spam check, rate limit, save)
+api/admin/leads.js    List / CSV / status update (admin key)
+api/health.js         Database health check
+api/_lib/             Shared: validate.js (tested), http.js, db.js (not endpoints)
+db/schema.sql         leads table; apply with npm run db:migrate (tools/migrate.mjs)
+tests/                npm test
+vercel.json           Security headers, caching, /admin route
+.vercelignore         Allowlist of what is uploaded to Vercel
 js/redesign.js        Home: category stage, new-arrivals belt, range tiles + filters
 js/products.js        products.html views
 js/catalog-data.js    GENERATED catalogue (ranges, products, colours, image sizes)
@@ -461,7 +507,10 @@ docs/gst-certificate.pdf  Page 1 of the GST certificate
 - **Hero video is 34 MB** — biggest remaining speed problem. Re-encoding to ~720p H.264, no audio, CRF ~28 would get it to roughly 3–5 MB. Needs `ffmpeg` (not installed on this machine). A poster frame (`images/hero-poster.jpg`) should be added at the same time so something shows before the video starts.
 - Hero + 3D ring still use the old Cormorant / DM Sans type; kept on request, so the top and bottom halves of the page use different fonts.
 - `css/style.css` still contains rules for removed sections (`.prod`, `.cgrid`, `.new-grid`, `.sec-prod`) — small, harmless, could be trimmed.
-- Enquiry form relies on the visitor's email app (WhatsApp button works).
+- **Database not connected yet** — see Pass 21 "Finish the database".
+- **Lead notifications** (email via Resend, or WhatsApp) skipped for now on request; leads are only visible in `/admin`.
+- **Custom domain** not set up; the site is on `himalay-web.vercel.app`.
+- Repo `api/`, `db/`, `package.json` are also visible on the GitHub Pages mirror (source code only, no secrets). Turn GitHub Pages off once Vercel is the main site.
 - The ring's side "enquiry list" drawer still has leftover clothing-cart plumbing (`cartState`, size picker UI) that now always resolves to "One size" — functions correctly but could be simplified.
 - `images/showcase-bg.jpg` source upload was small (736×552) — fine blurred at the current size.
 - "Explore by category" and the 3D ring still use the 9 older gallery photos; they could switch to the new per-colour photos.

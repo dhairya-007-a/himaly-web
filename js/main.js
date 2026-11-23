@@ -51,9 +51,11 @@
       const r = await fetch("/api/lead", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ ...payload, t: T0, page: location.pathname + location.search }),
+        body: JSON.stringify({ ...payload, elapsed: Date.now() - T0, page: location.pathname + location.search }),
       });
-      if (r.status === 404 || r.status === 405 || r.status === 501) return { fallback: true };
+      // 404/405: static host with no API. 501/503: API up but database not
+      // reachable. Either way, hand the visitor to WhatsApp/email instead.
+      if ([404, 405, 501, 502, 503, 504].includes(r.status)) return { fallback: true };
       const d = await r.json().catch(() => ({}));
       return { status: r.status, ok: r.ok && d.ok, error: d.error, field: d.field };
     } catch {

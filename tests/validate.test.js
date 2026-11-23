@@ -2,11 +2,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { validateLead, normalisePhone, csvCell, MIN_FILL_MS } from "../api/_lib/validate.js";
 
-const NOW = 1_800_000_000_000;
-const base = (o = {}) => ({ kind: "distributor", name: "Ravi Patel", phone: "+91 99790 11141", t: NOW - MIN_FILL_MS - 1000, ...o });
+const base = (o = {}) => ({ kind: "distributor", name: "Ravi Patel", phone: "+91 99790 11141", elapsed: MIN_FILL_MS + 1000, ...o });
 
 test("accepts a normal distributor enquiry", () => {
-  const r = validateLead(base({ role: "Dealer", email: "Ravi@Example.com", city: "Rajkot" }), NOW);
+  const r = validateLead(base({ role: "Dealer", email: "Ravi@Example.com", city: "Rajkot" }));
   assert.equal(r.ok, true);
   assert.equal(r.lead.phone, "+919979011141");
   assert.equal(r.lead.email, "ravi@example.com");
@@ -15,49 +14,49 @@ test("accepts a normal distributor enquiry", () => {
 });
 
 test("catalogue requests carry no role", () => {
-  const r = validateLead(base({ kind: "catalogue", role: "Dealer" }), NOW);
+  const r = validateLead(base({ kind: "catalogue", role: "Dealer" }));
   assert.equal(r.ok, true);
   assert.equal(r.lead.role, null);
 });
 
 test("unknown role falls back to Distributor", () => {
-  assert.equal(validateLead(base({ role: "Admin" }), NOW).lead.role, "Distributor");
+  assert.equal(validateLead(base({ role: "Admin" })).lead.role, "Distributor");
 });
 
 test("honeypot filled → spam", () => {
-  const r = validateLead(base({ website: "http://x" }), NOW);
+  const r = validateLead(base({ website: "http://x" }));
   assert.equal(r.ok, false);
   assert.equal(r.spam, true);
 });
 
 test("submitted too fast → spam", () => {
-  assert.equal(validateLead(base({ t: NOW - 500 }), NOW).spam, true);
-  assert.equal(validateLead(base({ t: "nope" }), NOW).spam, true);
+  assert.equal(validateLead(base({ elapsed: 500 })).spam, true);
+  assert.equal(validateLead(base({ elapsed: "nope" })).spam, true);
 });
 
 test("rejects bad kind, missing name, bad phone, bad email", () => {
-  assert.equal(validateLead(base({ kind: "x" }), NOW).ok, false);
-  assert.equal(validateLead(base({ name: " " }), NOW).field, "name");
-  assert.equal(validateLead(base({ phone: "12345" }), NOW).field, "phone");
-  assert.equal(validateLead(base({ phone: "call me" }), NOW).field, "phone");
-  assert.equal(validateLead(base({ email: "not-an-email" }), NOW).field, "email");
+  assert.equal(validateLead(base({ kind: "x" })).ok, false);
+  assert.equal(validateLead(base({ name: " " })).field, "name");
+  assert.equal(validateLead(base({ phone: "12345" })).field, "phone");
+  assert.equal(validateLead(base({ phone: "call me" })).field, "phone");
+  assert.equal(validateLead(base({ email: "not-an-email" })).field, "email");
 });
 
 test("over-long fields are rejected, not truncated", () => {
-  assert.equal(validateLead(base({ message: "a".repeat(2001) }), NOW).field, "message");
+  assert.equal(validateLead(base({ message: "a".repeat(2001) })).field, "message");
 });
 
 test("link-stuffed messages are refused", () => {
-  const r = validateLead(base({ message: "http://a http://b www.c" }), NOW);
+  const r = validateLead(base({ message: "http://a http://b www.c" }));
   assert.equal(r.ok, false);
 });
 
 test("non-object bodies are refused", () => {
-  for (const b of [null, "x", [], 5]) assert.equal(validateLead(b, NOW).ok, false);
+  for (const b of [null, "x", [], 5]) assert.equal(validateLead(b).ok, false);
 });
 
 test("control characters are stripped", () => {
-  assert.equal(validateLead(base({ name: "Ra\u0000vi" }), NOW).lead.name, "Ravi");
+  assert.equal(validateLead(base({ name: "Ra\u0000vi" })).lead.name, "Ravi");
 });
 
 test("phone normalisation", () => {

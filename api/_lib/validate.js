@@ -32,19 +32,19 @@ const EMAIL = /^[^\s@<>()"',;]{1,64}@[^\s@<>()"',;]+\.[a-z]{2,}$/i;
 /**
  * Validate a submitted lead.
  * @param {object} body  parsed JSON from the browser
- * @param {number} now   Date.now(), injectable for tests
  * @returns {{ok:true, lead:object} | {ok:false, error:string, field?:string, spam?:boolean}}
  */
-export function validateLead(body, now = Date.now()) {
+export function validateLead(body) {
   if (!body || typeof body !== "object" || Array.isArray(body)) return { ok: false, error: "Invalid request." };
 
   // Honeypot: a field hidden from people. Bots fill every input.
   if (clean(body.website)) return { ok: false, error: "Rejected.", spam: true };
 
-  // Timing: form-start timestamp set by the page when it loaded.
-  const t = Number(body.t);
-  if (!Number.isFinite(t) || now - t < MIN_FILL_MS || now - t > 1000 * 60 * 60 * 24) {
-    return { ok: false, error: "Please try again.", spam: true };
+  // Timing: how long the form was open, measured in the browser (elapsed ms,
+  // not a timestamp, so a visitor's wrong phone clock can't break it).
+  const elapsed = Number(body.elapsed);
+  if (!Number.isFinite(elapsed) || elapsed < MIN_FILL_MS || elapsed > 1000 * 60 * 60 * 24) {
+    return { ok: false, error: "Please wait a moment and send again.", spam: true };
   }
 
   const kind = clean(body.kind);
