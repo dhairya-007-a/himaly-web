@@ -5,6 +5,8 @@
 > **Repository Root**: [`c:\Users\asus\Downloads\himalay-web`](file:///c:/Users/asus/Downloads/himalay-web)  
 > **Local Server URL**: [http://localhost:8000/](http://localhost:8000/)
 
+> **⚠ UI preservation rule (from 2026-11-23):** the site's look is final. Only bugs, broken functionality, code-level issues and critical security holes get fixed. No changes to layout, spacing, sizes, colours, fonts, animations, transitions, icons, images or page structure, and responsive CSS only to fix an existing functional bug. Any fix that would change what the site looks like must be approved by the owner first.
+
 ---
 
 ## 1. Executive Summary & Purpose
@@ -502,6 +504,7 @@ To change the admin key: `vercel env add ADMIN_TOKEN production --value <new key
 | 2026-11-23 | Pass 21 | **First Vercel production deploy** (https://himalay-web.vercel.app), backend without database | pages 200, private files 404, API 405/415/403/401 checks, CSP clean, form fallback works |
 | 2026-11-23 | `f849153` | Pass 22 pedal rename + logo cap (Vercel + Pages) | home + `?p=pedal-dustbin` + new photos 200, old photo paths 404, no "paddle" text on home |
 | 2026-11-23 | `41e3409` | Pass 23 smooth 3D ring — first auto-deploy from `git push` (no CLI) | live `showcase.html` has the new spring code; Pages built |
+| 2026-11-23 | `21643f0` | Pass 24 link previews (OG/Twitter tags, share card) + canonical URLs | live home returns all og tags to a Facebook-bot request; `og-cover.jpg` 200 `image/jpeg`; canonical per product/range view |
 
 ## Site structure
 
