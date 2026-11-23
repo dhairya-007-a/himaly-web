@@ -459,8 +459,29 @@ Compared against himalaythermoplast.com (home, about, products, category, produc
 To change the admin key: `vercel env add ADMIN_TOKEN production --value <new key of 24+ characters> --yes --force`, then `vercel deploy --prod`.
 
 #### Deploying
-- `vercel deploy --prod` from this folder (deploys whatever is on disk, filtered by `.vercelignore`). `git push` updates GitHub and the GitHub Pages mirror.
+- **`git push` to `main` deploys everything:** the Vercel project is connected to `dhairya-007-a/himaly-web`, so each push builds a production deploy, and GitHub Pages rebuilds too.
+- `vercel deploy --prod` from this folder still works for a manual deploy (uses what is on disk, filtered by `.vercelignore`). Vercel CLI 66.6.0 is installed globally on this computer and logged in (since 2026-11-23).
 - Preview deploys (`vercel deploy`) sit behind Vercel login; use `vercel curl <url>` to test them.
+
+### 2026-11-23 — Pass 22: "Paddle" → "pedal" dustbin, logo size cap
+- **Rename:** every visible "paddle dustbin / paddle bin / Paddle dustbins" now says **pedal** (home, products pages, catalogue data, 6 bathroom-set descriptions, the builder `tools/build_catalog.py`, this file).
+- **New ids and paths:** `pedal-dustbin`, `printed-pedal-dustbin`; photo folders `images/p/pedal-dustbin/`, `images/p/printed-pedal-dustbin/`, and `images/best/pedal-dustbin.webp` (19 files moved with `git mv`).
+- **Old links still work:** `products.html?p=paddle-dustbin` (and the printed one) opens the pedal page and rewrites the address bar (`RENAMED` map in `js/products.js`). Old direct *image* URLs now 404.
+- **Kept on purpose:** uppercase `PADDLE` in `tools/build_catalog.py` — it matches the real factory folder `_17_PADDLE _DUSTBIN_DONE` and the photo names; "paddle" stays as a hidden search word so people typing it still find the bin.
+- **Logo:** header and footer logo now use `max-height` + `max-width` (header ≤166×44, mobile 121×32; footer ≤272 px wide) so the 598×158 PNG can't push the menu.
+- **Audit (headless Chromium at 375 / 768 / 1280):** 0 console errors, 0 broken images, 0 px sideways scroll on home and products pages. Filled correctly: `#showcase` iframe, 9-range strip, `#catalog` 5 room filters + 15 tiles, `#download` controls, distributor `<dialog>` opens, `docs/gst-certificate.pdf` linked. Columns: Why Himalay 1→3→3, Best sellers 2→3→4, catalogue 2→3→4, About+GST 1→1→2, reviews 1→1→3, footer 1→2→4. Product images already used fixed `aspect-ratio` boxes + `object-fit: contain`, and the hero already had its dark gradient — no change needed.
+
+### 2026-11-23 — Pass 23: 3D ring turns smoothly
+- **Problem:** the ring whipped round. Three causes in `showcase.html`:
+  1. Spring was very stiff (`STIFF 95`, about 0.35 s per step).
+  2. No speed limit, so clicking a model 4 places away spun the ring fast.
+  3. Trackpad/mouse sideways scroll jumped one look per 45 px with a 520 ms lock — a trackpad flick keeps sending scroll events for over a second, so it unlocked and jumped again (a normal flick skipped **2** looks).
+- **Fix:**
+  1. Softer spring, still critically damped so it never overshoots: `STIFF 38` (about 0.75 s per step).
+  2. Speed cap `MAX_VEL = 3.2` looks/second when not dragging, so long jumps glide.
+  3. Sideways scroll is now **smooth scroll**: the ring follows the trackpad continuously and snaps to the nearest look 160 ms after the gesture (including momentum) stops. One gesture moves at most one look either way. Handles line/page scroll modes too.
+- Dragging with mouse/finger is unchanged (the ring still follows the finger 1:1).
+- **Checked (headless Chromium):** same flick test, old ring 2 looks → new ring 1 look at small, medium and big flicks; arrow keys and clicks still work; 0 console errors.
 
 ### Deploy log
 | Date | Commit | What went live | Checked |
@@ -470,6 +491,8 @@ To change the admin key: `vercel env add ADMIN_TOKEN production --value <new key
 | 2026-11-22 | `2c16f83` | Pass 19 product pages, all photos, link fixes, clean-up | `products.html`, data, product photos 200; `/himalay-site/` now 404; 0 old-site links on home |
 | 2026-11-23 | `abb55a4` | Pass 20 mobile/tablet (GitHub Pages) | no sideways scroll at 360/390/768/1024 |
 | 2026-11-23 | Pass 21 | **First Vercel production deploy** (https://himalay-web.vercel.app), backend without database | pages 200, private files 404, API 405/415/403/401 checks, CSP clean, form fallback works |
+| 2026-11-23 | `f849153` | Pass 22 pedal rename + logo cap (Vercel + Pages) | home + `?p=pedal-dustbin` + new photos 200, old photo paths 404, no "paddle" text on home |
+| 2026-11-23 | Pass 23 | Smooth 3D ring (first auto-deploy from `git push`) | see commit check below |
 
 ## Site structure
 

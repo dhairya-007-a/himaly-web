@@ -1986,8 +1986,12 @@ header.bar > * {
       let pos = reducedMotion ? 0 : -1.15;
       let goal = 0;
       let vel = 0;
-      const STIFF = 95;
-      const DAMP = 2 * Math.sqrt(95);
+      // Ring spring: critically damped (no overshoot). STIFF 38 ≈ 0.75s to settle one
+      // step; it was 95 (≈0.35s), which made the ring whip round. MAX_VEL caps speed in
+      // slots/second so multi-slot jumps glide instead of spinning.
+      const STIFF = 38;
+      const DAMP = 2 * Math.sqrt(STIFF);
+      const MAX_VEL = 3.2;
 
       let rafPending = false;
       let lastTickTime = 0;
@@ -2002,8 +2006,8 @@ header.bar > * {
       let slipHover = false;
       let bagCount = 0;
       let dragEndTime = 0;
-      let wheelSum = 0;
-      let wheelLocked = false;
+      let wheelSnapTimer = null;
+      let wheelBase = 0;
       let toastTimer = null;
 
       // Stage geometry
@@ -2258,6 +2262,7 @@ header.bar > * {
           for (let step = 0; step < 3; step++) {
             const acc = -STIFF * (pos - goal) - DAMP * vel;
             vel += acc * h;
+            if (!isDragging) vel = Math.max(-MAX_VEL, Math.min(MAX_VEL, vel));
             pos += vel * h;
           }
           if (Math.abs(pos - goal) <= 5e-4 && Math.abs(vel) <= 5e-4) {
@@ -2630,16 +2635,20 @@ header.bar > * {
         if (focusOpen || gridOpen) return;
         if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
           e.preventDefault();
-          if (wheelLocked) return;
-          wheelSum += e.deltaX;
-          if (Math.abs(wheelSum) > 45) {
-            stopAuto();
-            if (wheelSum > 0) next();
-            else prev();
-            wheelSum = 0;
-            wheelLocked = true;
-            setTimeout(() => { wheelLocked = false; }, 520);
-          }
+          // Smooth scroll: the ring follows the trackpad/wheel continuously, then
+          // snaps to the nearest look once the gesture (incl. momentum) goes quiet.
+          // One gesture moves at most one look either way, so a flick can't spin it.
+          if (!wheelSnapTimer) { wheelBase = Math.round(goal); stopAuto(); }
+          const px = e.deltaMode === 1 ? e.deltaX * 16 : e.deltaMode === 2 ? e.deltaX * W : e.deltaX;
+          const step = Math.max(-40, Math.min(40, px)) / (dragPx * 2);
+          goal = Math.max(wheelBase - 1, Math.min(wheelBase + 1, goal + step));
+          setActive(mod(Math.round(goal), 9));
+          kick();
+          clearTimeout(wheelSnapTimer);
+          wheelSnapTimer = setTimeout(() => {
+            wheelSnapTimer = null;
+            goTo(Math.round(goal));
+          }, 160);
         }
       }, { passive: false });
 
