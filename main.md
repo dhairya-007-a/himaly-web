@@ -492,7 +492,7 @@ To change the admin key: `vercel env add ADMIN_TOKEN production --value <new key
 | 2026-11-23 | `abb55a4` | Pass 20 mobile/tablet (GitHub Pages) | no sideways scroll at 360/390/768/1024 |
 | 2026-11-23 | Pass 21 | **First Vercel production deploy** (https://himalay-web.vercel.app), backend without database | pages 200, private files 404, API 405/415/403/401 checks, CSP clean, form fallback works |
 | 2026-11-23 | `f849153` | Pass 22 pedal rename + logo cap (Vercel + Pages) | home + `?p=pedal-dustbin` + new photos 200, old photo paths 404, no "paddle" text on home |
-| 2026-11-23 | Pass 23 | Smooth 3D ring (first auto-deploy from `git push`) | see commit check below |
+| 2026-11-23 | `41e3409` | Pass 23 smooth 3D ring — first auto-deploy from `git push` (no CLI) | live `showcase.html` has the new spring code; Pages built |
 
 ## Site structure
 
