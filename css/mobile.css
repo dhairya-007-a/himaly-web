@@ -1,0 +1,71 @@
+/* Himalay: phone + tablet layer. Loaded LAST on every page.
+   Platform fixes only (touch, viewport, safe areas). Layout breakpoints stay
+   in style.css / redesign.css / products.css. New-arrivals belt (.rx-line)
+   is deliberately not touched here. */
+
+/* 1. No grey/blue tap flash; no landscape font inflation */
+html{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+
+/* 2. No 300ms double-tap wait on controls */
+a,button,summary,label,select,[role="button"]{touch-action:manipulation}
+
+/* 3. Long-press on a control shouldn't select its label or pop the link callout.
+      Content text stays selectable (addresses, phone numbers). */
+button,.rx-btn,.rx-chip,.rx-index button,.px-swatches button,.px-dots button,.mb,#sb{
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none
+}
+
+/* 4. iOS zooms into any input under 16px and never zooms back out */
+@media (pointer:coarse){
+  input,select,textarea,.fld input,.fld select,.fld textarea,.srch input{font-size:16px!important}
+}
+
+/* 5. Finger-sized targets (44px) for the nav icons and footer links */
+@media (pointer:coarse){
+  .ic button{min-width:44px;min-height:44px;align-items:center;justify-content:center}
+  .ic svg{width:22px;height:22px}
+  .x{min-width:44px;min-height:44px}
+  footer.rx-foot li a,footer.rx-foot .lnk{display:inline-block;padding:6px 0}
+}
+
+/* 6. Press feedback on the finger, not on release (hover is gated to mice) */
+.rx-btn,.rx-tile,.px-card,.rx-best__card,.rx-chip,.px-ranges a{
+  transition-property:background,transform,box-shadow;transition-duration:.14s
+}
+@media (hover:none),(pointer:coarse){
+  .rx-btn:active,.rx-chip:active,.px-ranges a:active{transform:scale(.97)}
+  .rx-tile:active,.px-card:active,.rx-best__card:active{transform:scale(.985)}
+  .rx-tile:active .rx-tile__go{background:var(--rx-ink);color:#fff;border-color:var(--rx-ink)}
+  /* the phone menu rows */
+  nav.open li:active{background:rgba(244,247,248,.08)}
+}
+
+/* 7. Notch / Dynamic Island / home bar (viewport-fit=cover is set on every page).
+      Side insets matter in landscape; bottom inset under the footer. */
+.c-wrap{
+  padding-left:max(clamp(16px,3.5vw,40px),env(safe-area-inset-left,0px));
+  padding-right:max(clamp(16px,3.5vw,40px),env(safe-area-inset-right,0px))
+}
+.hero nav,.px-top nav{padding-top:env(safe-area-inset-top,0px)}
+footer.rx-foot{padding-bottom:calc(28px + env(safe-area-inset-bottom,0px))}
+dialog.rx-dialog{max-height:calc(100dvh - 24px);overscroll-behavior:contain}
+
+/* 8. Inner horizontal scrollers: don't drag the page sideways or trigger back-swipe */
+.rx-index,.rx-chips{overscroll-behavior-x:contain;scroll-padding-inline:16px}
+
+/* 9. Tablet (portrait iPad 768-1024): give the all-products grid and
+      best sellers breathing room between the 640 phone and 1024 desktop rules */
+@media (min-width:641px) and (max-width:900px){
+  .rx-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .rx-head{gap:14px}
+}
+@media (min-width:821px) and (max-width:1024px) and (pointer:coarse){
+  nav ul{gap:16px}
+}
+
+/* 10. Small phones (iPhone SE / 360px Android) */
+@media (max-width:380px){
+  .rx-grid{gap:10px}
+  .rx-tile__body{padding:10px}
+  .rx-best__grid{gap:10px}
+}

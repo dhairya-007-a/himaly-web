@@ -16,7 +16,7 @@ nav.px-bc{position:static}
 .px-crumbs{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0 0 clamp(18px,2.4vw,28px);padding:0;font-size:14px;color:var(--rx-muted)}
 .px-crumbs li+li::before{content:"/";margin-right:6px;opacity:.5}
 .px-crumbs a{color:var(--rx-deep);font-weight:600}
-.px-crumbs a:hover{color:var(--rx-ink)}
+@media (hover:hover) and (pointer:fine){.px-crumbs a:hover{color:var(--rx-ink)}}
 .px h1{
   font:850 clamp(36px,5.6vw,72px)/.98 "Archivo",system-ui,sans-serif;font-stretch:118%;
   letter-spacing:-.01em;color:var(--rx-ink);margin:0;
@@ -39,12 +39,12 @@ a.rx-tile{color:inherit}
   position:relative;display:flex;flex-direction:column;background:#fff;border-radius:var(--rx-r-lg);overflow:hidden;
   box-shadow:0 0 0 1px rgba(21,48,79,.08);transition:transform .3s var(--rx-ease),box-shadow .3s var(--rx-ease);
 }
-.px-card:hover{transform:translateY(-4px);box-shadow:0 0 0 1px rgba(21,48,79,.08),0 18px 30px -18px rgba(21,48,79,.35)}
+@media (hover:hover) and (pointer:fine){.px-card:hover{transform:translateY(-4px);box-shadow:0 0 0 1px rgba(21,48,79,.08),0 18px 30px -18px rgba(21,48,79,.35)}}
 .px-card__ph{position:relative;aspect-ratio:1/1;background:var(--rx-mist)}
 .px-card:nth-child(3n+2) .px-card__ph{background:#D6F1F5}
 .px-card:nth-child(3n) .px-card__ph{background:#DCE7F6}
 .px-card__ph img{position:absolute;inset:8%;width:84%;height:84%;object-fit:contain;transition:transform .45s var(--rx-ease),opacity .2s}
-.px-card:hover .px-card__ph img{transform:scale(1.04)}
+@media (hover:hover) and (pointer:fine){.px-card:hover .px-card__ph img{transform:scale(1.04)}}
 .px-card__body{display:grid;gap:4px;padding:14px 16px 16px}
 .px-code{font:700 12px/1 "Archivo",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--rx-deep)}
 .px-card h2,.px-card h3{font:800 clamp(16px,1.3vw,19px)/1.2 "Archivo",sans-serif;font-stretch:108%;margin:0;color:var(--rx-ink)}
@@ -55,8 +55,7 @@ a.rx-tile{color:inherit}
 /* colour dots sit above the stretched link so hovering them previews the colour */
 .px-dots{position:relative;z-index:2;display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px;list-style:none;padding:0}
 .px-dots li{line-height:0}
-.px-dots button{all:unset;cursor:pointer;width:18px;height:18px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(21,48,79,.25);background:var(--sw,#ccc)}
-.px-dots button:hover,.px-dots button[aria-pressed="true"]{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--rx-ink)}
+.px-dots button{all:unset;cursor:pointer;width:18px;height:18px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(21,48,79,.25);background:var(--sw,#ccc)}.px-dots button[aria-pressed="true"]{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--rx-ink)}@media (hover:hover) and (pointer:fine){.px-dots button:hover{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--rx-ink)}}
 .px-dots button:focus-visible{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--rx-lagoon)}
 .px-dots__more{font-size:12.5px;color:var(--rx-muted);line-height:18px!important}
 
@@ -90,7 +89,7 @@ a.rx-tile{color:inherit}
   font:600 14px/1 "Archivo",sans-serif;color:var(--rx-ink);transition:box-shadow .2s,background .2s;
 }
 .px-swatches button::before{content:"";width:26px;height:26px;border-radius:50%;background:var(--sw,#ccc);box-shadow:inset 0 0 0 1px rgba(21,48,79,.2);flex:none}
-.px-swatches button:hover{box-shadow:inset 0 0 0 1px var(--rx-ink)}
+@media (hover:hover) and (pointer:fine){.px-swatches button:hover{box-shadow:inset 0 0 0 1px var(--rx-ink)}}
 .px-swatches button[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--rx-ink);background:var(--rx-mist)}
 .px-swatches button:focus-visible{box-shadow:inset 0 0 0 3px var(--rx-lagoon)}
 .px-facts{display:grid;grid-template-columns:auto 1fr;gap:8px 20px;margin:0;padding:18px 0;border-top:1px solid rgba(21,48,79,.12);border-bottom:1px solid rgba(21,48,79,.12)}
@@ -99,21 +98,21 @@ a.rx-tile{color:inherit}
 .px-acts{display:flex;gap:10px;flex-wrap:wrap}
 .px-acts .rx-btn{flex:1 1 200px}
 .px-wa{background:#1F9D55}
-.px-wa:hover{background:#17804A}
+@media (hover:hover) and (pointer:fine){.px-wa:hover{background:#17804A}}
 .px-more{margin-top:clamp(48px,6vw,88px)}
 .px-more h2{font:850 clamp(26px,3vw,40px)/1 "Archivo",sans-serif;font-stretch:118%;margin:0 0 clamp(18px,2.4vw,28px)}
 
 /* other ranges strip at the bottom of a category */
 .px-ranges{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
 .px-ranges a{display:inline-flex;align-items:center;min-height:44px;padding:10px 16px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px rgba(21,48,79,.18);font-weight:600;font-size:15px}
-.px-ranges a:hover{box-shadow:inset 0 0 0 1px var(--rx-ink)}
+@media (hover:hover) and (pointer:fine){.px-ranges a:hover{box-shadow:inset 0 0 0 1px var(--rx-ink)}}
 
 .px-missing{padding:clamp(48px,8vw,120px) 0;text-align:center;display:grid;gap:18px;justify-items:center}
 
 /* ───────── Responsive ───────── */
 @media (max-width:1024px){.px-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:900px){
-  .px-prod{grid-template-columns:1fr}
+  .px-prod{grid-template-columns:minmax(0,1fr)}
   .px-gal{position:static}
 }
 @media (max-width:640px){

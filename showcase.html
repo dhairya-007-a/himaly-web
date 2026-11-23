@@ -134,15 +134,17 @@ button:focus-visible, a:focus-visible {
   text-transform: uppercase;
   transition: background-color .3s, color .3s, border-style .3s;
 }
-
-.pill:hover,
 .pill[aria-current="true"],
 .pill[aria-current="page"],
 .pill[aria-current] {
   background: #000;
   color: #fff;
   border-style: solid;
-}
+}@media (hover:hover) and (pointer:fine){.pill:hover{
+  background: #000;
+  color: #fff;
+  border-style: solid;
+}}
 
 /* Status bar */
 header.bar {
@@ -619,9 +621,9 @@ header.bar > * {
   transition: border-style .3s;
 }
 
-.dock__auto:hover {
+@media (hover:hover) and (pointer:fine){.dock__auto:hover{
   border-style: solid;
-}
+}}
 
 .dock__auto[aria-pressed="true"] .icon-play {
   display: none;
@@ -699,11 +701,11 @@ header.bar > * {
   transition: background-color .3s, color .3s, border-style .3s;
 }
 
-.piece:hover {
+@media (hover:hover) and (pointer:fine){.piece:hover{
   background: #000;
   color: #fff;
   border-style: solid;
-}
+}}
 
 .piece__img {
   width: 48px;
@@ -724,9 +726,9 @@ header.bar > * {
   transition: transform 1s var(--ease);
 }
 
-.piece:hover .piece__img span {
+@media (hover:hover) and (pointer:fine){.piece:hover .piece__img span{
   transform: scale(1.32);
-}
+}}
 
 .piece__meta {
   display: flex;
@@ -777,13 +779,13 @@ header.bar > * {
   transition: transform .6s var(--ease);
 }
 
-.dock__shop:hover .dock__dot {
+@media (hover:hover) and (pointer:fine){.dock__shop:hover .dock__dot{
   transform: scale(1.08);
-}
+}}
 
-.dock__shop:hover .dock__dot svg {
+@media (hover:hover) and (pointer:fine){.dock__shop:hover .dock__dot svg{
   transform: rotate(90deg);
-}
+}}
 
 .deck.is-grid .dock__now,
 .deck.is-grid .dock__pieces,
@@ -969,9 +971,9 @@ header.bar > * {
   transition: transform .6s var(--ease);
 }
 
-.focus__close:hover {
+@media (hover:hover) and (pointer:fine){.focus__close:hover{
   transform: rotate(90deg);
-}
+}}
 
 .focus__hint {
   position: absolute;
@@ -1037,15 +1039,18 @@ header.bar > * {
   animation-delay: calc(var(--pi) * .11s + .6s);
   transition: transform .5s cubic-bezier(.2, 1.6, .4, 1), background-color .25s, color .25s, box-shadow .4s;
 }
-
-.tag:hover .dotnum,
 .tag.is-hot .dotnum,
 .tag:focus-visible .dotnum {
   background: #fff;
   color: #000;
   box-shadow: 0 0 0 1px #000;
   transform: scale(1.15);
-}
+}@media (hover:hover) and (pointer:fine){.tag:hover .dotnum{
+  background: #fff;
+  color: #000;
+  box-shadow: 0 0 0 1px #000;
+  transform: scale(1.15);
+}}
 
 .tag__tip {
   position: absolute;
@@ -1080,13 +1085,14 @@ header.bar > * {
   font-style: italic;
   font-variant-numeric: tabular-nums;
 }
-
-.tag:hover .tag__tip,
 .tag.is-hot .tag__tip,
 .tag:focus-visible .tag__tip {
   opacity: 1;
   transform: translate(0, -50%) scale(1);
-}
+}@media (hover:hover) and (pointer:fine){.tag:hover .tag__tip{
+  opacity: 1;
+  transform: translate(0, -50%) scale(1);
+}}
 
 .tag__tip.is-flip {
   left: auto;
@@ -1094,13 +1100,14 @@ header.bar > * {
   transform-origin: 100% 50%;
   transform: translate(8px, -50%) scale(.96);
 }
-
-.tag:hover .tag__tip.is-flip,
 .tag.is-hot .tag__tip.is-flip,
 .tag:focus-visible .tag__tip.is-flip {
   opacity: 1;
   transform: translate(0, -50%) scale(1);
-}
+}@media (hover:hover) and (pointer:fine){.tag:hover .tag__tip.is-flip{
+  opacity: 1;
+  transform: translate(0, -50%) scale(1);
+}}
 
 .tag__tip.is-below {
   top: calc(100% + 8px);
@@ -1116,13 +1123,14 @@ header.bar > * {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-.tag:hover .tag__tip.is-below,
 .tag.is-hot .tag__tip.is-below,
 .tag:focus-visible .tag__tip.is-below {
   opacity: 1;
   transform: translate(calc(-50% + var(--dx, 0px)), 0) scale(1);
-}
+}@media (hover:hover) and (pointer:fine){.tag:hover .tag__tip.is-below{
+  opacity: 1;
+  transform: translate(calc(-50% + var(--dx, 0px)), 0) scale(1);
+}}
 
 /* The slip (receipt drawer) */
 .slip {
@@ -1430,9 +1438,9 @@ header.bar > * {
   transition: transform .5s cubic-bezier(.2, 1.6, .4, 1);
 }
 
-.slip__cta:hover .cta-arrow {
+@media (hover:hover) and (pointer:fine){.slip__cta:hover .cta-arrow{
   transform: translateX(4px);
-}
+}}
 
 .slip.is-complete .slip__cta {
   background: #fff;
@@ -1540,10 +1548,10 @@ header.bar > * {
   font-weight: 600;
 }
 
-.drawer__item:hover .drawer__name {
+@media (hover:hover) and (pointer:fine){.drawer__item:hover .drawer__name{
   font-style: italic;
   transform: translateX(6px);
-}
+}}
 
 .drawer__meta {
   color: var(--muted);

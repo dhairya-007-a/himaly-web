@@ -420,6 +420,14 @@ Compared against himalaythermoplast.com (home, about, products, category, produc
 - **Structure clean-up:** removed `himalay-site/` (an old copy of the whole site that GitHub Pages was still publishing at `/himalay-site/`) and 46 unused images (old category/gallery PNGs, product thumbs, `category-bg.jpg`, the old best-seller dispensers). All recoverable from git history.
 - **Checked:** every link on `index.html` and `products.html` resolves to a real product, range or section; all 524 image files load; all 80 page variants (15 ranges, 63 products, not-found, and a script-injection attempt in the URL) render without errors; phone width 390 px has no sideways scroll, 2-column cards, 1-column product page.
 
+### 2026-11-23 — Pass 20: Native feel on phones and tablets
+- **Stuck hover fixed:** on a phone, a tap triggered the hover effect (lifted cards, zoomed photos) and it stayed stuck. Every `:hover` rule in `css/style.css`, `css/redesign.css`, `css/products.css`, `index.html` and `showcase.html` is now wrapped in `@media (hover:hover) and (pointer:fine)`, so mice and trackpads keep it and fingers don't. Done by `tools/gate_hover.py` (safe to re-run). The New arrivals belt (`.rx-line`, `.rx-arrow`) was left exactly as it was, on request.
+- **New `css/mobile.css`** (loaded last on `index.html` and `products.html`): no grey tap flash, no 300 ms tap delay (`touch-action: manipulation`), long-press doesn't select button labels, inputs are 16 px on touch screens so iOS stops zooming into the forms, 44 px tap targets for the search/menu icons and dialog close, press-down feedback (`:active`) on buttons/cards/chips, notch and home-bar padding (`env(safe-area-inset-*)`), `100dvh` dialog, tablet 3-column product grid between 641–900 px.
+- **Heights:** hero, 3D ring frame and "Explore by category" use `svh` instead of `vh`, so the mobile address bar no longer pushes the bottom of the hero off screen.
+- **Bug fixed — "Explore by category" was 1,300 px wide on phones/tablets:** the single-column grid used `1fr`, which can't shrink below the 1600 px photo inside it. Changed to `minmax(0,1fr)` for every single-column grid in `redesign.css` and `products.css`.
+- **Status bar colour:** `theme-color #15304F` added to both pages.
+- **Checked (Playwright, Chromium):** 360, 390, 768, 1024 px on home, a range page and a product page; no sideways scroll, no element past the screen edge. Still needs a real phone: tap highlight, input zoom, safe areas and the address-bar height can't be reproduced in a desktop browser.
+
 ### Deploy log
 | Date | Commit | What went live | Checked |
 |---|---|---|---|
@@ -436,10 +444,12 @@ showcase.html         3D product ring (loaded in an iframe on the home page)
 css/style.css         Base + hero/nav (original)
 css/redesign.css      Sections from "Explore by category" down, dialog, footer
 css/products.css      products.html only
+css/mobile.css        Phone/tablet layer (touch, safe areas), loaded last
 js/main.js            Menu, enquiry dialog + forms (both pages)
 js/redesign.js        Home: category stage, new-arrivals belt, range tiles + filters
 js/products.js        products.html views
 js/catalog-data.js    GENERATED catalogue (ranges, products, colours, image sizes)
+tools/gate_hover.py   Wraps :hover rules for mouse only (re-run after adding hover CSS)
 tools/build_catalog.py  Builds images/p + js/catalog-data.js from the factory PNG folder
 images/p/<product>/   GENERATED product photos per colour
 docs/gst-certificate.pdf  Page 1 of the GST certificate
@@ -455,4 +465,3 @@ docs/gst-certificate.pdf  Page 1 of the GST certificate
 - The ring's side "enquiry list" drawer still has leftover clothing-cart plumbing (`cartState`, size picker UI) that now always resolves to "One size" — functions correctly but could be simplified.
 - `images/showcase-bg.jpg` source upload was small (736×552) — fine blurred at the current size.
 - "Explore by category" and the 3D ring still use the 9 older gallery photos; they could switch to the new per-colour photos.
-- The `mobile-native` skill is installed but hasn't been run over this site yet — next mobile pass should use it.
