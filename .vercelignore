@@ -1,0 +1,18 @@
+# Allowlist: upload ONLY what the live site needs. Everything else in this
+# folder (2.4 GB raw photos, the full GST certificate with partner details,
+# tool caches, .env files) stays on this computer.
+/*
+!/index.html
+!/products.html
+!/showcase.html
+!/admin.html
+!/css
+!/js
+!/images
+!/logo
+!/docs
+!/api
+!/main-bg-video.mp4
+!/package.json
+!/package-lock.json
+!/vercel.json

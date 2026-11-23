@@ -24,3 +24,15 @@ GST CERTIFICATE.pdf
 
 .claude/settings.local.json
 .playwright-mcp/
+
+# Node / Vercel
+node_modules/
+.vercel/
+.env
+.env*.local
+
+.vercel
+.env*
+
+# Admin key for /admin (never commit)
+.admin-key.txt
