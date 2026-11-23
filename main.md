@@ -483,6 +483,15 @@ To change the admin key: `vercel env add ADMIN_TOKEN production --value <new key
 - Dragging with mouse/finger is unchanged (the ring still follows the finger 1:1).
 - **Checked (headless Chromium):** same flick test, old ring 2 looks → new ring 1 look at small, medium and big flicks; arrow keys and clicks still work; 0 console errors.
 
+### 2026-11-23 — Pass 24: Link previews (WhatsApp / Instagram / Facebook) + canonical URLs
+- **Share card:** `images/og-cover.jpg` (1200×630 JPEG, 72 KB; JPEG because WhatsApp handles WebP badly): white logo + "Durable household plastics, made in Morbi" + "Dealers & distributors welcome" on navy, the blue bathroom set on the right. Made with Pillow from `images/best/bathroom-set.webp` and the logo; to remake it, rerun the snippet in the Pass 24 commit or edit the image directly.
+- **`index.html` and `products.html`:** `og:type/site_name/locale/url/title/description/image` (+ image size, type, alt) and `twitter:card=summary_large_image`. All URLs are absolute `https://himalay-web.vercel.app/...` (preview bots need full URLs).
+- **Canonical:** home has a fixed `<link rel="canonical">`. `products.html` sets its own per view in `js/products.js`: `?p=<id>` for a product, `?c=<id>` for a range, plain for the list; the colour `?v=` is dropped (same product); unknown ids get none. The GitHub Pages mirror points its canonical at Vercel, so Google treats Vercel as the real site.
+- **`showcase.html`:** `noindex` — it is only the 3D ring inside the home page iframe, not a page of its own.
+- **Limit:** preview bots don't run JavaScript, so every product link shares the generic "All products" card, not that product's photo. Per-product cards would need the pages generated on the server.
+- **Footer phone link checked:** `href="tel:+919979011141"` in source, on the live site and after JS runs. The `about:invalid#zCSafez` seen in a markup dump comes from the dump tool's URL sanitiser (it blocks `tel:`), not from the site.
+- **Changing domain later:** update the absolute URLs in both pages' `<head>` and the one in `js/products.js`.
+
 ### Deploy log
 | Date | Commit | What went live | Checked |
 |---|---|---|---|
@@ -532,7 +541,7 @@ docs/gst-certificate.pdf  Page 1 of the GST certificate
 - `css/style.css` still contains rules for removed sections (`.prod`, `.cgrid`, `.new-grid`, `.sec-prod`) — small, harmless, could be trimmed.
 - **Database not connected yet** — see Pass 21 "Finish the database".
 - **Lead notifications** (email via Resend, or WhatsApp) skipped for now on request; leads are only visible in `/admin`.
-- **Custom domain** not set up; the site is on `himalay-web.vercel.app`.
+- **Custom domain** not set up; the site is on `himalay-web.vercel.app` (also hard-coded in OG/canonical tags, see Pass 24).
 - Repo `api/`, `db/`, `package.json` are also visible on the GitHub Pages mirror (source code only, no secrets). Turn GitHub Pages off once Vercel is the main site.
 - The ring's side "enquiry list" drawer still has leftover clothing-cart plumbing (`cartState`, size picker UI) that now always resolves to "One size" — functions correctly but could be simplified.
 - `images/showcase-bg.jpg` source upload was small (736×552) — fine blurred at the current size.

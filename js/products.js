@@ -231,6 +231,15 @@
     qs.set("p", pid);
     history.replaceState(null, "", location.pathname + "?" + qs + location.hash);
   }
+  /* Canonical per view: product and range pages are distinct pages; the colour (?v=)
+     is a variant of the same product, so it is left out. Unknown ids get none. */
+  const known = pid ? prodById.has(pid) : cid ? catById.has(cid) : true;
+  if (known) {
+    const link = document.createElement("link");
+    link.rel = "canonical";
+    link.href = "https://himalay-web.vercel.app/products.html" + (pid ? "?p=" + encodeURIComponent(pid) : cid ? "?c=" + encodeURIComponent(cid) : "");
+    document.head.append(link);
+  }
   if (pid) { const p = prodById.get(pid); p ? viewProd(p, qs.get("v")) : notFound(); }
   else if (cid) { const c = catById.get(cid); c ? viewCat(c) : notFound(); }
   else viewAll();
