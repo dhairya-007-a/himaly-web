@@ -59,10 +59,21 @@ test("control characters are stripped", () => {
   assert.equal(validateLead(base({ name: "Ra\u0000vi" })).lead.name, "Ravi");
 });
 
-test("phone normalisation", () => {
-  assert.equal(normalisePhone("099790-11141"), "09979011141");
-  assert.equal(normalisePhone("(0281) 234 5678"), "02812345678");
-  assert.equal(normalisePhone("+1 234"), null);
+test("phone normalisation: every Indian format becomes +91 + 10 digits", () => {
+  for (const x of ["99790 11141", "099790-11141", "91 9979011141", "+91 99790 11141", "+91-99790-11141", "0919979011141"])
+    assert.equal(normalisePhone(x), "+919979011141", x);
+  assert.equal(normalisePhone("(0281) 234 5678"), "+912812345678"); // landline with STD code
+});
+
+test("phone normalisation: international numbers keep their country code", () => {
+  assert.equal(normalisePhone("+1 415 555 2671"), "+14155552671");
+  assert.equal(normalisePhone("+44 20 7946 0958"), "+442079460958");
+});
+
+test("phone normalisation: junk and malformed numbers are refused", () => {
+  for (const x of ["+1 234", "12345678", "5551234567", "+91 12345", "+91 0979011141", "+91 1979011141",
+                   "9999999999", "0000000000", "1234567890", "9876543210", "+0 1234 5678", "98250 1234a", "", null, 42])
+    assert.equal(normalisePhone(x), null, String(x));
 });
 
 test("CSV cells neutralise formulas and escape quotes", () => {

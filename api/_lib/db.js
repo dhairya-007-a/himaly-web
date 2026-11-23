@@ -12,14 +12,26 @@ export function db() {
   return sql;
 }
 
-// Same IP (hashed) may submit this many leads per window.
+// Limits checked in the database before every insert (one round trip):
+//  - same visitor (hashed IP): at most RATE_LIMIT.max leads per RATE_LIMIT.minutes
+//  - same phone + form already sent in the last DUP_MINUTES: treated as a
+//    double-submit, answered "ok" without a second row
+//  - whole site: more than FLOOD.max leads in FLOOD.minutes means a spam wave
+//    (a real busy day is a few dozen); new leads get 503 and the visitor's form
+//    falls back to WhatsApp, so the database is protected and nobody is stuck.
 export const RATE_LIMIT = { max: 5, minutes: 10 };
+export const DUP_MINUTES = 10;
+export const FLOOD = { max: 300, minutes: 5 };
 
-export async function recentFromIp(ipHash) {
+export async function guardCounts(ipHash, phone, kind) {
   const rows = await db()`
-    SELECT count(*)::int AS n FROM leads
-    WHERE ip_hash = ${ipHash} AND created_at > now() - make_interval(mins => ${RATE_LIMIT.minutes})`;
-  return rows[0].n;
+    SELECT
+      count(*) FILTER (WHERE ip_hash = ${ipHash} AND created_at > now() - make_interval(mins => ${RATE_LIMIT.minutes}))::int AS ip,
+      count(*) FILTER (WHERE phone = ${phone} AND kind = ${kind} AND created_at > now() - make_interval(mins => ${DUP_MINUTES}))::int AS dup,
+      count(*) FILTER (WHERE created_at > now() - make_interval(mins => ${FLOOD.minutes}))::int AS recent
+    FROM leads
+    WHERE created_at > now() - make_interval(mins => ${Math.max(RATE_LIMIT.minutes, DUP_MINUTES, FLOOD.minutes)})`;
+  return rows[0];
 }
 
 export async function insertLead(l) {

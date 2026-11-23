@@ -494,6 +494,30 @@ To change the admin key: `vercel env add ADMIN_TOKEN production --value <new key
 - **Footer phone link checked:** `href="tel:+919979011141"` in source, on the live site and after JS runs. The `about:invalid#zCSafez` seen in a markup dump comes from the dump tool's URL sanitiser (it blocks `tel:`), not from the site.
 - **Changing domain later:** update the absolute URLs in both pages' `<head>` and the one in `js/products.js`.
 
+### 2026-11-23 — Pass 25: Backend hardening (lead API, admin, health, GST PDF) — no visual change
+Goal: survive floods (target 10k requests/s) and abuse without the database or the bill being the weak point. Layers, outermost first:
+
+1. **Vercel platform:** automatic DDoS mitigation (always on, all plans). Static pages, images, CSS/JS, the video and the GST PDF are served from Vercel's CDN; they never run our code, so 10k req/s of page views is CDN load, not server load. (The 34 MB hero video makes that bandwidth-heavy; see follow-ups.)
+2. **Vercel Firewall rules (staged, owner publishes):**
+   - `API rate limit`: any path starting `/api/`, 60 requests / 60 s per IP, over the limit → 429. Firewall-blocked requests aren't billed.
+   - `Block exploit probes`: deny `/.env*`, `/.git/*`, `/wp-admin`, `/wp-login.php`, `/xmlrpc.php`, `/phpmyadmin`, `/.aws/credentials`, `/server-status`, `/.DS_Store`.
+   - Publish: `vercel firewall diff` then `vercel firewall publish --yes`. Undo one: `vercel firewall rules disable "API rate limit"` + publish. Counters are per region.
+3. **`POST /api/lead`, cheapest check first** (`api/lead.js`):
+   - **Origin required** (`api/_lib/http.js`): every current browser sends `Origin` on a `fetch` POST, so no Origin = script → 403. Must be this host over https; `Sec-Fetch-Site`, if sent, must be `same-origin`.
+   - **Per-instance limiter** (`api/_lib/limiter.js`): 10 posts/min per visitor per instance → 429, before any database call. Memory capped at 10,000 keys (oldest evicted), so spoofed-IP floods can't exhaust it.
+   - **Body read as a stream, cut at 8 KB** — a client lying about Content-Length can't make the function buffer megabytes.
+   - **One database guard query** (`guardCounts` in `api/_lib/db.js`) before insert: same visitor ≤ 5 leads / 10 min (429); same phone + same form within 10 min = double-tap → "ok" without a second row; **flood breaker**: > 300 leads site-wide in 5 min → 503, and the visitor's form falls back to WhatsApp, so a spam wave can't fill or overload the database.
+4. **Phone numbers** (`normalisePhone` in `api/_lib/validate.js`): every Indian format (`99790 11141`, `099790-11141`, `91 9979011141`, `+91 99790 11141`, landline `(0281) 234 5678`) is stored as `+91` + 10 digits; `+91` must have exactly 10 digits not starting 0/1; other countries need `+` and 8–15 digits; junk (`9999999999`, `0000000000`, `1234567890`, `9876543210`) is refused. Duplicate detection uses this normalised form. New index `leads_phone_idx` in `db/schema.sql`.
+5. **Admin API:** 10 wrong keys per visitor per instance in 10 min → 429 (key is 24+ random chars, compared in constant time as before; still refuses to run with a short key).
+6. **`/api/health`:** result cached 15 s per instance, parallel checks share one probe, a healthy answer is CDN-cacheable 15 s, a failure is never cached. Hammering it costs ≤ 1 tiny query per instance per 15 s.
+7. **GST certificate PDF** (`docs/gst-certificate.pdf`): audited — 1 page, only the public registration details (GSTIN, legal name, address); no JavaScript, forms, links, launch actions, embedded files or encryption; metadata only "MuPDF". New headers: `Content-Type: application/pdf`, `Content-Disposition: inline; filename="Himalay-GST-registration-certificate.pdf"`, 1-day cache, `X-Robots-Tag: noindex, noarchive` (not in search results), `Cross-Origin-Resource-Policy: same-origin` (other sites can't embed it). Not added on purpose: CSP `sandbox` — Chrome then refuses to show the PDF. The full multi-page original stays off the internet (`.gitignore` + `.vercelignore` allowlist).
+8. **API responses:** also `Cross-Origin-Resource-Policy: same-origin`.
+
+**Tests:** `npm test` → 24 pass (was 12): phone formats/junk, origin rules, body cap with a lying Content-Length, limiter window + bounded memory (25,000 keys), lead handler 403/405/429/503 paths, admin 401→429, health sharing one probe and never caching a failure.
+**Local throughput of refusals (one CPU core, in-process):** no-Origin 403 ≈ 11,400/s, one IP flooding → 429 ≈ 7,200/s, honeypot bots → fake 200 ≈ 4,100/s. Vercel runs many instances in parallel, and the firewall drops floods before this code runs.
+**Not done:** a real 10k req/s load test against the live site — it would be a self-inflicted attack (billing, and Vercel may treat it as one). Do it only on a preview deploy with Vercel's permission.
+**Unchanged:** every page looks and behaves the same (UI preservation rule). Only visible effect: a phone like `12345678` without a country/STD code now gets the existing "Please enter a valid phone number." message.
+
 ### Deploy log
 | Date | Commit | What went live | Checked |
 |---|---|---|---|
@@ -542,7 +566,8 @@ docs/gst-certificate.pdf  Page 1 of the GST certificate
 - **Hero video is 34 MB** — biggest remaining speed problem. Re-encoding to ~720p H.264, no audio, CRF ~28 would get it to roughly 3–5 MB. Needs `ffmpeg` (not installed on this machine). A poster frame (`images/hero-poster.jpg`) should be added at the same time so something shows before the video starts.
 - Hero + 3D ring still use the old Cormorant / DM Sans type; kept on request, so the top and bottom halves of the page use different fonts.
 - `css/style.css` still contains rules for removed sections (`.prod`, `.cgrid`, `.new-grid`, `.sec-prod`) — small, harmless, could be trimmed.
-- **Database not connected yet** — see Pass 21 "Finish the database".
+- **Database not connected yet** — see Pass 21 "Finish the database". After connecting, re-run `npm run db:migrate` (adds the Pass 25 phone index).
+- **Firewall rules staged, not published** — see Pass 25 step 2.
 - **Lead notifications** (email via Resend, or WhatsApp) skipped for now on request; leads are only visible in `/admin`.
 - **Custom domain** not set up; the site is on `himalay-web.vercel.app` (also hard-coded in OG/canonical tags, see Pass 24).
 - Repo `api/`, `db/`, `package.json` are also visible on the GitHub Pages mirror (source code only, no secrets). Turn GitHub Pages off once Vercel is the main site.

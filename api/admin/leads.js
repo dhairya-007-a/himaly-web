@@ -2,7 +2,8 @@
 //   GET  ?status=new&limit=200&format=csv
 //   PATCH { id, status }
 import { db } from "../_lib/db.js";
-import { json, readJson, checkAdmin } from "../_lib/http.js";
+import { json, readJson, checkAdmin, clientIpHash } from "../_lib/http.js";
+import { createLimiter } from "../_lib/limiter.js";
 import { STATUSES, csvCell } from "../_lib/validate.js";
 
 // Keep in sync with the SELECT lists below.
@@ -10,8 +11,21 @@ const COLS = ["id", "created_at", "kind", "role", "name", "phone", "email", "bus
 
 const deny = () => json(401, { ok: false, error: "Unauthorised." }, { "www-authenticate": "Bearer" });
 
+// Wrong keys per visitor per instance. The key is 24+ random characters, so
+// guessing is hopeless anyway; this just stops anyone burning function time trying.
+const badKeys = createLimiter({ max: 10, windowMs: 10 * 60_000 });
+
+// Returns a Response to send back if the request is not allowed, else null.
+function gate(request) {
+  const ip = clientIpHash(request);
+  if (checkAdmin(request)) return null;
+  if (!badKeys(ip)) return json(429, { ok: false, error: "Too many attempts. Try again later." }, { "retry-after": "600" });
+  return deny();
+}
+
 export async function GET(request) {
-  if (!checkAdmin(request)) return deny();
+  const no = gate(request);
+  if (no) return no;
   const u = new URL(request.url);
   const status = u.searchParams.get("status");
   const limit = Math.min(Math.max(parseInt(u.searchParams.get("limit") || "500", 10) || 500, 1), 5000);
@@ -38,7 +52,8 @@ export async function GET(request) {
 }
 
 export async function PATCH(request) {
-  if (!checkAdmin(request)) return deny();
+  const no = gate(request);
+  if (no) return no;
   const parsed = await readJson(request);
   if (parsed.error) return json(parsed.status, { ok: false, error: parsed.error });
   const id = Number(parsed.body && parsed.body.id);

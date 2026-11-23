@@ -17,14 +17,46 @@ const clean = (v) =>
     ? v.normalize("NFC").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "").trim()
     : "";
 
-// Indian numbers mostly, but dealers abroad exist: 8–15 digits after stripping
-// spaces, dashes, brackets and a leading +.
+// Phone numbers. Mostly Indian, so those are stored in one form, "+91" plus the
+// 10-digit national number, however they were typed:
+//   99790 11141 · 099790-11141 · 91 9979011141 · +91 99790 11141  → +919979011141
+//   (0281) 234 5678  (landline with STD code)                    → +912812345678
+// A "+91" number must have exactly 10 digits after it. Other countries: "+" and
+// 8–15 digits (E.164). Junk such as 0000000000 or 1234567890 is refused.
 export function normalisePhone(raw) {
   const s = clean(raw);
-  if (!/^\+?[\d\s\-()]{8,20}$/.test(s)) return null;
-  const digits = s.replace(/\D/g, "");
-  if (digits.length < 8 || digits.length > 15) return null;
-  return (s.startsWith("+") ? "+" : "") + digits;
+  if (!/^\+?[\d\s\-().]{8,22}$/.test(s)) return null;
+  let d = s.replace(/\D/g, "");
+  const plus = s.startsWith("+");
+
+  let national = null; // Indian 10-digit number, if this is one
+  if (plus) {
+    if (d.startsWith("91")) {
+      if (d.length !== 12) return null;
+      national = d.slice(2);
+    } else if (d.length < 8 || d.length > 15 || d.startsWith("0")) {
+      return null;
+    }
+  } else if (d.length === 10 && /^[6-9]/.test(d)) national = d;            // mobile
+  else if (d.length === 11 && d.startsWith("0")) national = d.slice(1);    // 0 + mobile / STD landline
+  else if (d.length === 12 && d.startsWith("91")) national = d.slice(2);   // 91 without +
+  else if (d.length === 13 && d.startsWith("091")) national = d.slice(3);
+  else return null; // no country code and not a recognisable Indian number
+
+  if (national !== null) {
+    // Indian numbers never start with 0 or 1 after the country code.
+    if (!/^[2-9]\d{9}$/.test(national) || isJunk(national)) return null;
+    return "+91" + national;
+  }
+  if (isJunk(d)) return null;
+  return "+" + d;
+}
+
+function isJunk(digits) {
+  if (/^(\d)\1+$/.test(digits)) return true; // 9999999999
+  const runs = "01234567890123456789";
+  const back = "98765432109876543210";
+  return runs.includes(digits) || back.includes(digits); // 1234567890, 9876543210
 }
 
 const EMAIL = /^[^\s@<>()"',;]{1,64}@[^\s@<>()"',;]+\.[a-z]{2,}$/i;
