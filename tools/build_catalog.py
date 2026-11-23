@@ -39,24 +39,24 @@ CATEGORIES = [
     ("dispensers", "Dispensers & bottles", "water", "Clear water dispenser with a tap and 20 litre PET bottles.", "dispenser water tap pet bottle 20 litre 8 litre", ("dispenser-8", 0)),
     ("fridge-bottles", "Fridge bottles", "water", "Slim bottles that fit the fridge door, single or in a set of six.", "fridge bottle water", ("ht-47", 0)),
     ("mops", "Mops", "cleaning", "Spin mops with steel or plastic handles.", "mop spin floor cleaning steel plastic", ("mop-steel", 0)),
-    ("dustbins", "Paddle dustbins", "cleaning", "Foot-pedal dustbins in plain and dotted finishes, two sizes.", "dustbin bin paddle pedal waste 007 008", ("paddle-dustbin", 0)),
+    ("dustbins", "Pedal dustbins", "cleaning", "Foot-pedal dustbins in plain and dotted finishes, two sizes.", "dustbin bin pedal paddle waste 007 008", ("pedal-dustbin", 0)),
 ]
 
 B = "_01_BATHROOM SET/"
 PRODUCTS = [
     # id, category, code, name, short line, blurb, facts, folder (or list of files), options
     # options: drop = words to strip from file names; only/skip = regex on file name; extra = [(file, variant name)]
-    ("ht-01", "bathroom-sets", "HT-01", "Super Jumbo bathroom set with paddle bin", "11 pieces + paddle bin", "Tub, buckets, mugs, soap case, stool and a paddle dustbin, all in one matching print.", [("Pieces", "11 + paddle bin"), ("Size", "Super Jumbo")], B + "HT-01 - SUPER JUMBO B.T SET 11 PIC PADDLEBIN_/PNG", {}),
+    ("ht-01", "bathroom-sets", "HT-01", "Super Jumbo bathroom set with pedal bin", "11 pieces + pedal bin", "Tub, buckets, mugs, soap case, stool and a pedal dustbin, all in one matching print.", [("Pieces", "11 + pedal bin"), ("Size", "Super Jumbo")], B + "HT-01 - SUPER JUMBO B.T SET 11 PIC PADDLEBIN_/PNG", {}),
     ("ht-02", "bathroom-sets", "HT-02", "Super Jumbo bathroom set", "11 pieces", "Tub, buckets, mugs, soap case and stool in one matching print.", [("Pieces", "11"), ("Size", "Super Jumbo")], B + "HT-02 - SUPER JUMBO B.T. SET 11 PIC_/PNG", {}),
-    ("ht-03", "bathroom-sets", "HT-03", "Jumbo bathroom set with paddle bin", "11 pieces + paddle bin", "The Jumbo set with a matching paddle dustbin.", [("Pieces", "11 + paddle bin"), ("Size", "Jumbo")], B + "HT-03 -  JUMBO B.T. SET 11 PIC PADDLEBIN/PNG", {}),
+    ("ht-03", "bathroom-sets", "HT-03", "Jumbo bathroom set with pedal bin", "11 pieces + pedal bin", "The Jumbo set with a matching pedal dustbin.", [("Pieces", "11 + pedal bin"), ("Size", "Jumbo")], B + "HT-03 -  JUMBO B.T. SET 11 PIC PADDLEBIN/PNG", {}),
     ("ht-04", "bathroom-sets", "HT-04", "Jumbo bathroom set 11+1", "12 pieces", "Eleven matching pieces plus one extra.", [("Pieces", "11 + 1"), ("Size", "Jumbo")], B + "HT-04 - JUMBO B.T. SET 11+1_/PNG", {}),
-    ("ht-05", "bathroom-sets", "HT-05", "Super bathroom set with paddle bin", "11 pieces + paddle bin", "The Super set with a matching paddle dustbin.", [("Pieces", "11 + paddle bin"), ("Size", "Super")], B + "HT-05 - SUPER B.T. SET 11 PIC  PADDLEBIN_/PNG", {}),
+    ("ht-05", "bathroom-sets", "HT-05", "Super bathroom set with pedal bin", "11 pieces + pedal bin", "The Super set with a matching pedal dustbin.", [("Pieces", "11 + pedal bin"), ("Size", "Super")], B + "HT-05 - SUPER B.T. SET 11 PIC  PADDLEBIN_/PNG", {}),
     ("ht-06", "bathroom-sets", "HT-06", "Super bathroom set", "11 pieces", "Eleven matching pieces in the Super size.", [("Pieces", "11"), ("Size", "Super")], B + "HT-06 - SUPER B.T. SET 11 PIC_/PNG", {}),
-    ("ht-07", "bathroom-sets", "HT-07", "Bathroom set with paddle bin", "11 pieces + paddle bin", "Our standard set with a matching paddle dustbin.", [("Pieces", "11 + paddle bin"), ("Size", "Standard")], B + "HT-07 - B.T. SET 11 PIC PADDLEBIN_/PNG", {}),
+    ("ht-07", "bathroom-sets", "HT-07", "Bathroom set with pedal bin", "11 pieces + pedal bin", "Our standard set with a matching pedal dustbin.", [("Pieces", "11 + pedal bin"), ("Size", "Standard")], B + "HT-07 - B.T. SET 11 PIC PADDLEBIN_/PNG", {}),
     ("ht-08", "bathroom-sets", "HT-08", "Bathroom set 11+1", "12 pieces", "Eleven matching pieces plus one extra, standard size.", [("Pieces", "11 + 1"), ("Size", "Standard")], B + "HT-08 - B.T. SET 11+1_/PNG", {}),
-    ("ht-09", "bathroom-sets", "HT-09", "Jumbo bathroom set 6 pcs with paddle bin", "6 pieces + paddle bin", "A smaller Jumbo set with a matching paddle dustbin.", [("Pieces", "6 + paddle bin"), ("Size", "Jumbo")], B + "HT-09 - JUMBO B.T. SET 6 PIC PADDLEBIN_/PNG", {}),
+    ("ht-09", "bathroom-sets", "HT-09", "Jumbo bathroom set 6 pcs with pedal bin", "6 pieces + pedal bin", "A smaller Jumbo set with a matching pedal dustbin.", [("Pieces", "6 + pedal bin"), ("Size", "Jumbo")], B + "HT-09 - JUMBO B.T. SET 6 PIC PADDLEBIN_/PNG", {}),
     ("ht-10", "bathroom-sets", "HT-10", "Jumbo bathroom set 6 pcs", "6 pieces", "Six matching pieces in the Jumbo size.", [("Pieces", "6"), ("Size", "Jumbo")], B + "HT-10 - JUMBO B.T. SET 6 PIC_/PNG", {}),
-    ("ht-11", "bathroom-sets", "HT-11", "Bathroom set 6 pcs with paddle bin", "6 pieces + paddle bin", "Six matching pieces with a paddle dustbin, standard size.", [("Pieces", "6 + paddle bin"), ("Size", "Standard")], B + "HT-11 - B.T. SET 6 PIC PADDLEBIN_/PNG", {}),
+    ("ht-11", "bathroom-sets", "HT-11", "Bathroom set 6 pcs with pedal bin", "6 pieces + pedal bin", "Six matching pieces with a pedal dustbin, standard size.", [("Pieces", "6 + pedal bin"), ("Size", "Standard")], B + "HT-11 - B.T. SET 6 PIC PADDLEBIN_/PNG", {}),
     ("ht-12", "bathroom-sets", "HT-12", "Bathroom set 6 pcs", "6 pieces", "Six matching pieces, standard size.", [("Pieces", "6"), ("Size", "Standard")], B + "HT-12 - B.T. SET 6 PIC_/PNG", {}),
     ("oasis-6", "bathroom-sets", "HT-13", "Oasis bathroom set 6 pcs", "6 pieces", "Plain-colour Oasis set in brown, coco and grey.", [("Pieces", "6")], B + "OASIS-13-14_6PCS_4PCS/PNG", {"only": r"6 PCS"}),
     ("oasis-4", "bathroom-sets", "HT-14", "Oasis bathroom set 4 pcs", "4 pieces", "A compact plain-colour Oasis set.", [("Pieces", "4")], B + "OASIS-13-14_6PCS_4PCS/PNG", {"only": r"4 PCS"}),
@@ -68,7 +68,7 @@ PRODUCTS = [
     ("bath-mug", "bathroom-essentials", "", "Bath mug", "Printed", "Bath mug that matches the bathroom sets.", [], "_15_MIX_SINGLE_PRODUCT_DONE/PNG", {"only": r"MUG"}),
     ("soap-case", "bathroom-essentials", "", "Soap case", "With drain lid", "Soap case that matches the bathroom sets.", [], "_15_MIX_SINGLE_PRODUCT_DONE/PNG", {"only": r"SOAP CASE"}),
     ("bathroom-dustbin", "bathroom-essentials", "", "Bathroom dustbin", "Open top", "Small dustbin for the bathroom.", [], "_15_MIX_SINGLE_PRODUCT_DONE/PNG", {"only": r"CREAM - DUSTBIN"}),
-    ("printed-paddle-dustbin", "dustbins", "", "Printed paddle dustbin", "Floral print", "Foot-pedal dustbin with a floral print and lid.", [], "_15_MIX_SINGLE_PRODUCT_DONE/PNG", {"only": r"PADDLE DUSTBIN"}),
+    ("printed-pedal-dustbin", "dustbins", "", "Printed pedal dustbin", "Floral print", "Foot-pedal dustbin with a floral print and lid.", [], "_15_MIX_SINGLE_PRODUCT_DONE/PNG", {"only": r"PADDLE DUSTBIN"}),
     ("dust-pan", "bathroom-essentials", "", "Dust pan", "With handle", "Dust pan with a long grip.", [], "_15_MIX_SINGLE_PRODUCT_DONE/PNG", {"only": r"DUST PAN"}),
     ("brush-stand", "bathroom-essentials", "", "Brush stand", "Toothbrush holder", "Toothbrush and paste stand.", [], "_15_MIX_SINGLE_PRODUCT_DONE/PNG", {"only": r"BRUSH STAND"}),
     ("body-scrubber", "bathroom-essentials", "", "Body scrubber", "Bath scrubber", "Soft-bristle body scrubber.", [], "_15_MIX_SINGLE_PRODUCT_DONE/PNG", {"only": r"BODY SCRUB"}),
@@ -113,7 +113,7 @@ PRODUCTS = [
 
     ("mop-steel", "mops", "", "Spin mop, steel handle", "4 colours", "Spin mop with a steel handle and spin bucket.", [("Handle", "Steel")], "_16_MOP_DONE/PNG", {"only": r"STEEL"}),
     ("mop-plastic", "mops", "", "Spin mop, plastic handle", "4 colours", "Spin mop with a light plastic handle and spin bucket.", [("Handle", "Plastic")], "_16_MOP_DONE/PNG", {"only": r"PLASTIC"}),
-    ("paddle-dustbin", "dustbins", "007 / 008", "Paddle dustbin", "Two sizes", "Foot-pedal dustbin with lid, in plain and dotted finishes.", [("Sizes", "007 and 008")], "_17_PADDLE _DUSTBIN_DONE/PNG", {}),
+    ("pedal-dustbin", "dustbins", "007 / 008", "Pedal dustbin", "Two sizes", "Foot-pedal dustbin with lid, in plain and dotted finishes.", [("Sizes", "007 and 008")], "_17_PADDLE _DUSTBIN_DONE/PNG", {}),
 ]
 
 # words stripped from file names before the rest is read as the colour

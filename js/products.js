@@ -222,7 +222,15 @@
 
   /* ── route ── */
   const qs = new URLSearchParams(location.search);
-  const pid = qs.get("p"), cid = qs.get("c");
+  /* Old product ids that were renamed; keep shared links working. */
+  const RENAMED = { "paddle-dustbin": "pedal-dustbin", "printed-paddle-dustbin": "printed-pedal-dustbin" };
+  let pid = qs.get("p");
+  const cid = qs.get("c");
+  if (RENAMED[pid]) {
+    pid = RENAMED[pid];
+    qs.set("p", pid);
+    history.replaceState(null, "", location.pathname + "?" + qs + location.hash);
+  }
   if (pid) { const p = prodById.get(pid); p ? viewProd(p, qs.get("v")) : notFound(); }
   else if (cid) { const c = catById.get(cid); c ? viewCat(c) : notFound(); }
   else viewAll();

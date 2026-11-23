@@ -427,7 +427,7 @@ footer.rx-foot{background:var(--rx-ink)!important;color:#E8EFF6;font:400 clamp(1
 @media (hover:hover) and (pointer:fine){.rx-foot__call a.rx-phone:hover{color:var(--rx-lagoon)}}
 .rx-foot__call .rx-btn{padding:11px 16px;font-size:14px}
 footer.rx-foot .fg{grid-template-columns:1.5fr 1fr 1fr 1.4fr;gap:clamp(32px,4vw,56px)}
-footer.rx-foot .logo img{height:clamp(56px,5vw,72px)}
+footer.rx-foot .logo img{max-height:clamp(56px,5vw,72px);max-width:min(272px,70vw)}
 footer.rx-foot ul{gap:12px}
 footer.rx-foot address{line-height:1.8}
 footer.rx-foot h3{font:800 clamp(18px,1.5vw,21px) "Archivo",sans-serif;font-stretch:110%;letter-spacing:0;text-transform:none;color:#fff;margin:0 0 18px}
