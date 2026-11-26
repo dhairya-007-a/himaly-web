@@ -1929,7 +1929,7 @@ header.bar > * {
             <label>Message<textarea name="message" rows="3" maxlength="600" placeholder="Quantity, delivery city, anything else"></textarea></label>
             <p class="sendf__err" id="sendErr" role="alert"></p>
             <button type="submit" class="slip__cta">Open email to send<svg class="cta-arrow" viewBox="0 0 26 14" width="22" height="12" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h24M19 1l6 6-6 6"/></svg></button>
-            <p class="sendf__done" id="sendDone" role="status" hidden>Your email app has opened with the enquiry ready. <b>Press Send there.</b><br>No email app? <a id="sendGmail" href="https://mail.google.com/" target="_blank" rel="noopener">Open it in Gmail</a></p>
+            <p class="sendf__done" id="sendDone" role="status" hidden><span id="sendDoneText"></span> <b>Press Send there.</b><br><a id="sendGmail" href="https://mail.google.com/" target="_blank" rel="noopener">Didn’t open? Open Gmail</a><br><a id="sendAlt" href="mailto:himalaythermoplast@gmail.com" target="_top" hidden>Use another email app (Outlook, Mail)</a></p>
           </form>
         </div>
         <div class="slip__foot" aria-hidden="true">
@@ -3182,17 +3182,34 @@ header.bar > * {
             items.length + (items.length === 1 ? ' product' : ' products');
           const q = 'subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
 
-          // Gmail in the browser, for computers with no email app set up
-          sendGmail.href = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + HIMALAY_MAIL + '&' +
-            'su=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+          const gmailUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + HIMALAY_MAIL +
+            '&su=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+          const mailtoUrl = 'mailto:' + HIMALAY_MAIL + '?' + q;
+          // Phones/tablets: mailto opens the Gmail (or Mail) app. Computers usually have
+          // no email app set up, where mailto silently does nothing, so open Gmail in a
+          // new tab instead and offer the email app as the alternative.
+          const phone = matchMedia('(pointer: coarse)').matches;
+          const doneText = document.getElementById('sendDoneText');
+          const alt = document.getElementById('sendAlt');
+          sendGmail.href = gmailUrl;
+          alt.href = mailtoUrl;
+          if (phone) {
+            doneText.textContent = 'Your email app has opened with the enquiry ready.';
+            sendGmail.textContent = 'Didn’t open? Use Gmail in the browser';
+            alt.hidden = true;
+            const a = document.createElement('a');
+            a.href = mailtoUrl;
+            a.target = '_top'; // the showcase runs inside the home page's iframe
+            document.body.append(a);
+            a.click();
+            a.remove();
+          } else {
+            window.open(gmailUrl, '_blank', 'noopener');
+            doneText.textContent = 'Gmail has opened in a new tab with the enquiry ready.';
+            sendGmail.textContent = 'Didn’t open? Open Gmail';
+            alt.hidden = false;
+          }
           sendDone.hidden = false;
-          // the showcase runs inside the home page's iframe: open the mail app from the top window
-          const a = document.createElement('a');
-          a.href = 'mailto:' + HIMALAY_MAIL + '?' + q;
-          a.target = '_top';
-          document.body.append(a);
-          a.click();
-          a.remove();
         });
       }
 
