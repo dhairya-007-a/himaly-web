@@ -1458,6 +1458,27 @@ header.bar > * {
   display: inline;
 }
 
+/* "Send enquiry" appears once something is on the enquiry list; opens an email draft */
+.slip__send {
+  margin-top: 8px;
+  text-decoration: none;
+}
+
+.slip__send[hidden] {
+  display: none;
+}
+
+/* stays the black primary action even after the list button turns white */
+.slip.is-complete .slip__send.slip__cta {
+  background: #000;
+  color: #fff;
+  box-shadow: none;
+}
+
+.slip.is-complete .slip__send .cta-arrow {
+  display: inline;
+}
+
 .slip__foot {
   display: flex;
   flex-direction: column;
@@ -1825,6 +1846,10 @@ header.bar > * {
             <span class="t-done">Added to enquiry list</span>
             <svg class="cta-arrow" viewBox="0 0 26 14" width="22" height="12" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h24M19 1l6 6-6 6"/></svg>
           </button>
+          <a class="slip__cta slip__send" id="send" href="mailto:himalaythermoplast@gmail.com" target="_top" hidden>
+            <span>Send enquiry by email (<span data-tally>0</span>)</span>
+            <svg class="cta-arrow" viewBox="0 0 26 14" width="22" height="12" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h24M19 1l6 6-6 6"/></svg>
+          </a>
         </div>
         <div class="slip__foot" aria-hidden="true">
           <div class="slip__code"></div>
@@ -2985,6 +3010,33 @@ header.bar > * {
         }, 2500);
       }
 
+      // Email draft of everything on the enquiry list. mailto: opens the visitor's
+      // mail app with it filled in; pressing Send there delivers it to Himalay.
+      const sendEl = document.getElementById('send');
+      function updateSend() {
+        if (!sendEl) return;
+        const picked = [];
+        cartState.forEach((look, li) => look.forEach((st, k) => {
+          if (st.added) picked.push(LOOKS[li].items[k].name + ' (' + LOOKS[li].name + ')');
+        }));
+        sendEl.hidden = picked.length === 0;
+        const body = [
+          'Hello Himalay Thermoplast,',
+          '',
+          'I would like the dealer price for these products:',
+          ...picked.map((p, i) => (i + 1) + '. ' + p),
+          '',
+          'Name:',
+          'Business name:',
+          'City:',
+          'Phone:',
+          '',
+          'Thank you.'
+        ].join('\n');
+        const subject = 'Enquiry: ' + picked.length + (picked.length === 1 ? ' product' : ' products') + ' from the 3D showcase';
+        sendEl.href = 'mailto:himalaythermoplast@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      }
+
       function addToBag(ks) {
         if (!ks || ks.length === 0) return;
         ks.forEach(k => {
@@ -3002,6 +3054,7 @@ header.bar > * {
         });
 
         bagCount += ks.length;
+        updateSend();
         document.querySelectorAll('[data-tally]').forEach(t => {
           t.textContent = bagCount;
           t.classList.remove('bump');
@@ -3009,7 +3062,7 @@ header.bar > * {
           t.classList.add('bump');
         });
 
-        showToast(ks.length > 1 ? 'Fit added to your bag.' : 'Item added to your bag.');
+        showToast(ks.length > 1 ? 'Products added to your enquiry list.' : 'Added to your enquiry list.');
 
         const allAdded = cartState[active].every(s => s.added);
         slipEl.classList.toggle('is-complete', allAdded);
