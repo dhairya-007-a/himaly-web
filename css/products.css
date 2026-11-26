@@ -123,3 +123,4 @@ a.rx-tile{color:inherit}
   .px-head__stats{gap:20px}
   .px-acts .rx-btn{flex:1 1 100%}
 }
+.px-card.is-picked{box-shadow:0 0 0 2px var(--rx-deep),0 18px 30px -18px rgba(21,48,79,.35)}

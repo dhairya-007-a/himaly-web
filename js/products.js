@@ -29,7 +29,7 @@
       else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
       else el.setAttribute(k, v === true ? "" : v);
     }
-    for (const kid of kids.flat()) if (kid != null && kid !== false) el.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+    for (const kid of kids.flat(Infinity)) if (kid != null && kid !== false) el.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
     return el;
   };
   const img = (im, alt, opts = {}) => h("img", {
@@ -47,10 +47,12 @@
   const plural = (n, one, many) => n + " " + (n === 1 ? one : many);
 
   /* ── product card, used by category view and "more in this range" ── */
-  const card = (p, Hn = "h2") => {
-    const first = p.variants[0];
+  /* start = which colour the card shows first, so a range of look-alike sets
+     doesn't open as a wall of the same colour */
+  const card = (p, Hn = "h2", start = 0) => {
+    const si = start % p.variants.length, first = p.variants[si];
     const photo = img(first.imgs[0], p.name + ", " + first.name, { small: true });
-    const href = url({ p: p.id });
+    const href = url(si ? { p: p.id, v: first.id } : { p: p.id });
     const link = h("a", { href }, p.name);
     const show = (v, btn) => {
       photo.src = v.imgs[0].sm; photo.alt = p.name + ", " + v.name;
@@ -61,11 +63,11 @@
     const dots = h("ul.px-dots", { "aria-label": "Colours" },
       p.variants.slice(0, MAX).map((v, i) => h("li", null, h("button", {
         type: "button", style: { "--sw": v.sw }, title: v.name, "aria-label": "Show " + v.name,
-        "aria-pressed": String(i === 0),
+        "aria-pressed": String(i === si),
         onmouseenter: (e) => show(v, e.currentTarget), onfocus: (e) => show(v, e.currentTarget), onclick: (e) => show(v, e.currentTarget),
       }))),
       p.variants.length > MAX ? h("li.px-dots__more", null, "+" + (p.variants.length - MAX)) : null);
-    return h("article.px-card", null,
+    return h("article.px-card", { id: "p-" + p.id },
       h("div.px-card__ph", null, photo),
       h("div.px-card__body", null,
         p.code ? h("span.px-code", null, p.code) : null,
@@ -132,8 +134,11 @@
   };
 
   /* ── view 2: one category ── */
+  /* products pinned to the top of a range page */
+  const PIN_FIRST = { "bathroom-sets": ["oasis-6"] };
   const viewCat = (c) => {
-    const ps = prodsIn(c.id);
+    const pins = PIN_FIRST[c.id] || [];
+    const ps = prodsIn(c.id).sort((a, b) => (pins.includes(b.id) ? 1 : 0) - (pins.includes(a.id) ? 1 : 0));
     setTitle(c.name, c.blurb);
     const others = D.categories.filter((x) => x.id !== c.id);
     app.replaceChildren(h("section.rx.px", { "aria-labelledby": "h-px" }, h("div.c-wrap", null,
@@ -143,9 +148,16 @@
         h("dl.px-head__stats", null,
           h("div", null, h("dt", null, "Products"), h("dd", null, ps.length)),
           h("div", null, h("dt", null, "Colours"), h("dd", null, colourCount(c.id))))),
-      h("div.px-grid", null, ps.map((p) => card(p))),
+      h("div.px-grid", null, ps.map((p, i) => card(p, "h2", i))),
       h("div.px-more", null, h("h2", null, "Other ranges"),
         h("ul.px-ranges", null, others.map((x) => h("li", null, h("a", { href: url({ c: x.id }) }, x.name))))))));
+    /* #p-<id> from the home page's new-arrivals belt: bring that product into view */
+    const target = location.hash.startsWith("#p-") && prodById.get(location.hash.slice(3))?.cat === c.id
+      ? document.getElementById(location.hash.slice(1)) : null;
+    if (target) {
+      requestAnimationFrame(() => target.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" }));
+      target.classList.add("is-picked");
+    }
   };
 
   /* ── view 3: one product ── */

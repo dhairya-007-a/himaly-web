@@ -97,13 +97,14 @@
     belt.addEventListener("pointerdown", (e) => {
       if (e.pointerType !== "mouse" || e.button !== 0) return;
       dragX = e.clientX; dragStart = belt.scrollLeft; moved = false;
-      belt.setPointerCapture(e.pointerId);
       belt.classList.add("is-dragging");
     });
     belt.addEventListener("pointermove", (e) => {
       if (!belt.classList.contains("is-dragging")) return;
       const dx = e.clientX - dragX;
-      if (Math.abs(dx) > 4) moved = true;
+      // Capture only once it's a real drag: capturing on pointerdown retargets the
+      // click to the belt, so plain clicks on product links never navigated.
+      if (!moved && Math.abs(dx) > 4) { moved = true; belt.setPointerCapture(e.pointerId); }
       belt.scrollLeft = dragStart - dx;
       userTouched();
     });
@@ -112,6 +113,12 @@
     belt.addEventListener("pointercancel", endDrag);
     // a drag shouldn't also count as a click on a link/button
     belt.addEventListener("click", (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+    // clicking anywhere on a product (photo or caption) opens its range, scrolled to that product
+    belt.addEventListener("click", (e) => {
+      if (e.defaultPrevented || e.target.closest("a, button")) return;
+      const link = e.target.closest(".rx-line__item")?.querySelector(".rx-line__cap h3 a");
+      if (link) location.href = link.href;
+    });
 
     // arrow buttons + keyboard: one item per step
     const step = () => (track.firstElementChild ? track.firstElementChild.getBoundingClientRect().width : 300);
