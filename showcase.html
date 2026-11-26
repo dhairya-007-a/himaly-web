@@ -1469,14 +1469,84 @@ header.bar > * {
 }
 
 /* stays the black primary action even after the list button turns white */
-.slip.is-complete .slip__send.slip__cta {
+.slip.is-complete .slip__send.slip__cta,
+.slip.is-complete .sendf .slip__cta {
   background: #000;
   color: #fff;
   box-shadow: none;
 }
 
-.slip.is-complete .slip__send .cta-arrow {
+.slip.is-complete .slip__send .cta-arrow,
+.slip.is-complete .sendf .cta-arrow {
   display: inline;
+}
+
+/* details form shown under "Send enquiry"; the slip scrolls when it's open */
+.slip.is-sending {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.sendf {
+  display: grid;
+  gap: 10px;
+}
+
+.sendf[hidden] {
+  display: none;
+}
+
+.sendf__h {
+  margin: 4px 0 0;
+}
+
+.sendf label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.sendf input,
+.sendf textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 16px; /* 16px stops iPhone zooming into the field */
+  text-transform: none;
+  padding: 10px 12px;
+  border: 1px solid #000;
+  border-radius: 10px;
+  background: #fff;
+  color: #000;
+}
+
+.sendf textarea {
+  resize: vertical;
+}
+
+.sendf input[aria-invalid="true"] {
+  border-color: #c62828;
+  box-shadow: 0 0 0 1px #c62828;
+}
+
+.sendf__err {
+  margin: 0;
+  font-size: 12px;
+  color: #c62828;
+}
+
+.sendf__err:empty {
+  display: none;
+}
+
+.sendf__done {
+  margin: 0;
+  font-size: 13px;
+  line-height: 19px;
+}
+
+.sendf__done a {
+  color: inherit;
 }
 
 .slip__foot {
@@ -1846,10 +1916,21 @@ header.bar > * {
             <span class="t-done">Added to enquiry list</span>
             <svg class="cta-arrow" viewBox="0 0 26 14" width="22" height="12" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h24M19 1l6 6-6 6"/></svg>
           </button>
-          <a class="slip__cta slip__send" id="send" href="mailto:himalaythermoplast@gmail.com" target="_top" hidden>
+          <button type="button" class="slip__cta slip__send" id="send" aria-expanded="false" aria-controls="sendForm" hidden>
             <span>Send enquiry by email (<span data-tally>0</span>)</span>
             <svg class="cta-arrow" viewBox="0 0 26 14" width="22" height="12" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h24M19 1l6 6-6 6"/></svg>
-          </a>
+          </button>
+          <form class="sendf" id="sendForm" hidden novalidate>
+            <p class="cap sendf__h">Your details</p>
+            <label>Name *<input name="name" autocomplete="name" required maxlength="80"></label>
+            <label>Business name<input name="business" autocomplete="organization" maxlength="100"></label>
+            <label>City *<input name="city" autocomplete="address-level2" required maxlength="60"></label>
+            <label>Phone *<input name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="20"></label>
+            <label>Message<textarea name="message" rows="3" maxlength="600" placeholder="Quantity, delivery city, anything else"></textarea></label>
+            <p class="sendf__err" id="sendErr" role="alert"></p>
+            <button type="submit" class="slip__cta">Open email to send<svg class="cta-arrow" viewBox="0 0 26 14" width="22" height="12" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h24M19 1l6 6-6 6"/></svg></button>
+            <p class="sendf__done" id="sendDone" role="status" hidden>Your email app has opened with the enquiry ready. <b>Press Send there.</b><br>No email app? <a id="sendGmail" href="https://mail.google.com/" target="_blank" rel="noopener">Open it in Gmail</a></p>
+          </form>
         </div>
         <div class="slip__foot" aria-hidden="true">
           <div class="slip__code"></div>
@@ -3010,31 +3091,109 @@ header.bar > * {
         }, 2500);
       }
 
-      // Email draft of everything on the enquiry list. mailto: opens the visitor's
-      // mail app with it filled in; pressing Send there delivers it to Himalay.
+      // Enquiry list → short details form → the visitor's own email app opens with
+      // the whole enquiry typed out (mailto:). They press Send there; nothing is
+      // sent by this page and no server or email service is needed.
+      const HIMALAY_MAIL = 'himalaythermoplast@gmail.com';
+      const SITE = 'https://himalay-web.vercel.app';
+      const RANGE_OF = {
+        'Bathroom Set': 'bathroom-sets', 'PP Containers': 'pp-containers', 'PET Container': 'pet-containers',
+        'Fridge Bottle': 'fridge-bottles', 'Himalay Patla': 'patla', 'Storage Rack': 'racks',
+        'Household Jug': 'household-jugs', 'Commercial Jug': 'commercial-jugs', 'Water Dispenser': 'dispensers'
+      };
       const sendEl = document.getElementById('send');
+      const sendForm = document.getElementById('sendForm');
+      const sendErr = document.getElementById('sendErr');
+      const sendDone = document.getElementById('sendDone');
+      const sendGmail = document.getElementById('sendGmail');
+
+      const pickedItems = () => {
+        const out = [];
+        cartState.forEach((look, li) => look.forEach((st, k) => {
+          if (st.added) out.push({ name: LOOKS[li].items[k].name, range: LOOKS[li].name, cat: RANGE_OF[LOOKS[li].name] });
+        }));
+        return out;
+      };
       function updateSend() {
         if (!sendEl) return;
-        const picked = [];
-        cartState.forEach((look, li) => look.forEach((st, k) => {
-          if (st.added) picked.push(LOOKS[li].items[k].name + ' (' + LOOKS[li].name + ')');
-        }));
-        sendEl.hidden = picked.length === 0;
-        const body = [
-          'Hello Himalay Thermoplast,',
-          '',
-          'I would like the dealer price for these products:',
-          ...picked.map((p, i) => (i + 1) + '. ' + p),
-          '',
-          'Name:',
-          'Business name:',
-          'City:',
-          'Phone:',
-          '',
-          'Thank you.'
-        ].join('\n');
-        const subject = 'Enquiry: ' + picked.length + (picked.length === 1 ? ' product' : ' products') + ' from the 3D showcase';
-        sendEl.href = 'mailto:himalaythermoplast@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+        sendEl.hidden = pickedItems().length === 0;
+      }
+
+      if (sendEl && sendForm) {
+        sendEl.addEventListener('click', () => {
+          const open = sendForm.hidden;
+          sendForm.hidden = !open;
+          sendEl.setAttribute('aria-expanded', String(open));
+          slipEl.classList.toggle('is-sending', open);
+          if (open) {
+            stopAuto();
+            sendForm.elements.name.focus({ preventScroll: true });
+            sendForm.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          }
+        });
+
+        sendForm.addEventListener('input', (e) => e.target.removeAttribute('aria-invalid'));
+
+        sendForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const f = sendForm.elements;
+          const val = (n) => f[n].value.trim();
+          const digits = val('phone').replace(/\D/g, '');
+          const bad = [];
+          if (val('name').length < 2) bad.push(['name', 'your name']);
+          if (val('city').length < 2) bad.push(['city', 'your city']);
+          if (digits.length < 10 || digits.length > 13) bad.push(['phone', 'a 10-digit phone number']);
+          ['name', 'city', 'phone'].forEach((n) => f[n].removeAttribute('aria-invalid'));
+          bad.forEach(([n]) => f[n].setAttribute('aria-invalid', 'true'));
+          if (bad.length) {
+            sendErr.textContent = 'Please enter ' + bad.map((b) => b[1]).join(', ') + '.';
+            f[bad[0][0]].focus();
+            return;
+          }
+          sendErr.textContent = '';
+
+          const items = pickedItems();
+          const line = '------------------------------';
+          const body = [
+            'Hello Himalay Thermoplast,',
+            '',
+            'I would like the dealer price for ' + (items.length === 1 ? 'this product:' : 'these ' + items.length + ' products:'),
+            '',
+            ...items.flatMap((p, i) => [
+              (i + 1) + '. ' + p.name + ' (' + p.range + ')',
+              '   ' + SITE + '/products.html?c=' + p.cat,
+            ]),
+            '',
+            line,
+            'MY DETAILS',
+            line,
+            'Name:      ' + val('name'),
+            'Business:  ' + (val('business') || '-'),
+            'City:      ' + val('city'),
+            'Phone:     ' + val('phone'),
+            ...(val('message') ? ['', 'Message:', val('message')] : []),
+            line,
+            '',
+            'Thank you.',
+            '',
+            '(Sent from the Himalay website, 3D showcase)'
+          ].join('\n');
+          const subject = 'Dealer enquiry: ' + val('name') + ', ' + val('city') + ' - ' +
+            items.length + (items.length === 1 ? ' product' : ' products');
+          const q = 'subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+
+          // Gmail in the browser, for computers with no email app set up
+          sendGmail.href = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + HIMALAY_MAIL + '&' +
+            'su=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+          sendDone.hidden = false;
+          // the showcase runs inside the home page's iframe: open the mail app from the top window
+          const a = document.createElement('a');
+          a.href = 'mailto:' + HIMALAY_MAIL + '?' + q;
+          a.target = '_top';
+          document.body.append(a);
+          a.click();
+          a.remove();
+        });
       }
 
       function addToBag(ks) {
