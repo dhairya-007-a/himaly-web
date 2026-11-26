@@ -27,7 +27,7 @@ The platform bridges corporate identity with interactive 3D digital experiences:
 himalay-web/
 ├── index.html                   # Main production landing page (Full bleed, integrated sections)
 ├── showcase.html                # Kinetic 3D Interactive Product Ring (Standalone & iframe embedded)
-├── main-bg-video.mp4            # Ambient video background for the full-height hero section
+├── main-bg-2.mp4                # Hero background video (1.2 MB, since Pass 26; old main-bg-video.mp4 kept locally, not deployed)
 ├── main.md                      # Comprehensive technical architecture & design specification
 ├── css/
 │   └── style.css                # Global styles, Misty Sea design tokens, and layout resets
@@ -116,7 +116,7 @@ The design follows the **Misty Sea** palette tailored for modern household manuf
 ### 4.1 Majestic Video Hero Section (`#top`)
 - **Positioning**: Starts at exact `top: 0`, `left: 0`, reaching both edges of the viewport.
 - **Dimensions**: `height: clamp(700px, 92vh, 920px); min-height: 640px;`
-- **Background**: Ambient loop video [`main-bg-video.mp4`](file:///c:/Users/asus/Downloads/himalay-web/main-bg-video.mp4) (`autoplay`, `muted`, `loop`, `playsinline`) overlaid with a triple-stop linear gradient (`rgba(21,48,79,.6)` to `rgba(21,48,79,.75)`).
+- **Background**: Ambient loop video `main-bg-2.mp4` (was `main-bg-video.mp4` until Pass 26) (`autoplay`, `muted`, `loop`, `playsinline`) overlaid with a triple-stop linear gradient (`rgba(21,48,79,.6)` to `rgba(21,48,79,.75)`).
 - **Navigation (`nav`)**:
   - Border-bottom spans 100% edge-to-edge.
   - Content wrapped in `.c-wrap .nav-inner` (Logo on the left, anchor navigation in the center, "Become a distributor" button & search icon on the right).
@@ -519,6 +519,38 @@ Goal: survive floods (target 10k requests/s) and abuse without the database or t
 **Not done:** a real 10k req/s load test against the live site — it would be a self-inflicted attack (billing, and Vercel may treat it as one). Do it only on a preview deploy with Vercel's permission.
 **Unchanged:** every page looks and behaves the same (UI preservation rule). Only visible effect: a phone like `12345678` without a country/STD code now gets the existing "Please enter a valid phone number." message.
 
+### 2026-11-26 — Pass 26: Product facts bug, new-arrivals clicks, bathroom range, new hero video
+- **`[object HTMLElement]` on product pages** (e.g. `?p=casserole&v=orange`): the `h()` element helper in `js/products.js` flattened children only one level, and the facts list passes `[dt, dd]` pairs two levels deep, so each pair was turned into text. Now `kids.flat(Infinity)`; fixes every view that uses the helper.
+- **"Fresh off the line" clicks did nothing with a mouse:** the belt called `setPointerCapture` on `pointerdown`, which retargets the click to the belt, so links inside never fired. Capture now starts only after a real drag (> 4 px) (`js/redesign.js`).
+- **New-arrivals items open their range:** title links are `products.html?c=<range>#p-<id>`; clicking anywhere on an item (photo or caption) follows that link. The range page scrolls the product into view and outlines it (`.px-card.is-picked`, `css/products.css`). Every product card now has `id="p-<id>"`.
+- **Range pages start each card on a different colour** (card *i* shows colour *i* mod count), so ranges of look-alike sets (Bathroom sets) aren't a wall of the same print. Single-colour products are unchanged.
+- **HT-13 Oasis bathroom set 6 pcs pinned first** in Bathroom sets (`PIN_FIRST` in `js/products.js`).
+- **Hero video:** `main-bg-2.mp4` (848×478, H.264 High, `moov` at the start, 1.2 MB) replaces `main-bg-video.mp4` (35 MB). `.vercelignore` now ships only the new file. Plays muted/inline on iPhone and Android.
+- Checked at 360 / 390 / 430 px: no sideways scroll, no `[object` text, video autoplays.
+
+### 2026-11-26 — Full-site check (live) + fixes
+Checked on https://himalay-web.vercel.app:
+- **566 assets** (every `src`/`href` in the HTML/CSS/JS, all 524 product photos, 15 range covers) → all 200. Only 404s: `robots.txt`, `sitemap.xml`, `favicon.ico` (not referenced; favicon is `logo/fvicon-icon.png`).
+- **81 pages** opened in Chrome (home, all products, showcase, 15 ranges, 63 products): no broken images, no `[object`/`undefined`/`NaN` text, no "not found", no unlabelled buttons, no bad product/range ids, titles match the product.
+- **Controls:** both "Become a distributor" buttons, "Ask for dealer price" (pre-fills product), dialog close, 5 room chips (15/3/6/4/2 ranges), search + empty state + reset, 9 category-stage buttons, search icon, WhatsApp/tel/mailto links, product swatches (photo + URL `?v=` + WhatsApp text update), thumbnails, Enquire (pre-fills code + name + colour), card colour dots, mobile menu, showcase autoplay/drawer/grid/enquiry panel. No console errors.
+
+Fixed:
+- **Catalogue form on iPhone:** with the database down every request uses the WhatsApp fallback, but `window.open` ran after an `await`, which iPhone Safari's popup blocker stops. The thank-you message now also has a tappable **Open WhatsApp** link (`js/main.js`).
+- **Showcase dead links:** logo and the drawer's 4 pills were `href="#"`. Now `index.html`, `products.html`, `?c=dispensers`, `?q=container`, `?c=household-jugs`, all `target="_top"` (the showcase runs inside the home page iframe).
+
+### 2026-11-26 — Pass 27/28: Showcase enquiry list → email to Himalay (no server, no email service)
+Before: "Add to enquiry list" put items in a "bag" with no way to send them.
+Now (`showcase.html`):
+1. Once something is on the list, a black **Send enquiry by email (n)** button appears (count via `[data-tally]`). Toasts say "enquiry list" instead of "bag".
+2. It opens a short form: **Name\*, Business name, City\*, Phone\* (10–13 digits), Message**. Missing fields turn red with one message. Inputs are 16 px so iPhone doesn't zoom.
+3. **Open email to send** builds a plain-text email to `himalaythermoplast@gmail.com` — subject `Dealer enquiry: <name>, <city> - <n> products`; body: product list with range links, a MY DETAILS block, the message, "(Sent from the Himalay website, 3D showcase)".
+   - **Computers** (`pointer: fine`): opens **Gmail compose in a new tab** (`mail.google.com/mail/?view=cm&...`). Reason: on a PC with no email app, `mailto:` does nothing and the page used to claim the app had opened. Links underneath: "Didn't open? Open Gmail" and "Use another email app (Outlook, Mail)" (`mailto:`).
+   - **Phones/tablets** (`pointer: coarse`): `mailto:` from the top window → Gmail/Mail app; backup link to Gmail in the browser.
+4. The customer presses **Send** in their own mail app/Gmail. Nothing is sent by the site.
+
+Decided: a coloured HTML email (logo, blue header, Call/WhatsApp/Reply buttons, product photos) was designed and previewed, but it needs a server-side sender (Resend via Vercel Marketplace, or Gmail SMTP with an app password). The owner chose **no extra services**, so emails are plain text. Limitation: if the customer doesn't press Send, nothing arrives.
+Tested: Chrome desktop (real click → Gmail compose filled correctly; not sent) and 390 px iframe (form scrolls inside the panel, no sideways scroll). Not tested on a real phone.
+
 ### Deploy log
 | Date | Commit | What went live | Checked |
 |---|---|---|---|
@@ -530,6 +562,11 @@ Goal: survive floods (target 10k requests/s) and abuse without the database or t
 | 2026-11-23 | `f849153` | Pass 22 pedal rename + logo cap (Vercel + Pages) | home + `?p=pedal-dustbin` + new photos 200, old photo paths 404, no "paddle" text on home |
 | 2026-11-23 | `41e3409` | Pass 23 smooth 3D ring — first auto-deploy from `git push` (no CLI) | live `showcase.html` has the new spring code; Pages built |
 | 2026-11-23 | `21643f0` | Pass 24 link previews (OG/Twitter tags, share card) + canonical URLs | live home returns all og tags to a Facebook-bot request; `og-cover.jpg` 200 `image/jpeg`; canonical per product/range view |
+| 2026-11-23 | `d9fb6bd` | Pass 25 backend hardening + firewall rules | 24/24 tests; `/.env` `/.git/config` `/wp-admin` 403; API 60/min then 429 |
+| 2026-11-26 | `e702de2` | Pass 26 facts fix, new-arrivals clicks → range, bathroom colours + HT-13 first, `main-bg-2.mp4` | live `main-bg-2.mp4` 200 (1.2 MB); live `products.js` has the fix |
+| 2026-11-26 | `767adfb` | Full-site check fixes: iPhone WhatsApp link, showcase links | live `showcase.html` + `main.js` updated; 566 assets 200; 81 pages clean |
+| 2026-11-26 | `1d3afc5` | Showcase "Send enquiry by email" (mailto draft) | button + draft checked on live showcase |
+| 2026-11-26 | `dd074c8` | Showcase details form; Gmail compose on computers, mail app on phones (`1f6d28f` + `dd074c8`) | live `showcase.html` has the new form |
 
 ## Site structure
 
@@ -564,13 +601,15 @@ docs/gst-certificate.pdf  Page 1 of the GST certificate
 ### Known follow-ups (not yet done)
 - **Product details are short on purpose:** sizes, piece counts and codes come from the photo folder names; capacities for Aquvo/Cool/Gold, mug and bucket sizes, materials and prices were not available. Add them as `facts` in `tools/build_catalog.py` when the factory confirms them.
 - **No PDF catalogue is hosted yet** — the form requests it on WhatsApp. Put the PDF in `docs/` and link it when available.
-- **Hero video is 34 MB** — biggest remaining speed problem. Re-encoding to ~720p H.264, no audio, CRF ~28 would get it to roughly 3–5 MB. Needs `ffmpeg` (not installed on this machine). A poster frame (`images/hero-poster.jpg`) should be added at the same time so something shows before the video starts.
+- ~~Hero video is 34 MB~~ — done in Pass 26: `main-bg-2.mp4` is 1.2 MB. A poster frame (`images/hero-poster.jpg`) is still worth adding.
 - Hero + 3D ring still use the old Cormorant / DM Sans type; kept on request, so the top and bottom halves of the page use different fonts.
 - `css/style.css` still contains rules for removed sections (`.prod`, `.cgrid`, `.new-grid`, `.sec-prod`) — small, harmless, could be trimmed.
 - **Database not connected yet** — see Pass 21 "Finish the database". After connecting, re-run `npm run db:migrate` (adds the Pass 25 phone index).
-- **Lead notifications** (email via Resend, or WhatsApp) skipped for now on request; leads are only visible in `/admin`.
+- **Lead notifications** (email via Resend, or WhatsApp) skipped for now on request; leads are only visible in `/admin`. Showcase enquiries instead go out as a customer-sent email (Pass 27/28); a coloured HTML email needs Resend or Gmail SMTP (declined for now).
 - **Custom domain** not set up; the site is on `himalay-web.vercel.app` (also hard-coded in OG/canonical tags, see Pass 24).
 - Repo `api/`, `db/`, `package.json` are also visible on the GitHub Pages mirror (source code only, no secrets). Turn GitHub Pages off once Vercel is the main site.
+- `robots.txt` and `sitemap.xml` are missing (404) — would help Google find the 78 range/product pages.
+- The line-item tag in the ring's enquiry panel still says "IN BAG" (CSS `content`); could say "ADDED".
 - The ring's side "enquiry list" drawer still has leftover clothing-cart plumbing (`cartState`, size picker UI) that now always resolves to "One size" — functions correctly but could be simplified.
 - `images/showcase-bg.jpg` source upload was small (736×552) — fine blurred at the current size.
 - "Explore by category" and the 3D ring still use the 9 older gallery photos; they could switch to the new per-colour photos.
