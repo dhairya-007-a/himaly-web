@@ -89,7 +89,7 @@ PRODUCTS = [
     ("ht-45", "pet-containers", "HT-45", "PET container 2 litres", "2000 ml", "Clear jar with a printed lid and spoon.", [("Capacity", "2000 ml")], "_03_PET_CONTAINER_DONE/PNG", {"only": r"HT-45"}),
     ("pet-set", "pet-containers", "HT-40–45", "PET container full range", "250 ml to 2 litres", "All six sizes together, blue or pink lids.", [("Sizes", "250, 500, 750, 1000, 1500, 2000 ml")], "_03_PET_CONTAINER_DONE/PNG", {"only": r"GROUP", "rename": [(r"BLUE", "Blue lids"), (r"PINK", "Pink lids")]}),
     # rolex + keeper photos and sizes come from 02_HIMALAY_CONTAINER_WEB.pdf (cut-outs split into the two stacks)
-    ("rolex", "storage", "", "Rolex storage set", "4 or 7 pieces", "Transparent stackable containers in graded sizes with tight-fitting lids.", [("4 piece sizes", "999, 1000, 1100, 1200"), ("7 piece sizes", "222, 333, 444, 555, 666, 777, 888"), ("Smallest (222)", "138 × 107 × 66 mm"), ("Largest (1200)", "528 × 418 × 278 mm")], "_PDF_02_CONTAINER_WEB/ROLEX", {"rename": [(r"4 PIC", "4 pieces"), (r"7 PIC", "7 pieces"), (r"ALL PIC", "Full set")]}),
+    ("rolex", "storage", "", "Rolex storage set", "4 or 7 pieces", "Transparent stackable containers in graded sizes with tight-fitting lids.", [("4 piece sizes", "999, 1000, 1100, 1200"), ("7 piece sizes", "222, 333, 444, 555, 666, 777, 888"), ("Smallest (222)", "138 × 107 × 66 mm"), ("Largest (1200)", "528 × 418 × 278 mm")], "_PDF_02_CONTAINER_WEB/ROLEX", {"tag": "-filled", "rename": [(r"4 PIC", "4 pieces"), (r"7 PIC", "7 pieces"), (r"ALL PIC", "Full set")]}),
     ("keeper", "storage", "", "Keeper storage set", "4 or 8 pieces", "Transparent stackable containers with clip-lock lids.", [("4 piece sizes", "99, 100, 110, 120"), ("8 piece sizes", "11, 22, 33, 44, 55, 66, 77, 88"), ("Smallest (11)", "90 × 49 × 25 mm"), ("Largest (120)", "445 × 297 × 137 mm")], "_PDF_02_CONTAINER_WEB/KEEPER", {"rename": [(r"4 PIC", "4 pieces"), (r"8 PIC", "8 pieces"), (r"ALL PIC", "Full set")]}),
     ("bento", "lunch-boxes", "", "Bento lunch box", "4 colours", "Steel compartments, clip-lock lid.", [], "_11_LUNCH_BOX_DONE/BENTO_BOX/PNG", {}),
     ("mello", "lunch-boxes", "", "Mello lunch box", "3 colours", "Leak-proof, stackable tiers.", [], "_11_LUNCH_BOX_DONE/MELLO_BOX/PNG", {}),
@@ -219,7 +219,8 @@ def main():
         for vid in order:
             v = variants[vid]
             for i, rel in enumerate(v.pop("_files")):
-                base = os.path.join(OUT_IMG, pid, vid + (f"-{i + 1}" if i else ""))
+                # "tag" renames the files when a photo is replaced, so browsers can't keep showing the cached old one
+                base = os.path.join(OUT_IMG, pid, vid + opts.get("tag", "") + (f"-{i + 1}" if i else ""))
                 v["imgs"].append(export(load_master(rel, cache), base))
         # same colour order on every product (so cards line up), "All colours" group shots last
         vs = sorted((variants[k] for k in order),
