@@ -89,8 +89,13 @@
     const res = await sendLead({ kind: "catalogue", name, phone, website: f.website ? f.website.value : "" });
     busy(form, false);
     if (res.fallback) {
+      // Popup blockers (iPhone Safari especially) often stop window.open after an
+      // await, so also give the visitor a link they can tap themselves.
       window.open(waLink(waText), "_blank", "noopener");
-      m.textContent = "Thank you, " + name + ". WhatsApp should open with your request; we'll send the catalogue there.";
+      m.textContent = "Thank you, " + name + ". Send your request on WhatsApp and we'll share the catalogue there. ";
+      const w = document.createElement("a");
+      w.href = waLink(waText); w.target = "_blank"; w.rel = "noopener"; w.textContent = "Open WhatsApp";
+      m.append(w);
     } else if (!res.ok) {
       return showError(form, m, res, waText);
     } else {
