@@ -206,7 +206,19 @@
     const facts = [["Range", c.name], ...(p.facts || [])];
     if (p.code) facts.unshift(["Code", p.code]);
     facts.push(["Colours", String(p.variants.length)]);
-    const more = prodsIn(c.id).filter((x) => x.id !== p.id);
+    // "More in …" cards: each starts on a colour not already shown above it, so the row isn't all one colour
+    // (least-used colour wins; ties go to the one shown longest ago, then catalogue order)
+    const uses = new Map([[v.id, [1, -1]]]);
+    const more = prodsIn(c.id).filter((x) => x.id !== p.id).map((x, n) => {
+      const score = (y) => uses.get(y.id) || [0, -2];
+      let i = 0;
+      x.variants.forEach((y, j) => {
+        const [a, b] = score(y), [c0, d] = score(x.variants[i]);
+        if (a < c0 || (a === c0 && b < d)) i = j;
+      });
+      uses.set(x.variants[i].id, [score(x.variants[i])[0] + 1, n]);
+      return [x, i];
+    });
 
     app.replaceChildren(h("section.rx.px", { "aria-labelledby": "h-px" }, h("div.c-wrap", null,
       crumbs(["All products", url()], [c.name, url({ c: c.id })], [p.name]),
@@ -220,7 +232,7 @@
           h("dl.px-facts", null, facts.map(([k, val]) => [h("dt", null, k), h("dd", null, val)])),
           h("div.px-acts", null, enq, wa),
           h("p.px-card__meta", null, "Dealers and distributors get factory prices. We reply within one working day."))),
-      more.length ? h("div.px-more", null, h("h2", null, "More in " + c.name), h("div.px-grid", null, more.map((x) => card(x, "h3")))) : null)));
+      more.length ? h("div.px-more", null, h("h2", null, "More in " + c.name), h("div.px-grid", null, more.map(([x, i]) => card(x, "h3", i)))) : null)));
     setVariant(v, false);
   };
 
