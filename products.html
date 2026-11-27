@@ -23,12 +23,33 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=DM+Sans:wght@400;500&display=swap">
+<link rel="preload" as="image" href="logo/himalaya-new-logo.png">
+<style>
+/* Loading screen (js/splash.js). Hides itself after 4s even if the script never runs. */
+.hx-splash{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#F4F7F8;touch-action:none;-webkit-animation:hx-auto .5s 4s forwards;animation:hx-auto .5s 4s forwards}
+.hx-nosplash .hx-splash{display:none}
+.hx-splash-done .hx-splash{opacity:0;visibility:hidden;transition:opacity .5s ease,visibility 0s linear .5s}
+.hx-splash__in{display:flex;flex-direction:column;align-items:center;gap:22px;transition:transform .5s ease}
+.hx-splash-done .hx-splash__in{-webkit-transform:scale(1.04);transform:scale(1.04)}
+.hx-splash img{display:block;width:min(300px,68vw);height:auto;-webkit-clip-path:inset(0 100% 0 0);clip-path:inset(0 100% 0 0);opacity:0;-webkit-transform:translateY(10px);transform:translateY(10px);-webkit-animation:hx-wipe .9s cubic-bezier(.22,1,.36,1) .1s forwards;animation:hx-wipe .9s cubic-bezier(.22,1,.36,1) .1s forwards}
+.hx-splash__bar{position:relative;display:block;width:min(140px,36vw);height:3px;border-radius:3px;background:#D5E3E8;overflow:hidden}
+.hx-splash__bar::after{content:"";position:absolute;top:0;left:0;bottom:0;width:40%;border-radius:3px;background:linear-gradient(90deg,#4A8FD8,#3FBFCF);-webkit-animation:hx-run 1.1s ease-in-out .3s infinite;animation:hx-run 1.1s ease-in-out .3s infinite;-webkit-transform:translateX(-100%);transform:translateX(-100%)}
+@-webkit-keyframes hx-wipe{to{-webkit-clip-path:inset(0 0 0 0);clip-path:inset(0 0 0 0);opacity:1;-webkit-transform:none;transform:none}}
+@keyframes hx-wipe{to{-webkit-clip-path:inset(0 0 0 0);clip-path:inset(0 0 0 0);opacity:1;-webkit-transform:none;transform:none}}
+@-webkit-keyframes hx-run{to{-webkit-transform:translateX(250%);transform:translateX(250%)}}
+@keyframes hx-run{to{-webkit-transform:translateX(250%);transform:translateX(250%)}}
+@-webkit-keyframes hx-auto{to{opacity:0;visibility:hidden}}
+@keyframes hx-auto{to{opacity:0;visibility:hidden}}
+@media (prefers-reduced-motion:reduce){.hx-splash img{-webkit-animation:none;animation:none;-webkit-clip-path:none;clip-path:none;opacity:1;-webkit-transform:none;transform:none}.hx-splash__bar{display:none}.hx-splash__in,.hx-splash-done .hx-splash__in{transition:none;-webkit-transform:none;transform:none}}
+</style>
+<script src="js/splash.js"></script>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/redesign.css">
 <link rel="stylesheet" href="css/products.css">
 <link rel="stylesheet" href="css/mobile.css">
 </head>
 <body>
+<div class="hx-splash" id="hx-splash" aria-hidden="true"><div class="hx-splash__in"><img src="logo/himalaya-new-logo.png" alt="" width="598" height="158"><span class="hx-splash__bar"></span></div></div>
 <a class="skip" href="#app">Skip to products</a>
 <div class="wrap">
 <header class="px-top">
